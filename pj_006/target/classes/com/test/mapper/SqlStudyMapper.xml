@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mapper.SqlStudyMapper">
+
+
+<select id="testList" parameterType="com.test.mapper.SqlVO">
+	SELECT employee_id
+            ,department_id
+            ,EMAIL
+            ,first_name
+            ,last_name
+            ,phone_number
+            ,hire_date
+            ,job_id
+            ,salary
+            ,commission_pct
+            ,manager_id
+            
+    from HR.employees
+
+</select>
+
+
+
+<insert id="insert">
+
+
+
+</insert>
+
+
+
+</mapper>
