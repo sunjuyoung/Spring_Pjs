@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%-- jstl-1.2.jar 파일 필요 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -30,35 +30,79 @@ div#input:hover, div#output:hover {
 
 <script>
 	$(document).ready(function() {
-
-		var clientId = '__nrAJSkyIyXZcu51oT7';
-		var secretId = 'YUxjXONUas';
 		
-		$.ajax({
-			url:'https://openapi.naver.com/v1/search/movie.json?display=10',
-			type:'get',
-			dataType: 'jsonp',
-			processData: false,
-			
-			beforeSend : function(xhr){
-				xhr.setRequestHeader('X-Naver-Client-Id',clientId);
-				xhr.setRequestHeader('X-Naver-Client-Secret',secretId);
-				xhr.setRequestHeader('Content-type','application/json');
+		
+		
+		var movieApi = function(value){
 
-			},
-			error : function(res){
-				console.log(res);
+			var bookData = { query : value
+							,display : 5};
+			
+			
+		$.ajax({
+			url:'${pageContext.request.contextPath}/movie/movieMain.json',
+			type:'post',
+			
+			data : bookData,
+
+				
+			error : function(request,status,error){
+				console.log(request);
+				console.log(status);
+				console.log(error);
 			},
 			success:function(res){
-				console.log(res);
+			
+				
+				console.log(res.result);
+				console.log(JSON.parse(res.result));
+				var book = JSON.parse(res.result);
+				console.log(book.items.length);
+				
+				
+	
+				for(var i=0; i<book.items.length; i++){
+					$("#book").append("<span>"+book.items[i].title+"<span>");
+					$("#book").append("<img src="+book.items[i].image+" />");
+					$("#book").append("<a href="+book.items[i].link+">주소</a>")
+					$("#book").append("<hr>");
+				}
+				
+				
+				
 			}
 		})
+		
+		}
+		
+		
+		$("#searchBtn").on("click",function(e){
+			e.preventDefault();
+			$("#book").empty();
+			
+			var keyword = $("input[name='searchValue']").val();
+			movieApi(keyword);
+		
+		})
+		movieApi();
 	});
 </script>
 </head>
 <body>
 
 	<div class="container">
+		<div id="searchMovie">
+			<form>
+			<input type="text" placeholder="영화찾기" id="searchValue" name="searchValue">
+			<button type="submit" id="searchBtn">찾기</button>
+			</form>
+		</div>
+		
+		<hr>
+		<div id="book">
+		
+		
+		</div>
 		
 
 
