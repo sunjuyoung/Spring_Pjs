@@ -29,12 +29,21 @@ public class MovieController {
 	@RequestMapping(value = "/movieMain.json")
 	public @ResponseBody Map<String,String> movieList(@RequestParam Map<String,String> params) {
 		String bookName;
+		Integer pageNum;
 	
 		if("".equals(params.get("query")) || params.get("query") == null) {
 			
 			bookName = "배트맨";
 		}else {
 			bookName =  params.get("query");
+			
+		}
+		
+		if("".equals(params.get("page")) || params.get("page") == null) {
+			
+			pageNum = 1;
+		}else {
+			pageNum =  Integer.parseInt(params.get("page"));
 			
 		}
 		
@@ -46,15 +55,11 @@ public class MovieController {
 		String clientSecret = "YUxjXONUas";// 애플리케이션 클라이언트 시크릿값";
 
 		try {
-			
 			String text = URLEncoder.encode(bookName, "utf-8");
 			String apiURL;
 			System.out.println(bookName);
 			
-			
-				 apiURL = "https://openapi.naver.com/v1/search/movie.json?encoding=utf-8&query="+text +"&display="+amount;// json 결과
-		
-			
+				 apiURL = "https://openapi.naver.com/v1/search/movie.json?encoding=utf-8&query="+text +"&display="+amount+"&start="+pageNum;// json 결과
 			
 			URL url = new URL(apiURL);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -79,6 +84,7 @@ public class MovieController {
 			}
 			
 			resultMap.put("result",response.toString());
+			resultMap.put("pageNum",pageNum.toString());
 			
 			
 			br.close();
