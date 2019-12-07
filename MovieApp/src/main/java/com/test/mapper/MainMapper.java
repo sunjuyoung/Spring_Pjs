@@ -1,10 +1,10 @@
 package com.test.mapper;
 
-import java.util.Map;
+import com.test.domain.MainVO;
 
 public interface MainMapper {
 	
-	public Map main();
+	public MainVO main();
 	
 
 }

@@ -1,10 +1,9 @@
 package com.test.service;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.test.domain.MainVO;
 import com.test.mapper.MainMapper;
 
 @Service
@@ -14,7 +13,7 @@ public class MainServiceImpl implements MainService{
 	private MainMapper mapper;
 	
 	@Override
-	public Map main() {
+	public MainVO main() {
 		
 		return mapper.main();
 	}

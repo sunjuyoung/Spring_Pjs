@@ -16,18 +16,22 @@
 			
 			<!-- aws -->
 		<!-- 
-		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://database-1.cdivqmcssv6e.ap-northeast-2.rds.amazonaws.com:3306/innodb"></property> 
 		
-		<property name="username" value="root"></property>
-		<property name="password" value="tnqls2356"></property>
 		-->
+		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://database-2.cdivqmcssv6e.ap-northeast-2.rds.amazonaws.com:3306/innodb"></property> 
+		
+		<property name="username" value="sun"></property>
+		<property name="password" value="tnqls2356"></property>
 		
 		<!-- local -->
-		<property name="jdbcUrl"
+		<!-- <property name="jdbcUrl"
 			value="jdbc:log4jdbc:oracle:thin:@localhost:1521:XE"></property>
 		
 		<property name="username" value="book_ex"></property>
-		<property name="password" value="1234"></property>
+		<property name="password" value="1234"></property> -->
+		
+		
+		
 	</bean>
 
 

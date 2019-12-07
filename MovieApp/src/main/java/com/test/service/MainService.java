@@ -1,9 +1,9 @@
 package com.test.service;
 
-import java.util.Map;
+import com.test.domain.MainVO;
 
 public interface MainService {
 	
 
-	public Map main();
+	public MainVO main();
 }
