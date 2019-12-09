@@ -198,10 +198,11 @@
 		</dependency>
 
 		<!-- Servlet -->
+		<!-- Spring Legacy Project 생성된 서블릿 버전은 2.5이므로 web.xml도 수정 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
+			<version>3.1.0</version>  
 			<scope>provided</scope>
 		</dependency>
 
@@ -222,6 +223,14 @@
 			<version>1.18.0</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
+		</dependency>
+		
+		
 	</dependencies>
 
 	<build>

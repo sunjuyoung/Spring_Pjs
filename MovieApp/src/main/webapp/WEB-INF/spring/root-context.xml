@@ -18,7 +18,7 @@
 		<!-- 
 		
 		-->
-		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://database-2.cdivqmcssv6e.ap-northeast-2.rds.amazonaws.com:3306/innodb"></property> 
+		<property name="jdbcUrl" value="jdbc:log4jdbc:mysql://database-2.cdivqmcssv6e.ap-northeast-2.rds.amazonaws.com:3306/innodb?useSSL=false"></property> 
 		
 		<property name="username" value="sun"></property>
 		<property name="password" value="tnqls2356"></property>

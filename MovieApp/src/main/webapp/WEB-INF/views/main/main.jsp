@@ -82,12 +82,12 @@
         <h1 class="mb-0">Clarence
           <span class="text-primary">Taylor</span>
         </h1>
-        <div class="subheading mb-5">3542 Berry Street · Cheyenne Wells, CO 80810 · 010-9164-8902 ·
+        <div class="subheading mb-5">경기도 하남시 미사강변북로· 010-9164-8902 ·
           <a href="mailto:name@email.com">syseoz@google.com</a>
         </div>
         <p class="lead mb-5">I am experienced in leveraging agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition.</p>
         <div class="social-icons">
-          <a href="#">
+          <a href="https://blog.naver.com/syseoz">
             <i class="fab fa-linkedin-in"></i>
           </a>
           <a href="https://github.com/sunjuyoung" target="_blank">

@@ -26,6 +26,11 @@ public class MovieController {
 		return "movie/movieMain";
 	}
 
+	/**
+	 * 
+	 * @param params
+	 * @return
+	 */
 	@RequestMapping(value = "/movieMain.json")
 	public @ResponseBody Map<String,String> movieList(@RequestParam Map<String,String> params) {
 		String bookName;

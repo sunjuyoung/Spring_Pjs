@@ -10,12 +10,10 @@
 		</layout>
 	</appender>
 	
-	<logger name="java.sql" level="info" additivity="false">
-			<AppenderRef ref="console" />
-		</logger>
+
 	
 	<!-- Application Loggers -->
-	<logger name="com.test.sts">
+	<logger name="com.test.controller">
 		<level value="info" />
 	</logger>
 	

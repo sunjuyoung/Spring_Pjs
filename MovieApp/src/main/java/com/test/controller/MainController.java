@@ -18,6 +18,13 @@ public class MainController {
 	@Autowired
 	private MainService service;
 	
+	
+	/**
+	 * 
+	 * @param model
+	 * @param rttr
+	 * @return
+	 */
 	@RequestMapping(value="/main.do")
 	public String main(ModelMap model, RedirectAttributes rttr) {
 		
