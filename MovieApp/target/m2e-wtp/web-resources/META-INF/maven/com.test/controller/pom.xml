@@ -114,6 +114,7 @@
 		</dependency>
 
 		<!-- Logging -->
+		<!--PreparedSatement에서 사용된 ? 가 어떤 값으로 처리되었는지 확인 기능  -->
 		<dependency>
 			<groupId>org.bgee.log4jdbc-log4j2</groupId>
 			<artifactId>log4jdbc-log4j2-jdbc4</artifactId>
@@ -140,7 +141,7 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
+			<version>1.2.17</version>
 			<exclusions>
 				<exclusion>
 					<groupId>javax.mail</groupId>
@@ -197,10 +198,11 @@
 		</dependency>
 
 		<!-- Servlet -->
+		<!-- Spring Legacy Project 생성된 서블릿 버전은 2.5이므로 web.xml도 수정 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
+			<version>3.1.0</version>  
 			<scope>provided</scope>
 		</dependency>
 
@@ -221,6 +223,14 @@
 			<version>1.18.0</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
+		</dependency>
+		
+		
 	</dependencies>
 
 	<build>
