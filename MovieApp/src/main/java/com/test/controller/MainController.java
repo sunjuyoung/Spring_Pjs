@@ -26,11 +26,11 @@ public class MainController {
 	 * @return
 	 */
 	@RequestMapping(value="/main.do")
-	public String main(ModelMap model, RedirectAttributes rttr) {
+	public void main(ModelMap model, RedirectAttributes rttr) {
+		
+		log.info("hi");
 		
 		
-		//model.addAttribute("list",service.main());
-		return "main/main";
 	}
 	
 
