@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
-<%@include file="../projects/includes/header.jsp" %>
+<%@include file="../board/includes/header.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
@@ -7,7 +9,7 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800"></h1>
-            <a href="${pageContext.request.contextPath}/projects/projectMain.do" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Excel Download</a>
+            <a href="${pageContext.request.contextPath}/board/mainList.do" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Excel Download</a>
           </div>
 
           <!-- Content Row -->
@@ -47,7 +49,8 @@
 												<td><a class="move" href='<c:out value="${board.bno }" />'><c:out value="${board.bno}" /></a></td>
 												<td><a class="move" href='<c:out value="${board.bno }" />'><c:out value="${board.title }" /> </a></td>
 												<td><c:out value="${board.writer }" /></td>
-												<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate }" /></td>
+												
+												<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updatedate }" /></td>
 										
 											</tr>
 
@@ -55,12 +58,22 @@
 
 									</tbody>
 								</table>
+								
 							</div>
+							
+							
+							
+							
 						</div>
 						   
 					</div>
 
 				</div>
+				<form id="actionForm" action="/board/list" method="get">
+					<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
+					<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
+				</form>
+				
 
           </div>
 
@@ -219,6 +232,24 @@
   <!-- Page level custom scripts -->
   <script src="${pageContext.request.contextPath}/resources/projects/js/demo/chart-area-demo.js"></script>
   <script src="${pageContext.request.contextPath}/resources/projects/js/demo/chart-pie-demo.js"></script>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+		var $actionForm = $("#actionForm");
+		//글 조회
+		$(".move").on("click",function(e){
+			e.preventDefault();
+
+			$actionForm.append("<input type='hidden' name='bno' value='"+$(this).attr("href")+"'>");
+			$actionForm.attr("action","${pageContext.request.contextPath}/board/get");
+			$actionForm.submit();
+			
+		});
+		
+	});
+	
+	</script>
+
 
 </body>
 

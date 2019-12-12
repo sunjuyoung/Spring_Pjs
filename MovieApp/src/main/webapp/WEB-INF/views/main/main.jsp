@@ -64,7 +64,7 @@
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <a class="collapse-item" href="${pageContext.request.contextPath}/projects/projectMain.do" target="_blank">Spring</a><br />
+            <a class="collapse-item" href="${pageContext.request.contextPath}/board/mainList.do" target="_blank">Spring</a><br />
             <a class="collapse-item" href="register.html">Spring Boot</a><br />
             <a class="collapse-item" href="forgot-password.html">React</a>
             <div class="collapse-divider"></div>
@@ -78,9 +78,9 @@
   <div class="container-fluid p-0">
 
     <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
-      <div class="w-100">
-        <h1 class="mb-0">Clarence
-          <span class="text-primary">Taylor</span>
+      <div class="w-90">
+        <h1 class="mb-0">JAVA WEB Developer 
+          <span class="text-info"></span>
         </h1>
         <div class="subheading mb-5">경기도 하남시 미사강변북로· 010-9164-8902 ·
           <a href="mailto:name@email.com">syseoz@google.com</a>
