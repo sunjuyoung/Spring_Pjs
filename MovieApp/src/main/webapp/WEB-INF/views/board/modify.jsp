@@ -16,11 +16,11 @@
   <title>Board modify Page!</title>
 
   <!-- Custom fonts for this template-->
-  <link href="/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="${pageContext.request.contextPath}/resources/projects/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <!-- Custom styles for this template-->
-  <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="${pageContext.request.contextPath}/resources/projects/css/sb-admin-2.min.css" rel="stylesheet">
 
 
 <style>
@@ -41,16 +41,14 @@
       <div class="card-body p-0">
         <!-- Nested Row within Card Body -->
         <div class="row">
-          <div class="col-lg-5 d-none d-lg-block "><img src="${pageContext.request.contextPath}/resources/img/chaewon05.jpg" width="500" height="780"></div>
+          <div class="col-lg-5 d-none d-lg-block "><img src="${pageContext.request.contextPath}/resources/projects/img/chaewon05.jpg" width="500" height="780"></div>
           <div class="col-lg-7">
             <div class="p-5">
               <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">Board modify Page!</h1>
               </div>
-   <form role="form"  action = "/board/remove"method="post">
-            
-            
-                            <div class="form-group row">
+   			<form role="form"  action = "/board/remove"method="post">
+                <div class="form-group row">
                   <div class="col-sm-12 ">
                   <b>bno</b>
                     <input type="text" class="form-control form-control-user" id="bno" name="bno" readonly="readonly" value='<c:out value="${board.bno }"></c:out>'>
@@ -83,7 +81,7 @@
                 <div class="form-group row">
                 <div class="col-sm-12">
                 <label>Update Date</label>
-                <input class="form-control" name="updateDate" value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.updateDate}" />'  readonly="readonly">
+                <input class="form-control" name="updateDate" value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.updatedate}" />'  readonly="readonly">
                 </div>
                 </div>
                 
@@ -93,10 +91,10 @@
                 <hr>
                 <!-- 어느 엘리멘트에나 data-로 시작하는 속성은 무엇이든 사용할 수 있습니다 -->
                 <button type="submit" data-oper="modify"class="btn btn-google btn-user btn-block"> 
-                  <i class="fab fa-google fa-fw"></i> 수정
+                  <!-- <i class="fab fa-google fa-fw"></i> --> 수정
                 </button>
                 <button type="submit" data-oper="remove" class="btn btn-facebook btn-user btn-block">
-                  <i class="fab fa-facebook-f fa-fw"></i>삭제
+                <!--   <i class="fab fa-facebook-f fa-fw"></i> -->삭제
                 </button>
     
               <hr>
@@ -106,10 +104,9 @@
               
               <input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum }" />'>
               <input type="hidden" name="amount" value='<c:out value="${cri.amount }" />'>
+               <input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }" />
                 </form> 
-              <div class="text-center">
-                <a class="small" href="login.html">Already have an account? Login!</a>
-              </div>
+              
             </div>
           </div>
         </div>
@@ -119,36 +116,32 @@
   </div>
 
   <!-- Bootstrap core JavaScript-->
-<!--   <script src="/resources/vendor/jquery/jquery.min.js"></script> -->
+<!--   <script src="${pageContext.request.contextPath}/resources/projects/vendor/jquery/jquery.min.js"></script> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-  <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="${pageContext.request.contextPath}/resources/projects/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Core plugin JavaScript-->
-  <script src="/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="${pageContext.request.contextPath}/resources/projects/vendor/jquery-easing/jquery.easing.min.js"></script>
 
   <!-- Custom scripts for all pages-->
-  <script src="/resources/js/sb-admin-2.min.js"></script>
+  <script src="${pageContext.request.contextPath}/resources/projects/js/sb-admin-2.min.js"></script>
 <script>
 
 $(document).ready(function(){
-	
-
-	
 	var formObj=$("form");
+	
 	
 	$("button").on("click",function(e){
 	e.preventDefault();
-	
 	var operation=$(this).data("oper");
-	
 	console.log(operation);
 	
 	if(operation === "modify"){
-		formObj.attr("action","/board/modify");
+		formObj.attr("action","${pageContext.request.contextPath}/board/modify");
 	}else if(operation === "remove"){
-		formObj.attr("action","/board/remove");
+		formObj.attr("action","${pageContext.request.contextPath}/board/remove");
 	}else{
-		formObj.attr("action","/board/list").attr("method","get");
+		formObj.attr("action","/board/mainList.do").attr("method","get");
 		
 		//수정/삭제를 취소하고 목록페이지 이동
 		//목록페이지는 pagenum과 amount 만을 사용하므로 다른 내용들은 삭제
@@ -160,17 +153,11 @@ $(document).ready(function(){
 		//모든내용 삭제후 필요한태그 추가
 		formObj.append(pageNumTag);
 		formObj.append(amountTag);
-		
 	}
-	
-
 	
 	formObj.submit();
 	
 	});
-	
-	
-	
 	
 	
 	

@@ -59,7 +59,7 @@ float : right;
 							<div class="text-center">
 								<h6 class="h6 text-gray-800 mb-2">Board Read Page!</h6>
 							</div>
-						 <form class="form" action="/board/remove" method="post"> 
+						 <form class="form" action="${pageContext.request.contextPath}/board/remove" method="post"> 
 						 
 						 <input type="hidden" value='<c:out value="${board.bno}" />'  id="bno" name="bno"/>
 							<div class="form-group row">
@@ -111,54 +111,38 @@ float : right;
                            
               <input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum }" />'>
               <input type="hidden" name="amount" value='<c:out value="${cri.amount }" />'>
-							
+			<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }" />		
 			 </form> 
 			 
-			 
-			 <!-- -------------------  reply-----------------------  -->
+						 <!-- -------------------  reply-----------------------  -->
 			 <div class='row'>
-
-  <div class="col-lg-12">
-
-    <!-- /.panel -->
-    <div class="panel panel-default">
-     <div class="panel-heading">
-        <i class="fa fa-comments fa-fw"></i> Reply
-    
-        <button id="addReplyBtn" class="btn btn-primary btn-sm pull-right" data-oper="new"> New </button>
-      </div>
-      
-      
-      <!-- /.panel-heading -->
-      <div class="panel-body">  
-      <hr>      
-      
-        <ul class="chat">
-<!-- <li class ="left clearfix" data-rno='44'>
-<div>
-
-<div class="header">
-<strong class="primary-font">user00</strong>
-<small class="pull-right text-muted">2018-11-11 13:13</small>
-</div>
-<p>  GOODL DIDIDID </p>
-</div>
-</li> -->
-
-        </ul>
-        <!-- ./ end ul -->
-      </div>
-      <!-- /.panel .chat-panel -->
-      <div class = "panel-footer">  <!-- 댓글 페이징 -->
-      
-      </div>
-      
-		</div>
-  </div>
-  <!-- ./ end row -->
-</div>
-			 
-
+			  <div class="col-lg-12">
+			
+			    <!-- /.panel -->
+			    <div class="panel panel-default">
+			     <div class="panel-heading">
+			        <i class="fa fa-comments fa-fw"></i> Reply
+			    
+			        <button id="addReplyBtn" class="btn btn-primary btn-sm pull-right" data-oper="new"> New </button>
+			      </div>
+			      <!-- /.panel-heading -->
+			      <div class="panel-body">  
+			      <hr>      
+			      
+			        <ul class="chat">
+			
+			        </ul>
+			        <!-- ./ end ul -->
+			      </div>
+			      <!-- /.panel .chat-panel -->
+			      <div class = "panel-footer">  <!-- 댓글 페이징 -->
+			      
+			      </div>
+			      
+					</div>
+			  </div>
+			  <!-- ./ end row -->
+			</div>
 							
 							
 							<div class="text-center">
@@ -356,7 +340,7 @@ float : right;
 
 		
 		if(operation === "remove"){       //삭제 버튼 처리
-			formObj.attr("action","/board/remove")
+			formObj.attr("action","${pageContext.request.contextPath}/board/remove")
 			formObj.submit();
 		}else if(operation === "new"){    //댓글 입력 모달창 처리
 			 $("#replyModal").modal();

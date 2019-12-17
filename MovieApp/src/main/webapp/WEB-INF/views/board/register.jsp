@@ -32,7 +32,7 @@
       <div class="card-body p-0">
         <!-- Nested Row within Card Body -->
         <div class="row">
-          <div class="col-lg-5 d-none d-lg-block "><img src="${pageContext.request.contextPath}/resources/projects/img/heartiz-teaser-chaewon.jpg" width="500" height="700"></div>
+          <div class="col-lg-5 d-none d-lg-block "><img src="${pageContext.request.contextPath}/resources/projects/img/test.jpg" width="500" height="700"></div>
           <div class="col-lg-7">
             <div class="p-5">
               <div class="text-center">
@@ -71,7 +71,7 @@
                   <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
                 </a>
                  -->
-                
+                <input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }" />
               </form>
               <hr>
               <div class="text-center">
@@ -103,6 +103,9 @@ $(document).ready(function(){
 	var name = '<sec:authentication property="principal.username" />';
 	
 	$("input[name='writer']").val(name);
+	$("input[name='writer']").attr("readonly","readonly");
+	
+	
 	
 	
 });

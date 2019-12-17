@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.test.domain.BoardVO;
+import com.test.domain.PageDTO;
 import com.test.mapper.BoardMapper;
 
 import lombok.extern.log4j.Log4j;
@@ -33,29 +34,26 @@ public class BoardServiceImpl implements BoardService {
 	public BoardVO get(Long bno) {
 		return mapper.get(bno);
 	}
-	/*
 	
-	//페이징 리스트
-	@Override
-	public List<BoardVO> getListWithPaging(Criteria cri) {
-		
-		
-		return mapper.getListWithPaging(cri);
-	}
 	
 	//입력
 	@Override
-	public void register(BoardVO board) {
-		mapper.insertSelectKey(board);
+	public void insert(BoardVO board) {
+		mapper.insert(board);
 		
 	}
-
-
-
+	
+	
 	//삭제
 	@Override
-	public boolean remove(Long bno) {
-		return mapper.delete(bno) ==1;
+	public boolean remove(int bno) {
+		
+		boolean result = false;
+		if(mapper.delete(bno) >0) {
+			result =true;
+		}
+		
+		return result;
 	}
 
 	//수정
@@ -64,12 +62,30 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.modify(board);
 	}
 
+	//페이징 리스트
+	@Override
+	public List<BoardVO> getListWithPaging(PageDTO dto) {
+		
+		
+		return mapper.getListWithPaging(dto);
+	}
+	
+	
+	
+	public int total() {
+		
+		return mapper.total();
+	}
+
+	/*
+	
+
+
+
 
 	
-	public int total(Criteria cri) {
-		
-		return mapper.total(cri);
-	}
+
+
 	
 	*/
 

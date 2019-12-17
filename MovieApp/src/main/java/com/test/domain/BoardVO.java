@@ -11,5 +11,6 @@ public class BoardVO {
 	private int bno;
 	private Date updatedate,regdate;
 	
+	private int pageNum,amount;
 
 }

@@ -42,76 +42,46 @@
 	</select>
 	
 	<insert id="insert">
-		insert into tb1_board (bno,title,content,writer) values
-		(seq_board.nextval,#{title},#{content},#{writer})
+		insert into tb1_board (title,content,writer) values
+		(#{title},#{content},#{writer})
 	</insert>
 	
-<!-- 
+
 
 	<select id="getListWithPaging" resultType="com.test.domain.BoardVO">
-		<![CDATA[
-		select bno,title,content,writer,regDate,updateDate,replyCnt from 
-		(select /*+INDEX_DESC (tb1_board pk_board)*/ rownum rn, bno, title, content,regDate,updateDate,writer,replyCnt from tb1_board where 
-		]]>
-
-		<include refid="criteria"></include>
-
-
-			<![CDATA[
-			rownum <= #{pageNum} * #{amount}) 
-			where rn > (#{pageNum} -1) * #{amount}
-			
-			]]>
-
-
+		select bno,title,content,writer,regdate,updatedate from tb1_board limit #{limit} OFFSET #{offset}
 	</select>
 
 
- -->
+
 
 	<!-- selectKey 어노테이션, pk값을 미리(before) sql을 통해서 처리후 결과 보관 자동으로 추가되는 PK값을 
 		확인해하는 상환에서 유용 -->
 	<insert id="insertSelectKey">
-		<selectKey keyProperty="bno" order="BEFORE"
-			resultType="long">
+		<selectKey keyProperty="bno" order="BEFORE" resultType="long">
 			select seq_board.nextval from dual
 		</selectKey>
-
 		insert into tb1_board (bno,title,content,writer) values
 		(#{bno},#{title},#{content},#{writer})
-
 	</insert>
-
-<!--  
-
-
 
 
 	<delete id="delete">
 		delete from tb1_board where bno=#{bno}
-
 	</delete>
 
 
 	<update id="modify">
 		update tb1_board set title=#{title}, content=#{content}, writer=#{writer},
-		updateDate=sysdate where bno=#{bno}
-
+		updatedate=now() where bno=#{bno}
 	</update>
-
-
+	
+	
 	<select id="total" resultType="int">
-		select count(*) from tb1_board
-		where
-		<include refid="criteria"></include>
-
-		bno >0
-
+		select count(*) from tb1_board 
+	
 	</select>
 
-	<update id="updateReplyCnt">
-		update tb1_board set replyCnt = replycnt + #{amount} where bno =#{bno}
 
-	</update>
--->
+
 </mapper>

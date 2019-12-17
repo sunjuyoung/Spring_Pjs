@@ -61,10 +61,18 @@
 								
 							</div>
 							
+							<div id="page-wrapper">
+									<ul class="pagination">
+									<c:forEach var="page" begin="${page.startPage }" end="${page.endPage }" >
+									 <li><a href="#">${page }</a></li>
+									</c:forEach>
+									
+									</ul>
 							
-							
+							</div>
 							
 						</div>
+						
 						   
 					</div>
 
@@ -140,40 +148,11 @@
 
             </div>
 
-            <div class="col-lg-6 mb-4">
-
-              <!-- Illustrations -->
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                </div>
-                <div class="card-body">
-                  <div class="text-center">
-                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="img/undraw_posting_photo.svg" alt="">
-                  </div>
-                  <p>Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a constantly updated collection of beautiful svg images that you can use completely free and without attribution!</p>
-                  <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on unDraw &rarr;</a>
-                </div>
-              </div>
-
-              <!-- Approach -->
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                </div>
-                <div class="card-body">
-                  <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce CSS bloat and poor page performance. Custom CSS classes are used to create custom components and custom utility classes.</p>
-                  <p class="mb-0">Before working with this theme, you should become familiar with the Bootstrap framework, especially the utility classes.</p>
-                </div>
-              </div>
-
-            </div>
           </div>
 
         </div>
         <!-- /.container-fluid -->
 
-      </div>
       <!-- End of Main Content -->
 
       <!-- Footer -->
@@ -186,10 +165,8 @@
       </footer>
       <!-- End of Footer -->
 
-    </div>
     <!-- End of Content Wrapper -->
 
-  </div>
   <!-- End of Page Wrapper -->
 
   <!-- Scroll to Top Button-->
@@ -216,9 +193,39 @@
     </div>
   </div>
 
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+         
+        </div>
+        <div class="modal-body">
+          <p>${result }</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+
+
   <!-- Bootstrap core JavaScript-->
-  <script src="${pageContext.request.contextPath}/resources/projects/vendor/jquery/jquery.min.js"></script>
-  <script src="${pageContext.request.contextPath}/resources/projects/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   
+<%--  <script src="${pageContext.request.contextPath}/resources/projects/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>  --%>
 
   <!-- Core plugin JavaScript-->
   <script src="${pageContext.request.contextPath}/resources/projects/vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -232,10 +239,38 @@
   <!-- Page level custom scripts -->
   <script src="${pageContext.request.contextPath}/resources/projects/js/demo/chart-area-demo.js"></script>
   <script src="${pageContext.request.contextPath}/resources/projects/js/demo/chart-pie-demo.js"></script>
+  
+
+
+
+<!-- Latest compiled JavaScript -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+  
+  
 
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var $actionForm = $("#actionForm");
+		var result = '<c:out value="${reulst}" />';
+		
+		/* 뒤로가기 앞으로가기 서버를 다시 호춣하는게 아니라 과거에 데이터를 활용
+			window history객체를 이용*/
+		history.replaceState({},null,null);
+		
+		function checkModal(result){
+			
+			if(result === '' || history.state){
+				return;
+			}
+			
+			if(result != ''){
+				$("#myModal").modal("show");
+			}
+			
+		}
+		
+		
+		
 		//글 조회
 		$(".move").on("click",function(e){
 			e.preventDefault();

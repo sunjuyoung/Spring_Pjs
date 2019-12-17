@@ -169,14 +169,8 @@ DataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, bu
 	}
 	catch (e) {}
 
-	attach(
-		$(host).empty().html('<ul class="pagination"/>').children('ul'),
-		buttons
-	);
 
-	if ( activeEl !== undefined ) {
-		$(host).find( '[data-dt-idx='+activeEl+']' ).focus();
-	}
+	
 };
 
 
