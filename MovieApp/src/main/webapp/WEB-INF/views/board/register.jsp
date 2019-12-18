@@ -22,6 +22,14 @@
   <!-- Custom styles for this template-->
   <link href="${pageContext.request.contextPath}/resources/projects/css/sb-admin-2.min.css" rel="stylesheet">
 
+<style>
+div#file{
+margin : 10px;
+
+}
+
+</style>
+
 </head>
 
 <body class="bg-gradient-primary">
@@ -57,19 +65,19 @@
                   <div class="col-sm-12">
                     <input type="text" class="form-control form-control-user" id="writer" name="writer">
                   </div>
+                 <div class="form-group row">
+				<div class="col-sm-8" id="file">
+                    <input type="file" class="form-control form-control-user" id="uploadFile" name="uploadFile" multiple>
+                    	<div class="uploadResult">
+                    	<ul></ul>
+                    	</div>
+               </div>
                 </div>
+               </div>
                 <button type="submit" class="btn btn-primary btn-user btn-block">
                  등록
                 </button>
-                
-                
-<!--                 <hr>
-                <a href="index.html" class="btn btn-google btn-user btn-block">
-                  <i class="fab fa-google fa-fw"></i> Register with Google
-                </a>
-                <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                  <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                </a>
+
                  -->
                 <input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }" />
               </form>
@@ -104,6 +112,85 @@ $(document).ready(function(){
 	
 	$("input[name='writer']").val(name);
 	$("input[name='writer']").attr("readonly","readonly");
+	
+	
+	//파일 확장자나 크기 사전 처리
+	var regex = new RegExp("(.*?)\.(exe|sh)$");
+	var maxSize = 10240000;
+	
+	function checkExtension(fileName,fileSize){
+		if(fileSize >= maxSize){
+			alert("파일 크기 초과");
+			return false;
+		}
+		
+		if(regex.test(fileName)){
+			alert("해당 종류의 파일은 업로드할 수 없습니다.");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	//목록 출력
+	var uploadResult = $(".uploadResult ul");
+	function showUploadResult(arr){
+		var str = "";
+		$(arr).each(function(i,obj){
+			if(!obj.image){
+				str+="<li><img src='${pageContext.request.contextPath}/resources/attach-icon.jpg'>"+obj.fileName+"</li>";
+			}else{
+				
+				//브라우저에서 GET방식으로 첨부파일의 이름을 사용할 때 파일이름에 공백,한글 등이 문제가 될 수 있다.
+				//encodeURIComponent사용
+				var fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName);
+				console.log(fileCallPath);
+				str+="<li><img src='${pageContext.request.contextPath}/sample/display?fileName="+fileCallPath+"'>"+obj.fileName+"</li>";
+			}
+			
+		})
+		uploadResult.append(str);
+	}
+	
+	
+	
+	//input type file 은 다른 DOM 다르게 readonly라 안쪽의 내용을 수정할 수 없다.
+	//clone을 활용하여 업로드 후 초기화
+	var cloneObj = $(".uploadDiv").clone();
+
+	$("#uploadBtn").on("click",function(e){
+		//가상의 form태그 생성
+		//Ajax를 이용한 파일업로드는 formdata를 이용해서 필요한 파라미터를 담아서 전송
+		var formData = new FormData();
+		var inputFile = $("input[name='uploadAjax']");
+		var files = inputFile[0].files;
+		
+		for(var i=0; i<files.length; i++){
+			if(!checkExtension(files[i].name,files[i].size)){
+				return false;
+			}
+			formData.append("uploadFile",files[i]);
+		}
+
+		$.ajax({
+			url:'${pageContext.request.contextPath}/sample/uploadFormAction',
+			processData : false,
+			contentType : false,
+			data : formData,
+			type:'POST',
+			dataType:'json',
+			success:function(res){
+
+				console.log(res);
+				
+				showUploadResult(res);
+				
+				$(".uploadDiv").html(cloneObj.html());
+			}
+			
+		})
+		
+	})
 	
 	
 	

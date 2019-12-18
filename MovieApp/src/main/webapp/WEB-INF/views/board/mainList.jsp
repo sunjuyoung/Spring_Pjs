@@ -61,14 +61,24 @@
 								
 							</div>
 							
-							<div id="page-wrapper">
+							<div class="pull-right">
+								<div id="page-wrapper">
 									<ul class="pagination">
-									<c:forEach var="page" begin="${page.startPage }" end="${page.endPage }" >
-									 <li><a href="#">${page }</a></li>
+									
+									<c:if test="${page.prev }">
+										<li class="paginate_button previous"><a href="${page.pageNum -1 }">Previous</a></li>
+									</c:if>
+									
+									<c:forEach var="num" begin="${page.startPage }" end="${page.endPage }" >
+										 <li class="paginate_button ${page.pageNum == num? 'active':''}"><a href="${num }">${num }</a></li>
 									</c:forEach>
 									
+									<c:if test="${page.next }">
+										<li class="paginate_button next"><a href="${page.pageNum +1 }">next</a></li>
+									</c:if>
 									</ul>
 							
+								</div>
 							</div>
 							
 						</div>
@@ -77,9 +87,9 @@
 					</div>
 
 				</div>
-				<form id="actionForm" action="/board/list" method="get">
-					<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum }">
-					<input type="hidden" name="amount" value="${pageMaker.cri.amount }">
+				<form id="actionForm" action="${pageContext.request.contextPath}/board/mainList.do" method="get">
+					<input type="hidden" name="pageNum" value="${page.pageNum }">
+					<input type="hidden" name="amount" value="${page.amount }">
 				</form>
 				
 
@@ -268,6 +278,16 @@
 			}
 			
 		}
+		
+		//페이지 버튼
+		$(".paginate_button a").on("click",function(e){
+			e.preventDefault();
+			var num = $(this).attr("href");
+			console.log(num);
+			$("input[name='pageNum']").val(num);
+			$actionForm.submit();
+			
+		});
 		
 		
 		

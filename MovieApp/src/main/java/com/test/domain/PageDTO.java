@@ -6,10 +6,10 @@ import lombok.Data;
 public class PageDTO {
 
 	
-	private int pageNum,amount,total, limit,offset;
+	private int pageNum,amount,total,offset;
 	private boolean next,prev;
 	
-	
+	private String keyword , type;
 	
 	
 	private int startPage,endPage;
@@ -20,7 +20,7 @@ public class PageDTO {
 		this.pageNum = pageNum;
 		this.total = total;
 		
-		this.limit = pageNum * amount;
+		
 		this.offset = (pageNum -1) * amount;
 	
 		//1~10페이지까지 10
@@ -35,8 +35,8 @@ public class PageDTO {
 			endPage = realEnd;
 		}
 		
-		this.prev = startPage > 1;
-		this.next = this.endPage < realEnd;
+		this.prev = this.pageNum > 1;
+		this.next = this.pageNum < endPage;
 		
 		
 	}

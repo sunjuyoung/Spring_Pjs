@@ -96,7 +96,7 @@ float : right;
 							<div class="form-group row">
 							<div class="col-sm-6">
 							<a
-								href="${pageContext.request.contextPath}/board/modify?bno=${board.bno}&pageNum=${cri.pageNum}&amount=${cri.amount}"
+								href="${pageContext.request.contextPath}/board/modify?bno=${board.bno}&pageNum=${vo.pageNum}&amount=${vo.amount}"
 								class="btn btn-info btn-user btn-block">  수정
 							</a>
 							</div>
@@ -109,8 +109,8 @@ float : right;
                 </div>
                 </div>
                            
-              <input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum }" />'>
-              <input type="hidden" name="amount" value='<c:out value="${cri.amount }" />'>
+              <input type="hidden" name="pageNum" value='<c:out value="${vo.pageNum }" />'>
+              <input type="hidden" name="amount" value='<c:out value="${vo.amount }" />'>
 			<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }" />		
 			 </form> 
 			 
@@ -147,7 +147,7 @@ float : right;
 							
 							<div class="text-center">
 								<a class="small"
-									href="${pageContext.request.contextPath}/board/mainList.do?pageNum=${cri.pageNum}&amount=${cri.amount}">메인화면</a>
+									href="${pageContext.request.contextPath}/board/mainList.do?pageNum=${vo.pageNum}&amount=${vo.amount}">메인화면</a>
 							</div>
 
 						</div>

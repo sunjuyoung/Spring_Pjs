@@ -30,11 +30,41 @@
 			</trim>
 		</if>
 	</sql>
+	
+	<sql id="boardList">
+	<where>
+		<if test="type == 'T'.toString()">
+			title like '%'||#{keyword}||'%'
+		</if>
+		<if test="type == 'C'.toString()">
+			content like '%'||#{keyword}||'%'
+		</if>
+	
+		<if test="type == 'W'.toString()">
+			write like '%'||#{keyword}||'%'
+		</if>
+		<if test="type == null">
+		</if>
+		</where>
+	</sql>
+	
+		<sql id="board">
+		
+		<if test="type == 'T'.toString()">
+			title like '%'||#{keyword}||'%'
+		</if>
+		<if test="type == 'C'.toString()">
+			content like '%'||#{keyword}||'%'
+		</if>
+	
+		<if test="type == 'W'.toString()">
+			write like '%'||#{keyword}||'%'
+		</if>
+	
+	</sql>
+	
+	
 
-
-	<select id="getList" resultType="com.test.domain.BoardVO">
-		select * from tb1_board  limit 10
-	</select>
 	
 	
 	<select id="get" resultType="com.test.domain.BoardVO">
@@ -49,7 +79,8 @@
 
 
 	<select id="getListWithPaging" resultType="com.test.domain.BoardVO">
-		select bno,title,content,writer,regdate,updatedate from tb1_board limit #{limit} OFFSET #{offset}
+		select bno,title,content,writer,regdate,updatedate from tb1_board limit #{amount} OFFSET #{offset}
+		<include refid="boardList"></include>
 	</select>
 
 
@@ -79,7 +110,6 @@
 	
 	<select id="total" resultType="int">
 		select count(*) from tb1_board 
-	
 	</select>
 
 

@@ -31,7 +31,7 @@ public class BoardServiceImpl implements BoardService {
 
 	//검색
 	@Override
-	public BoardVO get(Long bno) {
+	public BoardVO get(int bno) {
 		return mapper.get(bno);
 	}
 	

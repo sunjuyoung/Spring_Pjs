@@ -10,7 +10,7 @@ public interface BoardService {
 	
 	public List<BoardVO> getList();
 	
-	public BoardVO get(Long bno);
+	public BoardVO get(int bno);
 	
 	public void insert(BoardVO board);
 	
