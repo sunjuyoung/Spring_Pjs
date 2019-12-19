@@ -184,7 +184,14 @@ public class BoardController {
 	}
 	
 	
-	
+	/**
+	 * 파일업로드
+	 */
+	@GetMapping(value= {"/uploadForm","/uploadAjax"})
+	public void uploadForm() {
+		
+		log.info("upload form");
+	}
 
 	
 	/**

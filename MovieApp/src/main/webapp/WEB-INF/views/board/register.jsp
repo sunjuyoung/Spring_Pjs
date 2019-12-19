@@ -27,6 +27,14 @@ div#file{
 margin : 10px;
 
 }
+#preview{
+width : 100px;
+height : 100px;
+}
+
+div.p-5{
+padding : 
+}
 
 </style>
 
@@ -40,8 +48,7 @@ margin : 10px;
       <div class="card-body p-0">
         <!-- Nested Row within Card Body -->
         <div class="row">
-          <div class="col-lg-5 d-none d-lg-block "><img src="${pageContext.request.contextPath}/resources/projects/img/test.jpg" width="500" height="700"></div>
-          <div class="col-lg-7">
+          <div class="col-lg-12">
             <div class="p-5">
               <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">글 작성</h1>
@@ -49,36 +56,35 @@ margin : 10px;
               <form class="form" action="${pageContext.request.contextPath}/board/register" method="post">
                 <div class="form-group row">
                   <div class="col-sm-12 ">
-                  
+                  <label>제목</label>
                     <input type="text" class="form-control form-control-user" id="title" name="title" placeholder="title">
                   </div>
-                <!--   <div class="col-sm-6">
-                    <input type="text" class="form-control form-control-user" id="exampleLastName" placeholder="Last Name">
-                  </div> -->
+ 
                 </div>
                 <div class="form-group">
+                 <label>내용</label>
                 <textarea class = "form-control form-control-user"rows="3" cols="12" name="content" placeholder="content"></textarea>
-                 <!--  <input type="email" class="form-control form-control-user" id="exampleInputEmail" placeholder="Email Address"> -->
                 </div>
                 <div class="form-group row">
 
                   <div class="col-sm-12">
+                   <label>작성자</label>
                     <input type="text" class="form-control form-control-user" id="writer" name="writer">
                   </div>
                  <div class="form-group row">
-				<div class="col-sm-8" id="file">
-                    <input type="file" class="form-control form-control-user" id="uploadFile" name="uploadFile" multiple>
-                    	<div class="uploadResult">
-                    	<ul></ul>
+				<div class="col-lg-7" id="file">
+                    <input type="file"  id="uploadAjax" name="uploadAjax"  multiple />
+                    </div>
+                    	<div class="col-lg-4 uploadResult">
+                    	<img src="${pageContext.request.contextPath}/resources/img/izone.jpg"  id="preview"/>
                     	</div>
-               </div>
+               
                 </div>
                </div>
                 <button type="submit" class="btn btn-primary btn-user btn-block">
                  등록
                 </button>
 
-                 -->
                 <input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }" />
               </form>
               <hr>
@@ -108,10 +114,52 @@ margin : 10px;
 <script type="text/javascript">
 $(document).ready(function(){
 	
+	//파일 종류, 크기
+	var imageXp = new RegExp("(.*?)\.(jpg|png)$");
+	var imageMax = 10240000;
+	
 	var name = '<sec:authentication property="principal.username" />';
 	
 	$("input[name='writer']").val(name);
 	$("input[name='writer']").attr("readonly","readonly");
+	
+	
+	var file = document.getElementById('uploadAjax');
+	file.onchange = function(e) {
+	var img = e.target.files;
+	
+	if(!checkImage(img[0].name,img[0].size)){
+		$("input[name='uploadAjax']").val('');
+		$("#preview").attr("src","${pageContext.request.contextPath}/resources/img/izone.jpg");
+		return false;
+		
+	}else{
+		var fileReader = new FileReader();
+		fileReader.readAsDataURL(e.target.files[0]);
+		fileReader.onload = function(e) {
+		$("#preview").attr("src",e.target.result);
+		}
+	}
+	 
+
+	}
+	
+	function checkImage(fileName,filesize){
+		
+		if(filesize >= imageMax){
+			alert("파일 크기가 초과 (10Mb)");
+			return false;
+		}
+		if(!imageXp.test(fileName)){
+			alert("해당 종류의 파일은 업로드할수 없습니다 (이미지파일전용)");
+			return false;
+		}
+		return true;
+	}
+	
+	
+	
+	
 	
 	
 	//파일 확장자나 크기 사전 처리
