@@ -197,5 +197,10 @@ public class SampleController {
 		return new ResponseEntity<Resource>(resource,headers,HttpStatus.OK);
 	}
 	
+	@GetMapping(value="/bandSample")
+	public void bandSample() {
+		
+	}
+	
 
 }

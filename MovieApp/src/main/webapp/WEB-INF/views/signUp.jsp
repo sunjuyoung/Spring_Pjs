@@ -73,6 +73,7 @@ $(document).ready(function(){
 								</div>
 								<div class="mt-4 text-center">
 									<a href="${pageContext.request.contextPath}/signUp">cancel</a>
+									 <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
 								</div>
 							</form>
 						</div>
