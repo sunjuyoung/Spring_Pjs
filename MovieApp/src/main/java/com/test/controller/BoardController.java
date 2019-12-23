@@ -116,8 +116,72 @@ public class BoardController {
 		}
 		
 		
+		return "redirect:/board/mainList.do";
+		
+	}
+	
+	/**
+	 * 
+	 * @param vo
+	 * @param uploadFile
+	 * @param model
+	 * @return
+	 */
+	@PostMapping(value="/registerWithFile",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public String registerWithFile (BoardVO vo,MultipartFile[] uploadFile, Model model) {
+		String uploadFolder = "C:\\upload";
+		List<AttachFileDTO> list = new ArrayList<>();
+		
+		//make folder
+		String uploadFolderPath = getFolder();
+		File uploadPath = new File(uploadFolder,uploadFolderPath);
+		log.info("uploadPath : " + uploadPath);
+		
+		if(uploadPath.exists() == false) {
+			uploadPath.mkdirs();
+		}
+		
+		
+		
+		for(MultipartFile multipartFile : uploadFile) {
+			AttachFileDTO dto = new AttachFileDTO();
+			
+			//IE 경우 파일 경로전체가 출력된다 
+			String uploadFileName = multipartFile.getOriginalFilename();
+			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
+			dto.setFileName(uploadFileName); //파일네임 저장
+			
+			//중복 방지를 위한 UUID
+			UUID uuid = UUID.randomUUID();
+			dto.setUuid(uuid.toString()); // uuid 저장
+			uploadFileName = uuid.toString()+"_"+uploadFileName;
+		
+			try {
+				File saveFile = new File(uploadPath , uploadFileName);
+				multipartFile.transferTo(saveFile);
+				dto.setUploadPath(uploadFolderPath);  //저장경로 저장
+				
+				//이미지파일 체크 및 섬네일 생성
+				if(checkImageType(saveFile)) {
+					dto.setImage(true);  //이미지 여부 저장
+					//InputStream 과 io.File객체를 이용해서 파일생성
+					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_"+uploadFileName));
+					
+					Thumbnailator.createThumbnail(multipartFile.getInputStream(),thumbnail,100,100);
+					thumbnail.close();
+				}
+				
+				list.add(dto);
+				
+				service.fileInsert(vo);
+				
+			}catch (Exception e) {
+				log.error(e.getMessage());
+			}
+		}
 		
 		return "redirect:/board/mainList.do";
+		
 	}
 	
 	/**
