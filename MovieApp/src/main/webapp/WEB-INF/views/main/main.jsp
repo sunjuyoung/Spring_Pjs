@@ -28,7 +28,7 @@
 </head>
 
 <body id="page-top">
-
+<c:set var="pageContext" value="${pageContext.request.contextPath}" />
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
     <a class="navbar-brand js-scroll-trigger" href="#page-top">
       <span class="d-block d-lg-none">Clarence Taylor</span>
@@ -250,9 +250,33 @@
     
     
       <div class="w-100">
-        <h2 class="mb-5">Interests</h2>
-        <p>Apart from being a web developer, I enjoy most of my time being outdoors. In the winter, I am an avid skier and novice ice climber. During the warmer months here in Colorado, I enjoy mountain biking, free climbing, and kayaking.</p>
-        <p class="mb-0">When forced indoors, I follow a number of sci-fi and fantasy genre movies and television shows, I am an aspiring chef, and I spend a large amount of my free time exploring the latest technology advancements in the front-end web development world.</p>
+        <h2 class="mb-5">Projects</h2>
+        
+        
+        
+     <div class="row text-center">
+    
+      <div class="col-sm-4">
+          <img src="${pageContext.request.contextPath}/resources/img/chicago.jpg" alt="Paris" width="400" height="200">
+       </div>
+       <div class="col-sm-6">
+          <p><strong>Paris</strong></p>
+          <p>Friday 27 November 2015</p>
+          <button class="btn" data-toggle="modal" data-target="#myModal">Buy Tickets</button>
+       </div>
+      
+             <div class="col-sm-4">
+          <img src="${pageContext.request.contextPath}/resources/img/chicago.jpg" alt="Paris" width="400" height="200">
+       </div>
+       <div class="col-sm-6">
+          <p><strong>Paris</strong></p>
+          <p>Friday 27 November 2015</p>
+          <button class="btn" data-toggle="modal" data-target="#myModal">Buy Tickets</button>
+       </div>
+
+    </div>
+         
+        
       </div>
       
       

@@ -42,6 +42,11 @@ height:60px;
 <script>
 	$(document).ready(function() {
 		
+		//스프링시큐리티 토큰 처리
+		var csrfHeader = "${_csrf.headerName}";
+		var csrfToken =  "${_csrf.token}";
+			
+		
 		//파일 확장자나 크기 사전 처리
 		var regex = new RegExp("(.*?)\.(exe|sh)$");
 		var maxSize = 10240000;
@@ -104,6 +109,9 @@ height:60px;
 				url:'${pageContext.request.contextPath}/sample/uploadFormAction',
 				processData : false,
 				contentType : false,
+				beforeSend : function(xhr){
+					xhr.setRequestHeader(csrfHeader,csrfToken);
+				},
 				data : formData,
 				type:'POST',
 				dataType:'json',
