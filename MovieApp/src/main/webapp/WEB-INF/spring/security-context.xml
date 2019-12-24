@@ -27,6 +27,8 @@
 	<security:http>
 		<!--특정 uri접근할 떄 이용하는 설정 -->
 		<security:intercept-url pattern="/main/main.do" access="permitAll" />
+		
+		<security:intercept-url pattern="/sample/**" access="hasAnyRole('ROLE_MEMBER , ROLE_ADMIN')" />
 
 		<security:intercept-url pattern="/board/**" access="hasAnyRole('ROLE_MEMBER , ROLE_ADMIN')" />
 		<!--access 속성값으로 사용되는 문자열은 1.표현식, 2.권한명을 의미하는 문자열 표현식을 권장한다 -->

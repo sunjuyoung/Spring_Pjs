@@ -2,6 +2,7 @@ package com.test.service;
 
 import java.util.List;
 
+import com.test.domain.BoardAttachVO;
 import com.test.domain.BoardVO;
 import com.test.domain.PageDTO;
 
@@ -27,14 +28,19 @@ public interface BoardService {
 
 	public void register(BoardVO board);
 		
-	
-	
-	
-	
-	
-	
-	
-	
+		
 	*/
+		
+	public void fileInsert(BoardVO vo);
+	
+	public void fileDelete(String uuid);
+	
+	public List<BoardVO> findByBno(int bno);
+	
+	
+	
+	
+	
+
 	
 }

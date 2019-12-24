@@ -31,7 +31,7 @@ import com.test.domain.AttachFileDTO;
 
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnailator;
-
+//파일 업로드 테스트
 @Controller
 @Log4j
 @RequestMapping(value="/sample")

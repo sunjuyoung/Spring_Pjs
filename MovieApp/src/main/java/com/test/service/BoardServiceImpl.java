@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.test.domain.BoardAttachVO;
 import com.test.domain.BoardVO;
 import com.test.domain.PageDTO;
 import com.test.mapper.BoardMapper;
@@ -75,6 +76,27 @@ public class BoardServiceImpl implements BoardService {
 	public int total() {
 		
 		return mapper.total();
+	}
+
+
+	@Override
+	public void fileInsert(BoardVO vo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void fileDelete(String uuid) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public List<BoardVO> findByBno(int bno) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*

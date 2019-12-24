@@ -114,4 +114,23 @@
 
 
 
+
+
+
+	<insert id="fileInsert">
+		insert into tb1_attach (uuid,uploadPath,fileName,fileType,bno) 
+		values (#{uuid},#{uploadPath},#{fileName},#{fileType},#{bno})
+	</insert>
+	
+	<select id="findByBno" resultType="com.test.domain.BoardAttachVO">
+	select * from tb1_attach where bno = #{bno}
+	
+	</select>
+
+
+
+
+
+
+
 </mapper>
