@@ -53,7 +53,7 @@ padding :
               <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">글 작성</h1>
               </div>
-              <form class="form" action="${pageContext.request.contextPath}/board/register" method="post">
+              <form class="form" action="${pageContext.request.contextPath}/board/register" method="post" enctype="multipart/form-data">
                 <div class="form-group row">
                   <div class="col-sm-12 ">
                   <label>제목</label>
@@ -73,7 +73,7 @@ padding :
                   </div>
                  <div class="form-group row">
 				<div class="col-lg-7" id="file">
-                    <input type="file"  id="uploadAjax" name="uploadAjax"  multiple />
+                    <input type="file"  id="multipartFile" name="multipartFile"  multiple />
                     </div>
                     	<div class="col-lg-4 uploadResult">
                     	<img src="${pageContext.request.contextPath}/resources/img/izone.jpg"  id="preview"/>
@@ -82,7 +82,7 @@ padding :
                
                 </div>
                </div>
-                <button type="button" class="btn btn-primary btn-user btn-block">
+                <button type="submit" class="btn btn-primary btn-user btn-block">
                  등록
                 </button>
 

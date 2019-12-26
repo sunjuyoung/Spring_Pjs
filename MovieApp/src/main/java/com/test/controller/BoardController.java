@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.test.domain.AttachFileDTO;
+import com.test.domain.BoardAttachVO;
 import com.test.domain.BoardVO;
 import com.test.domain.PageDTO;
 import com.test.service.BoardService;
@@ -47,6 +48,34 @@ public class BoardController {
 	
 	@Setter(onMethod_  = {@Autowired})
 	 private BoardService service;
+	
+	
+	//파일 년/월/일  폴더 생성
+	private String getFolder() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date date = new Date();
+		
+		String str = sdf.format(date);
+		
+		//파일 구분자는 os 마다 다르다
+		//JVM이 실행되는 os에 맞는 구분자로 변경하는 API
+		return str.replace("-", File.separator);
+	}
+	
+	
+	//업로드된 파일이 이미지 종류의 파일인지 확인/
+	//이미지 파일의 경우 섬네일 이미지 생성및 저장
+	private boolean checkImageType(File file) {
+		try {
+			String contentType = Files.probeContentType(file.toPath());
+			
+			return contentType.startsWith("image");
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 	
 
 
@@ -104,8 +133,8 @@ public class BoardController {
 	 * @param rttr
 	 * @return
 	 */
-	@PostMapping(value="/register")
-	public String register(BoardVO vo, RedirectAttributes rttr) {
+	@PostMapping(value="/registerregister")
+	public String registerregister(BoardVO vo, RedirectAttributes rttr) {
 		
 		
 		try {
@@ -127,10 +156,16 @@ public class BoardController {
 	 * @param model
 	 * @return
 	 */
-	@PostMapping(value="/registerWithFile",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String registerWithFile (BoardVO vo,MultipartFile[] uploadFile, Model model) {
+	@PostMapping(value="/register",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public String register (BoardVO vo,MultipartFile multipartFile, Model model) {
+		log.info("register controller");
+		
+		log.info(multipartFile.getOriginalFilename());
+		
+		
+		
 		String uploadFolder = "C:\\upload";
-		List<AttachFileDTO> list = new ArrayList<>();
+	//	List<AttachFileDTO> list = new ArrayList<>();
 		
 		//make folder
 		String uploadFolderPath = getFolder();
@@ -143,27 +178,39 @@ public class BoardController {
 		
 		
 		
-		for(MultipartFile multipartFile : uploadFile) {
-			AttachFileDTO dto = new AttachFileDTO();
+		
+		
+		
+		
+		
+		
+		
+		
+			//AttachFileDTO dto = new AttachFileDTO();
+			//BoardAttachVO attVO = new BoardAttachVO();
 			
 			//IE 경우 파일 경로전체가 출력된다 
 			String uploadFileName = multipartFile.getOriginalFilename();
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
-			dto.setFileName(uploadFileName); //파일네임 저장
+			//dto.setFileName(uploadFileName); //파일네임 저장
+			vo.setFileName(uploadFileName);
 			
 			//중복 방지를 위한 UUID
 			UUID uuid = UUID.randomUUID();
-			dto.setUuid(uuid.toString()); // uuid 저장
+			//dto.setUuid(uuid.toString()); // uuid 저장
+			vo.setUuid(uuid.toString());
 			uploadFileName = uuid.toString()+"_"+uploadFileName;
-		
+			log.info("register controller1");
 			try {
 				File saveFile = new File(uploadPath , uploadFileName);
 				multipartFile.transferTo(saveFile);
-				dto.setUploadPath(uploadFolderPath);  //저장경로 저장
+				//dto.setUploadPath(uploadFolderPath);  //저장경로 저장
+				vo.setUploadPath(uploadFolderPath);
 				
 				//이미지파일 체크 및 섬네일 생성
 				if(checkImageType(saveFile)) {
-					dto.setImage(true);  //이미지 여부 저장
+					//dto.setImage(true);  //이미지 여부 저장
+					vo.setFileType(true);
 					//InputStream 과 io.File객체를 이용해서 파일생성
 					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_"+uploadFileName));
 					
@@ -171,14 +218,15 @@ public class BoardController {
 					thumbnail.close();
 				}
 				
-				list.add(dto);
+				//list.add(dto);
 				
-				service.fileInsert(vo);
+				log.info("register controller2");
+				service.insert(vo);
 				
 			}catch (Exception e) {
 				log.error(e.getMessage());
 			}
-		}
+		
 		
 		return "redirect:/board/mainList.do";
 		
@@ -220,103 +268,9 @@ public class BoardController {
 		return "redirect:/board/mainList.do";
 	}
 	
-	//년/월/일  폴더 생성
-	private String getFolder() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		
-		Date date = new Date();
-		
-		String str = sdf.format(date);
-		
-		//파일 구분자는 os 마다 다르다
-		//JVM이 실행되는 os에 맞는 구분자로 변경하는 API
-		return str.replace("-", File.separator);
-	}
-	
-	
-	//업로드된 파일이 이미지 종류의 파일인지 확인/
-	//이미지 파일의 경우 섬네일 이미지 생성및 저장
-	private boolean checkImageType(File file) {
-		try {
-			String contentType = Files.probeContentType(file.toPath());
-			
-			return contentType.startsWith("image");
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	
-	/**
-	 * 파일업로드
-	 */
-	@GetMapping(value= {"/uploadForm","/uploadAjax"})
-	public void uploadForm() {
-		
-		log.info("upload form");
-	}
 
 	
-	/**
-	 * 파일업로드
-	 * @param uploadFile
-	 * @param model
-	 */
-	@PostMapping(value="/uploadFormAction",produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseBody
-	public ResponseEntity<List<AttachFileDTO>> uploadFormAction (MultipartFile[] uploadFile, Model model) {
-		String uploadFolder = "C:\\upload";
-		List<AttachFileDTO> list = new ArrayList<>();
-		
-		//make folder
-		String uploadFolderPath = getFolder();
-		File uploadPath = new File(uploadFolder,uploadFolderPath);
-		log.info("uploadPath : " + uploadPath);
-		
-		if(uploadPath.exists() == false) {
-			uploadPath.mkdirs();
-		}
-		
-		
-		
-		for(MultipartFile multipartFile : uploadFile) {
-			AttachFileDTO dto = new AttachFileDTO();
-			
-			//IE 경우 파일 경로전체가 출력된다 
-			String uploadFileName = multipartFile.getOriginalFilename();
-			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
-			dto.setFileName(uploadFileName); //파일네임 저장
-			
-			//중복 방지를 위한 UUID
-			UUID uuid = UUID.randomUUID();
-			dto.setUuid(uuid.toString()); // uuid 저장
-			uploadFileName = uuid.toString()+"_"+uploadFileName;
-		
-			try {
-				File saveFile = new File(uploadPath , uploadFileName);
-				multipartFile.transferTo(saveFile);
-				dto.setUploadPath(uploadFolderPath);  //저장경로 저장
-				
-				//이미지파일 체크 및 섬네일 생성
-				if(checkImageType(saveFile)) {
-					dto.setImage(true);  //이미지 여부 저장
-					//InputStream 과 io.File객체를 이용해서 파일생성
-					FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_"+uploadFileName));
-					
-					Thumbnailator.createThumbnail(multipartFile.getInputStream(),thumbnail,100,100);
-					thumbnail.close();
-				}
-				
-				list.add(dto);
-			}catch (Exception e) {
-				log.error(e.getMessage());
-			}
-		}
-		
-		return new ResponseEntity<>(list,HttpStatus.OK);
-		
-	}
+
 	
 	/**
 	 * 

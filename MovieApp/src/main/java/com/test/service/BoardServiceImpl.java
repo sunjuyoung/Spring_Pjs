@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.test.domain.BoardAttachVO;
 import com.test.domain.BoardVO;
 import com.test.domain.PageDTO;
 import com.test.mapper.BoardMapper;
@@ -38,9 +38,12 @@ public class BoardServiceImpl implements BoardService {
 	
 	
 	//입력
+	@Transactional
 	@Override
 	public void insert(BoardVO board) {
+		log.info("register service");
 		mapper.insert(board);
+		mapper.fileInsert(board);
 		
 	}
 	
