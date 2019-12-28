@@ -43,6 +43,7 @@ public class BoardServiceImpl implements BoardService {
 	public void insert(BoardVO board) {
 		log.info("register service");
 		mapper.insert(board);
+		
 		mapper.fileInsert(board);
 		
 	}

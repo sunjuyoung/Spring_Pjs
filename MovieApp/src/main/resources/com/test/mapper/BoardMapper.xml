@@ -79,8 +79,10 @@
 
 
 	<select id="getListWithPaging" resultType="com.test.domain.BoardVO">
-		select bno,title,content,writer,regdate,updatedate from tb1_board limit #{amount} OFFSET #{offset}
+		select sub1.bno,sub1.title,sub1.content,sub1.writer,sub1.regdate,sub1.updatedate from
+		(select * from tb1_board order by bno desc) sub1
 		<include refid="boardList"></include>
+		limit #{amount} OFFSET #{offset}
 	</select>
 
 
@@ -118,6 +120,9 @@
 
 
 	<insert id="fileInsert">
+	<selectKey keyProperty="bno" order="BEFORE" resultType="int">
+		SELECT bno FROM tb1_board ORDER BY bno DESC LIMIT 1
+	</selectKey>
 		insert into tb1_attach (uuid,uploadPath,fileName,fileType,bno) 
 		values (#{uuid},#{uploadPath},#{fileName},#{fileType},#{bno})
 	</insert>

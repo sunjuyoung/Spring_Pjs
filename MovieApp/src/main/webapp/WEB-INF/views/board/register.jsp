@@ -125,9 +125,10 @@ $(document).ready(function(){
 	$("input[name='writer']").attr("readonly","readonly");
 	
 	
-	var file = document.getElementById('uploadAjax');
+	var file = document.getElementById('multipartFile');
 	
 	file.onchange = function(e) {
+		console.log(file);
 	var img = e.target.files;
 	if(!checkImage(img[0].name,img[0].size)){
 		$("input[name='uploadAjax']").val('');

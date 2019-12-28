@@ -88,7 +88,9 @@ public class SampleController {
 		
 		//make folder
 		String uploadFolderPath = getFolder();
+		log.info(uploadFolderPath);
 		File uploadPath = new File(uploadFolder,uploadFolderPath);
+		
 		log.info("uploadPath : " + uploadPath);
 		
 		if(uploadPath.exists() == false) {
@@ -102,6 +104,7 @@ public class SampleController {
 			
 			//IE 경우 파일 경로전체가 출력된다 
 			String uploadFileName = multipartFile.getOriginalFilename();
+			log.info(uploadFileName);
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
 			dto.setFileName(uploadFileName); //파일네임 저장
 			
