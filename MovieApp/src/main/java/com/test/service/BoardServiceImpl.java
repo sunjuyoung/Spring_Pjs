@@ -40,11 +40,19 @@ public class BoardServiceImpl implements BoardService {
 	//입력
 	@Transactional
 	@Override
-	public void insert(BoardVO board) {
-		log.info("register service");
+	public void insertWithFile(BoardVO board) {
+		log.info("insertWithFile service");
 		mapper.insert(board);
 		
 		mapper.fileInsert(board);
+		
+	}
+	
+	@Override
+	public void insert(BoardVO board) {
+		log.info("insert service");
+		mapper.insert(board);
+		
 		
 	}
 	

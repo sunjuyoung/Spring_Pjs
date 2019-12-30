@@ -76,7 +76,7 @@ height:60px;
 					
 					//브라우저에서 GET방식으로 첨부파일의 이름을 사용할 때 파일이름에 공백,한글 등이 문제가 될 수 있다.
 					//encodeURIComponent사용
-					var fileCallPath = encodeURIComponent(obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName);
+					var fileCallPath = encodeURIComponent(obj.uploadPath+"/"+obj.uuid+"_"+obj.fileName);
 					console.log(fileCallPath);
 					str+="<li><img src='${pageContext.request.contextPath}/sample/display?fileName="+fileCallPath+"'>"+obj.fileName+"</li>";
 				}

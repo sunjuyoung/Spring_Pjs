@@ -15,6 +15,8 @@ public interface BoardService {
 	
 	public void insert(BoardVO board);
 	
+	public void insertWithFile(BoardVO board);
+	
 	public boolean remove(int bno);
 	
 	public int modify(BoardVO board);

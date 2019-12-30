@@ -160,13 +160,15 @@ public class BoardController {
 	public String register (BoardVO vo,MultipartFile multipartFile, Model model) {
 		log.info("register controller");
 		
-		log.info(multipartFile.getOriginalFilename());
+		if(multipartFile.isEmpty()) {
+			service.insert(vo);
+		}
 		
-		
+		if(!multipartFile.isEmpty()) {
+			
 		
 		String uploadFolder = "C:\\upload";
-	//	List<AttachFileDTO> list = new ArrayList<>();
-		
+
 		//make folder
 		String uploadFolderPath = getFolder();
 		File uploadPath = new File(uploadFolder,uploadFolderPath);
@@ -186,24 +188,19 @@ public class BoardController {
 		
 		
 		try {
-			
 			File saveFile = new File(uploadPath,uploadFileName);
 			multipartFile.transferTo(saveFile);
 			vo.setUploadPath(uploadFolderPath);
 			
 			if(checkImageType(saveFile)) {
 				vo.setFileType(true);  //이미지 여부 저장
-				
 			}
 			
-			service.insert(vo);
+			service.insertWithFile(vo);
 		}catch(Exception e) {
 			
 		}
-		
-		
-	
-		
+		}
 		
 		return "redirect:/board/mainList.do";
 		
@@ -272,6 +269,7 @@ public class BoardController {
 			header.add("Content-Type", Files.probeContentType(file.toPath()));
 			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file),header,HttpStatus.OK);
 			
+			log.info(result);
 			
 		}catch(IOException e) {
 			e.printStackTrace();

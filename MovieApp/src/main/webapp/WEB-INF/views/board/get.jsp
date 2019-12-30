@@ -45,14 +45,16 @@ float : right;
 <body class="bg-gradient-primary">
 
 	<div class="container">
-
+		<input type="hidden" id="fileName" name="fileName" value="${board.fileName }"/>
+		<input type="hidden" id="uuid" name="uuid" value="${board.uuid }"/>
+		<input type="hidden" id="uploadPath" name="uploadPath" value="${board.uploadPath }"/>
 		<div class="card o-hidden border-0 shadow-lg my-5">
 			<div class="card-body p-0">
 				<!-- Nested Row within Card Body -->
 				<div class="row">
-					<div class="col-lg-5 d-none d-lg-block ">
-						<img
-							src="${pageContext.request.contextPath}/resources/projects/img/chaewon07.jpg" style="width:100%; height:100%; " >
+					<div class="col-lg-5">
+				<img src="C://" style="width:100%; height:100%; " >
+						
 					</div>
 					<div class="col-lg-7">
 						<div class="p-5">
@@ -213,10 +215,43 @@ float : right;
 	<script>
 	$(document).ready(function(){
 		
+		//스프링시큐리티 토큰 처리
+		var csrfHeader = "${_csrf.headerName}";
+		var csrfToken =  "${_csrf.token}";
+		//파일정보		
+		var fileName = $("input[name='fileName']").val();
+		var uuid = $("input[name='uuid']").val();
+		var uploadPath = $("input[name='uploadPath']").val();
+		
 		var bnoValue = '<c:out value="${board.bno}"/>';
-		  var replyUL = $(".chat");
-		  
-		    showList(1);
+		var replyUL = $(".chat");
+		//var fileCallPath = encodeURIComponent(uploadPath+"/s_"+uuid+"_"+fileName);
+		var fileCallPath = uploadPath+"\\"+uuid+"_"+fileName;
+		//이미지 정보
+		var $imglocation = $(".getImg");
+		var test1 ="";
+		
+		
+		if(fileName != null){
+			showImage();
+		}else{
+		//	test1+="<img src='${pageContext.request.contextPath}/resources/img/izone.jpg"'>";
+		//	$imglocation.append(test1);
+			
+		}
+		
+		function showImage(){
+			test1+="<img src='${pageContext.request.contextPath}/board/display?fileName='"+fileCallPath+">";
+			
+			console.log(test1);
+			$imglocation.append(test1);
+				
+				
+			
+			
+			
+		}
+		    //showList(1);
 		    
 		function showList(page){  //댓글 리스트 ajax처리
 			

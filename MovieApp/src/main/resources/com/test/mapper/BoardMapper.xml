@@ -68,7 +68,18 @@
 	
 	
 	<select id="get" resultType="com.test.domain.BoardVO">
-		select * from tb1_board where bno=#{bno}
+			SELECT b.title
+					,b.content
+					,b.writer
+					,b.updatedate
+					,b.bno
+					,a.UUID
+					,a.filetype
+					,a.fileName
+					,a.uploadPath
+			 FROM tb1_board b
+				INNER JOIN tb1_attach a ON b.bno = a.bno
+				WHERE a.bno=#{bno}
 	</select>
 	
 	<insert id="insert">
