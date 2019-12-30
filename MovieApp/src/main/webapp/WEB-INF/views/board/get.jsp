@@ -52,8 +52,9 @@ float : right;
 			<div class="card-body p-0">
 				<!-- Nested Row within Card Body -->
 				<div class="row">
-					<div class="col-lg-5">
-				<img src="C://" style="width:100%; height:100%; " >
+					<div class="col-lg-5 getImg">
+					
+				<%-- <img src="${pageContext.request.contextPath}/resources/img/izone.jpg" style="width:100%; height:100%; " > --%>
 						
 					</div>
 					<div class="col-lg-7">
@@ -210,7 +211,7 @@ float : right;
 	
 	
 	
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/projects/js/reply.js"></script>
+	<%-- <script type="text/javascript" src="${pageContext.request.contextPath}/resources/projects/js/reply.js"></script> --%>
 	
 	<script>
 	$(document).ready(function(){
@@ -225,31 +226,23 @@ float : right;
 		
 		var bnoValue = '<c:out value="${board.bno}"/>';
 		var replyUL = $(".chat");
-		//var fileCallPath = encodeURIComponent(uploadPath+"/s_"+uuid+"_"+fileName);
-		var fileCallPath = uploadPath+"\\"+uuid+"_"+fileName;
-		//이미지 정보
-		var $imglocation = $(".getImg");
+		
+		//파일 경로 
+		var fileCallPath =  encodeURIComponent(uploadPath+"\\"+uuid+"_"+fileName);
+		
+		
 		var test1 ="";
-		
-		
-		if(fileName != null){
-			showImage();
+		if(fileName == null || fileName == ""){
+			test1+="<img src='${pageContext.request.contextPath}/resources/img/izone.jpg' style='width:100%; height:100%;'>";
+			$(".getImg").append(test1);
 		}else{
-		//	test1+="<img src='${pageContext.request.contextPath}/resources/img/izone.jpg"'>";
-		//	$imglocation.append(test1);
-			
+			showImage();
 		}
 		
+		//이미지 출력
 		function showImage(){
-			test1+="<img src='${pageContext.request.contextPath}/board/display?fileName='"+fileCallPath+">";
-			
-			console.log(test1);
-			$imglocation.append(test1);
-				
-				
-			
-			
-			
+			test1+="<img src='${pageContext.request.contextPath}/sample/display?fileName="+fileCallPath+"' style='width:100%; height:100%;'>";
+			$(".getImg").append(test1);
 		}
 		    //showList(1);
 		    
