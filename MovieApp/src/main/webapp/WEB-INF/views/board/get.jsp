@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%-- jstl-1.2.jar 파일 필요 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,15 +26,36 @@
 
 <!-- Custom styles for this template-->
 <link href="${pageContext.request.contextPath}/resources/projects/css/sb-admin-2.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style>
 small{
 float : right;
 
 }
 button#addReplyBtn{
-float : right;
+display:flex;
+align-items:center;
+margin : 0px 2px;
+}
 
+input#reply{
+flex:1;
+padding:6px 6px;
+margin : 0px 2px;
 
+}
+div.panel-body{
+height : auto;
+padding : auto 0px 5px 0px;
+}
+div.panel-heading{
+background:none;
+}
+ul.chat{
+padding : 5px 3px 3px 3px;
 }
 
 
@@ -120,38 +142,31 @@ float : right;
 						 <!-- -------------------  reply-----------------------  -->
 			 <div class='row'>
 			  <div class="col-lg-12">
-			
 			    <!-- /.panel -->
 			    <div class="panel panel-default">
 			     <div class="panel-heading">
 			        <i class="fa fa-comments fa-fw"></i> Reply
-			    
-			        <button id="addReplyBtn" class="btn btn-primary btn-sm pull-right" data-oper="new"> New </button>
 			      </div>
 			      <!-- /.panel-heading -->
 			      <div class="panel-body">  
-			      <hr>      
-			      
+			      	<div class="row">
+			       <input class="form-control form-control-user" type="text"  name="reply" id="reply" value="">
+			       <button id="addReplyBtn" class="btn btn-primary btn-sm pull-right" data-oper="replyAdd"> New </button>
+			        <sec:authentication property="principal.username" />
+			      </div>
 			        <ul class="chat">
-			
+			        	
 			        </ul>
 			        <!-- ./ end ul -->
 			      </div>
-			      <!-- /.panel .chat-panel -->
-			      <div class = "panel-footer">  <!-- 댓글 페이징 -->
-			      
-			      </div>
-			      
 					</div>
 			  </div>
 			  <!-- ./ end row -->
 			</div>
-							
-							
-							<div class="text-center">
-								<a class="small"
-									href="${pageContext.request.contextPath}/board/mainList.do?pageNum=${vo.pageNum}&amount=${vo.amount}">메인화면</a>
-							</div>
+				<div class="text-center">
+					<a class="small"
+						href="${pageContext.request.contextPath}/board/mainList.do?pageNum=${vo.pageNum}&amount=${vo.amount}">메인화면</a>
+				</div>
 
 						</div>
 					</div>
@@ -181,9 +196,9 @@ float : right;
           </div>
         </div>
         <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-oper="replyUpdate">수정</button>
+       <!--  <button type="button" class="btn btn-default" data-oper="replyUpdate">수정</button>
           <button type="button" class="btn btn-default" data-oper="replyAdd">입력</button>
-           <button type="button" class="btn btn-default" data-oper="close">닫기</button>
+           <button type="button" class="btn btn-default" data-oper="close">닫기</button> -->
         </div>
       </div>
       
@@ -244,23 +259,31 @@ float : right;
 			test1+="<img src='${pageContext.request.contextPath}/sample/display?fileName="+fileCallPath+"' style='width:100%; height:100%;'>";
 			$(".getImg").append(test1);
 		}
+		
+		
+		
+		$("#addReplyBtn").on("click",function(){
+			
+		})
+		
+		
+		
+		
+		
+		
+		
 		    //showList(1);
 		    
 		function showList(page){  //댓글 리스트 ajax처리
-			
-			  console.log("show list " + page);
+			console.log("show list " + page);
 		    
-		    replyService.getList({bno:bnoValue,page: page|| 1 }, function( replyCnt,list) {
-		    	console.log("replyCnt>>>>>>>>>>"+replyCnt );
-
+		   replyService.getList({bno:bnoValue,page: page|| 1 }, function( replyCnt,list) {
+		   console.log("replyCnt>>>>>>>>>>"+replyCnt );
 		    	
 		     var str="";
-		     
 		     if(list == null || list.length == 0){
 		       return;
 		     }
-		     
-
 		     
 		     for (var i = 0, len = list.length || 0; i < len; i++) {
 		       str +="<li class='left clearfix' data-rno='"+list[i].rno+"'  data-replyer='"+list[i].replyer+"'>";
@@ -272,22 +295,16 @@ float : right;
 		           +replyService.displayTime(list[i].replyDate)+"</small></div>";
 		       str +="    <p style='font-size:80%;'>"+list[i].reply+"</p></div></li>";
 		     }
-		     
 		     replyUL.html(str);
 		     showReplyPage(replyCnt);
-		     
-
 		 
 		   });//end function
 		     
 		 }//end showList
-		
-		 
 		 
 		 var pageNum =1;
 		 var replyPageFooter = $(".panel-footer");
 		 function showReplyPage(replyCnt){
-			 
 			 var endNum = Math.ceil(pageNum / 10.0) * 10;
 			 var startNum = endNum - 9;
 			 
@@ -311,17 +328,13 @@ float : right;
 				 var active = pageNum== i? "active":"";
 				 
 				 str += "<li class='page-item  "+active+"'> <a class='page-link' href='"+i+"'> "+i+" </a></li> ";
-				 
-				 
 			 }
 			 if(next){
 				 str+= "<li class='page-itme'><a class='page-link' href='"+ (endNum+1)+"'>Next</a></li>";
 			 }
 			 
 			 str+= "</ul></div>";
-			 
 			 replyPageFooter.html(str);
-			 
 		 }
 		 
 		 
@@ -406,37 +419,19 @@ float : right;
 
 		
 		$(".chat").on("click","img",function(){     //댓글 수정 삭제
-			
 			var title = $(this).attr("title");
-			
 			var rno = $(this).attr("alt");
-			
-			
-			
 			var replyer = $(".chat li").data("replyer");
-			
-		
-				
-				
-		
-			
 			console.log(rno);
 			
-			
 			var modal = $(".modal");
-			
 			if(title == 'replyD'){    //댓글 삭제
-				
 				if(confirm("이 코맨트를 삭제하시겠습니까?")){
 					replyService.remove(rno,function(result){
 						alert(result);
 						showList(1);
-						
 					});
-					
-					
 				}
-				
 			}else{  //댓글 수정
 				console.log("------------------------"+rno);
 				replyService.get(rno,function(reply){

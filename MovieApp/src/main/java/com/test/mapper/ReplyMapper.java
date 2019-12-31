@@ -1,0 +1,23 @@
+package com.test.mapper;
+
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.test.domain.PageDTO;
+import com.test.domain.ReplyVO;
+
+public interface ReplyMapper {
+	
+	public ReplyVO list(int bno);
+	
+	public int insert(ReplyVO vo);
+	
+	public int delete(int rno);
+	
+	public List<ReplyVO> getListWithPaging(@Param("pageDto") PageDTO dto,@Param("bno") int bno);
+	
+	
+
+}
