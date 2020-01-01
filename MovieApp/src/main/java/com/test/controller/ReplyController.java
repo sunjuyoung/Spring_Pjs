@@ -2,7 +2,9 @@ package com.test.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,8 @@ public class ReplyController {
 	@Autowired
 	private ReplyService service;
 	
-	@PostMapping(value="/insert")
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping(value="/insert", consumes = "application/json", produces= {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> insert(@RequestBody ReplyVO vo){
 		log.info("reply controller");
 		int result = service.insert(vo);

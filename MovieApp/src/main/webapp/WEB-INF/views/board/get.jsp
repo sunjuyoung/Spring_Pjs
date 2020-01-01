@@ -136,6 +136,7 @@ padding : 5px 3px 3px 3px;
                            
               <input type="hidden" name="pageNum" value='<c:out value="${vo.pageNum }" />'>
               <input type="hidden" name="amount" value='<c:out value="${vo.amount }" />'>
+              <input type="hidden" name="replyer" value='<sec:authentication property="principal.member.userName"/>'>
 			<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }" />		
 			 </form> 
 			 
@@ -148,17 +149,18 @@ padding : 5px 3px 3px 3px;
 			        <i class="fa fa-comments fa-fw"></i> Reply
 			      </div>
 			      <!-- /.panel-heading -->
+			      <form>
 			      <div class="panel-body">  
 			      	<div class="row">
-			       <input class="form-control form-control-user" type="text"  name="reply" id="reply" value="">
+			       <input class="form-control form-control-user" type="text"  name="reply" id="reply" required>
 			       <button id="addReplyBtn" class="btn btn-primary btn-sm pull-right" data-oper="replyAdd"> New </button>
-			        <sec:authentication property="principal.username" />
 			      </div>
 			        <ul class="chat">
 			        	
 			        </ul>
 			        <!-- ./ end ul -->
 			      </div>
+			      </form>
 					</div>
 			  </div>
 			  <!-- ./ end row -->
@@ -211,9 +213,6 @@ padding : 5px 3px 3px 3px;
 	
 	
 	
-	
-	
-	
 		<!-- Bootstrap core JavaScript-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/projects/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -226,7 +225,9 @@ padding : 5px 3px 3px 3px;
 	
 	
 	
-	<%-- <script type="text/javascript" src="${pageContext.request.contextPath}/resources/projects/js/reply.js"></script> --%>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/projects/js/reply.js"></script>
+	
+	<link id="contextPathHolder" th:data-contextPath="${#httpServletRequest.getContextPath()}"/>
 	
 	<script>
 	$(document).ready(function(){
@@ -238,7 +239,7 @@ padding : 5px 3px 3px 3px;
 		var fileName = $("input[name='fileName']").val();
 		var uuid = $("input[name='uuid']").val();
 		var uploadPath = $("input[name='uploadPath']").val();
-		
+		var replyer  = $("input[name='replyer']").val();
 		var bnoValue = '<c:out value="${board.bno}"/>';
 		var replyUL = $(".chat");
 		
@@ -261,8 +262,20 @@ padding : 5px 3px 3px 3px;
 		}
 		
 		
+		//ajax csrf토큰 전송 기본설정으로 지정
+		//Ajax spring security header
+		$(document).ajaxSend(function(e,xhr,option){
+			xhr.setRequestHeader(csrfHeader,csrfToken);
+		});
 		
-		$("#addReplyBtn").on("click",function(){
+		
+		
+		//댓글 추가
+		$("#addReplyBtn").on("click",function(e){
+			var reply = $("input[name='reply']").val();
+			e.preventDefault();
+			replyService.insert({reply:reply,replyer:replyer,bno:bnoValue});
+			
 			
 		})
 		
@@ -272,9 +285,10 @@ padding : 5px 3px 3px 3px;
 		
 		
 		
+		//댓글 리스트 ajax처리
 		    //showList(1);
-		    
-		function showList(page){  //댓글 리스트 ajax처리
+		/*    
+		function showList(page){  
 			console.log("show list " + page);
 		    
 		   replyService.getList({bno:bnoValue,page: page|| 1 }, function( replyCnt,list) {
@@ -351,7 +365,7 @@ padding : 5px 3px 3px 3px;
 		 });
 		 
 		 
-		 
+		 */
 		 
 		 
 		 
@@ -371,6 +385,7 @@ padding : 5px 3px 3px 3px;
 		 });
 		 */
 
+		 /*
 		var formObj=$("form");
 		var modal =  $("#replyModal");
 		
@@ -447,7 +462,7 @@ padding : 5px 3px 3px 3px;
 			}
 			
 		});
-		
+		*/
 		
 		
 		
