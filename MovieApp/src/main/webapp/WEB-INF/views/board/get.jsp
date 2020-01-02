@@ -57,15 +57,10 @@ background:none;
 ul.chat{
 padding : 5px 3px 3px 3px;
 }
-
-
-
-
 </style>
 </head>
 
 <body class="bg-gradient-primary">
-
 	<div class="container">
 		<input type="hidden" id="fileName" name="fileName" value="${board.fileName }"/>
 		<input type="hidden" id="uuid" name="uuid" value="${board.uuid }"/>
@@ -94,9 +89,6 @@ padding : 5px 3px 3px 3px;
 										readonly="readonly"
 										value='<c:out value="${board.title }"></c:out>'>
 								</div>
-								<!--   <div class="col-sm-6">
-                    <input type="text" class="form-control form-control-user" id="exampleLastName" placeholder="Last Name">
-                  </div> -->
 							</div>
 							<div class="form-group">
 								<b>Content</b>
@@ -105,33 +97,21 @@ padding : 5px 3px 3px 3px;
 										value="${board.content }"></c:out></textarea>
 							</div>
 							<div class="form-group row">
-
 								<div class="col-sm-12">
-									<b>Writer</b> <input type="text"
-										class="form-control form-control-user" id="writer"
-										name="writer" readonly="readonly"
-										value='<c:out value="${board.writer }"></c:out>'>
+									<b>Writer</b> <input type="text" class="form-control form-control-user" id="writer" name="writer" readonly="readonly" value='<c:out value="${board.writer }" />'>
 								</div>
 							</div>
-							<!--          <button type="submit" class="btn btn-primary btn-user btn-block">
-                  Register Account
-                </button> -->
 							<hr>
-							
 							<div class="form-group row">
 							<div class="col-sm-6">
-							<a
-								href="${pageContext.request.contextPath}/board/modify?bno=${board.bno}&pageNum=${vo.pageNum}&amount=${vo.amount}"
-								class="btn btn-info btn-user btn-block">  수정
+							<a href="${pageContext.request.contextPath}/board/modify?bno=${board.bno}&pageNum=${vo.pageNum}&amount=${vo.amount}" class="btn btn-info btn-user btn-block">  수정
 							</a>
 							</div>
-
-							
 							<div class="col-sm-6">	
-				 <button type="submit" data-oper="remove" class="btn btn-danger btn-user btn-block">
-                  삭제
-                </button>
-                </div>
+								 <button type="submit" data-oper="remove" class="btn btn-danger btn-user btn-block">
+				                  삭제
+				                </button>
+              			  </div>
                 </div>
                            
               <input type="hidden" name="pageNum" value='<c:out value="${vo.pageNum }" />'>
@@ -152,7 +132,7 @@ padding : 5px 3px 3px 3px;
 			      <form>
 			      <div class="panel-body">  
 			      	<div class="row">
-			       <input class="form-control form-control-user" type="text"  name="reply" id="reply" required>
+			       <input class="form-control form-control-user" type="text"  name="reply" id="reply" >
 			       <button id="addReplyBtn" class="btn btn-primary btn-sm pull-right" data-oper="replyAdd"> New </button>
 			      </div>
 			        <ul class="chat">
@@ -179,10 +159,12 @@ padding : 5px 3px 3px 3px;
 	</div>
 	
 	<!--댓글 모달  -->
-  <div class="modal fade" id="replyModal" role="dialog">
+ 
+ 
+<!--   <div class="modal fade" id="replyModal" role="dialog">
     <div class="modal-dialog">
     
-      <!-- Modal content-->
+      Modal content
       <div class="modal-content">
         <div class="modal-header">
 
@@ -198,23 +180,19 @@ padding : 5px 3px 3px 3px;
           </div>
         </div>
         <div class="modal-footer">
-       <!--  <button type="button" class="btn btn-default" data-oper="replyUpdate">수정</button>
+        <button type="button" class="btn btn-default" data-oper="replyUpdate">수정</button>
           <button type="button" class="btn btn-default" data-oper="replyAdd">입력</button>
-           <button type="button" class="btn btn-default" data-oper="close">닫기</button> -->
+           <button type="button" class="btn btn-default" data-oper="close">닫기</button>
         </div>
       </div>
       
     </div>
   </div>
-	
-	
-	
-	
-	
+	 -->
 	
 	
 		<!-- Bootstrap core JavaScript-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/projects/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 	<!-- Core plugin JavaScript-->
@@ -222,12 +200,9 @@ padding : 5px 3px 3px 3px;
 
 	<!-- Custom scripts for all pages-->
 	<script src="${pageContext.request.contextPath}/resources/projects/js/sb-admin-2.min.js"></script>
-	
-	
-	
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/projects/js/reply.js"></script>
 	
-	<link id="contextPathHolder" th:data-contextPath="${#httpServletRequest.getContextPath()}"/>
+	
 	
 	<script>
 	$(document).ready(function(){
@@ -242,6 +217,7 @@ padding : 5px 3px 3px 3px;
 		var replyer  = $("input[name='replyer']").val();
 		var bnoValue = '<c:out value="${board.bno}"/>';
 		var replyUL = $(".chat");
+		var replyPage = 1;
 		
 		//파일 경로 
 		var fileCallPath =  encodeURIComponent(uploadPath+"\\"+uuid+"_"+fileName);
@@ -274,12 +250,16 @@ padding : 5px 3px 3px 3px;
 		$("#addReplyBtn").on("click",function(e){
 			var reply = $("input[name='reply']").val();
 			e.preventDefault();
-			replyService.insert({reply:reply,replyer:replyer,bno:bnoValue});
-			
+			var result = replyService.insert({reply:reply,replyer:replyer,bno:bnoValue});
+			console.log(result);
 			
 		})
 		
 		
+		function replyList(){
+			
+			replyService.list({bno:bno,pageNum:replyPage});
+		}
 		
 		
 		
@@ -474,8 +454,6 @@ padding : 5px 3px 3px 3px;
 
 
 	<script>
-	console.log("========================");
-	console.log("================TEST JS========");
 	
 	//댓글 목록 처리
 	

@@ -4,20 +4,30 @@
 
 
 
-var contextPath     = "<%=contextPath%>";
 console.log("reply Module..");
-var contextPath = $('#contextPathHolder').attr('data-contextPath') ? $('#contextPathHolder').attr('data-contextPath') : '';
+
+
+
 var replyService = (function(){
+	
+	
+	function getContextPath() {
+
+		var hostIndex = location.href.indexOf( location.host ) + location.host.length;
+
+		return location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1) );
+
+	}
 	
 	
 	//입력
 	function insert(reply,callback,error){
 		console.log("insert");
-		console.log(reply);
+		var contextPath = getContextPath();
 		
 		$.ajax({
 			type:'post',
-			url : '/reply/insert',
+			url : contextPath+'/reply/insert',
 			data : JSON.stringify(reply),
 			contentType : 'application/json; charset=utf-8',
 			success : function(res,status,xhr){
@@ -32,6 +42,20 @@ var replyService = (function(){
 			
 		})
 		
+	}
+	
+	
+	function list(param,callback,error){
+		console.log("list");
+		var contextPath = getContextPath();
+		
+		$.ajax({
+			type : 'get',
+			url:contextPath+'reply/list/',
+			contentType:'application/json; charset=utf-8',
+			data : JSON.stringify()
+			
+		});
 	}
 	
 	

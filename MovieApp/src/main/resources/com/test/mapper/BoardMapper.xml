@@ -78,8 +78,8 @@
 					,a.fileName
 					,a.uploadPath
 			 FROM tb1_board b
-				INNER JOIN tb1_attach a ON b.bno = a.bno
-				WHERE a.bno=#{bno}
+				LEFT JOIN tb1_attach a ON b.bno = a.bno
+				WHERE b.bno=#{bno}
 	</select>
 	
 	<insert id="insert">

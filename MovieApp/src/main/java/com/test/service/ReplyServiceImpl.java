@@ -1,5 +1,7 @@
 package com.test.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ public class ReplyServiceImpl implements ReplyService {
 	private ReplyMapper mapper;
 	
 	@Override
-	public ReplyVO list(int bno) {
+	public List<ReplyVO> list(int bno) {
 		return mapper.list(bno);
 	}
 
@@ -25,6 +27,11 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public int delete(int rno) {
 		return mapper.delete(rno);
+	}
+
+	@Override
+	public int total(int bno) {
+		return mapper.total(bno);
 	}
 
 }

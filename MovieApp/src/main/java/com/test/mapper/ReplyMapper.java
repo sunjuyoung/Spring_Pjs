@@ -10,7 +10,7 @@ import com.test.domain.ReplyVO;
 
 public interface ReplyMapper {
 	
-	public ReplyVO list(int bno);
+	public List<ReplyVO> list(int bno);
 	
 	public int insert(ReplyVO vo);
 	
@@ -18,6 +18,6 @@ public interface ReplyMapper {
 	
 	public List<ReplyVO> getListWithPaging(@Param("pageDto") PageDTO dto,@Param("bno") int bno);
 	
-	
+	public int total(int bno);
 
 }
