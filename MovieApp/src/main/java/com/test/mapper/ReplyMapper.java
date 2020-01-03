@@ -16,7 +16,8 @@ public interface ReplyMapper {
 	
 	public int delete(int rno);
 	
-	public List<ReplyVO> getListWithPaging(@Param("pageDto") PageDTO dto,@Param("bno") int bno);
+	
+	public List<ReplyVO> getListWithPaging(@Param("dto") PageDTO dto,@Param("bno") int bno);
 	
 	public int total(int bno);
 

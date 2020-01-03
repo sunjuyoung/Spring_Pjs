@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.test.domain.PageDTO;
 import com.test.domain.ReplyVO;
 import com.test.mapper.ReplyMapper;
 
@@ -32,6 +33,11 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public int total(int bno) {
 		return mapper.total(bno);
+	}
+
+	@Override
+	public List<ReplyVO> getListWithPaging(PageDTO dto, int bno) {
+		return null;
 	}
 
 }

@@ -19,6 +19,10 @@ public class CommonController {
 	//jsp에서는 HttpServletRequest안에 SPRING_SECURITY_403_EXCEPTION이라는 이름으로 AccessDeniedException 객체가 전달
 	
 	
+	
+	
+	
+	
 	  @GetMapping("/accessError") 
 	  public void accessDenied(Authentication auth,Model model) {
 	  

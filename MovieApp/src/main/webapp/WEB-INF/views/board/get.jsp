@@ -3,6 +3,7 @@
 <%-- jstl-1.2.jar 파일 필요 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,32 +32,33 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style>
-small{
+/* small{
 float : right;
 
-}
+} */
 button#addReplyBtn{
 display:flex;
 align-items:center;
-margin : 0px 2px;
+margin : 0px 10px 0px 0px;
 }
 
 input#reply{
 flex:1;
 padding:6px 6px;
-margin : 0px 2px;
+margin : 00px 2px 2px 15px;
+width : auto;
 
 }
-div.panel-body{
+/* div.panel-body{
 height : auto;
 padding : auto 0px 5px 0px;
-}
-div.panel-heading{
+} */
+/* div.panel-heading{
 background:none;
-}
-ul.chat{
+} */
+/* ul.chat{
 padding : 5px 3px 3px 3px;
-}
+} */
 </style>
 </head>
 
@@ -131,20 +133,31 @@ padding : 5px 3px 3px 3px;
 			      <!-- /.panel-heading -->
 			      <form>
 			      <div class="panel-body">  
-			      	<div class="row">
-			       <input class="form-control form-control-user" type="text"  name="reply" id="reply" >
-			       <button id="addReplyBtn" class="btn btn-primary btn-sm pull-right" data-oper="replyAdd"> New </button>
-			      </div>
-			        <ul class="chat">
-			        	
-			        </ul>
+	
+			        <div class="chat">
+		<!-- 	        		<div>
+			        			<div class="header">
+			        				<strong class="primary-font">관리자90</strong>
+			        				<small class="pull-right text-muted">2011-11-11</small>
+			        			</div>
+								<p>test</p>			        		
+			        		</div> -->
+			        		 
+			        </div>
 			        <!-- ./ end ul -->
 			      </div>
+
 			      </form>
 					</div>
 			  </div>
 			  <!-- ./ end row -->
 			</div>
+			<div class="row">
+			<input class="form-control form-control-user" type="text"  name="reply" id="reply" >
+			       <button id="addReplyBtn" class="btn btn-primary btn-sm pull-right" data-oper="replyAdd"> 입력 </button>
+			       </div>
+			       
+			       
 				<div class="text-center">
 					<a class="small"
 						href="${pageContext.request.contextPath}/board/mainList.do?pageNum=${vo.pageNum}&amount=${vo.amount}">메인화면</a>
@@ -223,18 +236,18 @@ padding : 5px 3px 3px 3px;
 		var fileCallPath =  encodeURIComponent(uploadPath+"\\"+uuid+"_"+fileName);
 		
 		
-		var test1 ="";
+		var imageStr ="";
 		if(fileName == null || fileName == ""){
-			test1+="<img src='${pageContext.request.contextPath}/resources/img/izone.jpg' style='width:100%; height:100%;'>";
-			$(".getImg").append(test1);
+			imageStr+="<img src='${pageContext.request.contextPath}/resources/img/izone.jpg' style='width:100%; height:100%;'>";
+			$(".getImg").append(imageStr);
 		}else{
 			showImage();
 		}
 		
 		//이미지 출력
 		function showImage(){
-			test1+="<img src='${pageContext.request.contextPath}/sample/display?fileName="+fileCallPath+"' style='width:100%; height:100%;'>";
-			$(".getImg").append(test1);
+			imageStr+="<img src='${pageContext.request.contextPath}/sample/display?fileName="+fileCallPath+"' style='width:100%; height:100%;'>";
+			$(".getImg").append(imageStr);
 		}
 		
 		
@@ -251,14 +264,30 @@ padding : 5px 3px 3px 3px;
 			var reply = $("input[name='reply']").val();
 			e.preventDefault();
 			var result = replyService.insert({reply:reply,replyer:replyer,bno:bnoValue});
-			console.log(result);
-			
+			replyList();
+			reply.empty();
 		})
 		
-		
+		replyList();
 		function replyList(){
 			
-			replyService.list({bno:bno,pageNum:replyPage});
+			replyService.list({bno:bnoValue,pageNum:replyPage},function(list){
+				var replyStr ="";
+				console.log(list);
+				for(var i =0; i< list.length; i++){
+					replyStr+='<div>';
+					replyStr+='<div class="header">';
+					replyStr+='<strong class="primary-font">'+list[i].replyer+'</strong>';
+					replyStr+='<small class="pull-right text-muted">'+replyService.displayTime(list[i].replyDate)+'</small>';
+					replyStr+='</div>';
+					replyStr+='<p>'+list[i].reply+'</p>';			        		
+					replyStr+='</div>';				
+					
+				}
+				
+				$(".chat").append(replyStr);
+				
+			});
 		}
 		
 		

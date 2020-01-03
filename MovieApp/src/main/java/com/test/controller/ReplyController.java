@@ -1,13 +1,17 @@
 package com.test.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +32,16 @@ public class ReplyController {
 	@Autowired
 	private ReplyService service;
 	
+	
+
+	
+	
+	
+	/**
+	 * 
+	 * @param vo
+	 * @return
+	 */
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping(value="/insert", consumes = "application/json", produces= {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> insert(@RequestBody ReplyVO vo){
@@ -39,7 +53,12 @@ public class ReplyController {
 		
 	}
 	
-	
+	/**
+	 * 
+	 * @param bno
+	 * @param pageNum
+	 * @return
+	 */
 	@GetMapping(value="/list/{bno}/{pageNum}",produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
 	public ResponseEntity<List<ReplyVO>> list(@PathVariable("bno") int bno ,@PathVariable("pageNum") int pageNum){
 		log.info("reply list");

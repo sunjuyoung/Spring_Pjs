@@ -17,8 +17,7 @@
 	</delete> 
  
 	 <select id="getListWithPaging" resultType="com.test.domain.ReplyVO">
-	 
-	 
+	 	 SELECT bno,rno,reply,replyer,replyDate FROM tb1_reply WHERE bno=#{bno} limit #{amount} OFFSET #{offset}
 	 </select>
 	 
  
