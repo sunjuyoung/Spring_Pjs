@@ -47,7 +47,7 @@
 										<c:forEach var="board" items="${list}">
 											<tr>
 												<td><a class="move" href='<c:out value="${board.bno }" />'><c:out value="${board.bno}" /></a></td>
-												<td><a class="move" href='<c:out value="${board.bno }" />'><c:out value="${board.title }" /> </a></td>
+												<td><a class="move" href='<c:out value="${board.bno }" />'><c:out value="${board.title }" /> </a> <c:if test="${board.replyCnt >0 }"><a class="replyMove" href="<c:out value='${board.bno }' />">(${board.replyCnt})</a></c:if></td>
 												<td><c:out value="${board.writer }" /></td>
 												
 												<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updatedate }" /></td>
@@ -309,8 +309,7 @@
   <!-- Page level custom scripts -->
   <script src="${pageContext.request.contextPath}/resources/projects/js/demo/chart-area-demo.js"></script>
   <script src="${pageContext.request.contextPath}/resources/projects/js/demo/chart-pie-demo.js"></script>
-  
-
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/projects/js/reply.js"></script>
 
 
 <!-- Latest compiled JavaScript -->
@@ -369,7 +368,31 @@
 			$actionForm.submit();
 		});
 		
+		var replyStr ="";
+		//댓글 수 클릭 시 모달출력
+		$(".replyMove").on("click",function(e){
+			e.preventDefault();
+			console.log("replyMove");
+			var bno = $(this).attr("href");
+			
+			replyService.list({bno:bno,pageNum:1},function(res){
+				replyStr ="";
+				for(var i=0; i<res.length; i++){
+					replyStr+='<div>';
+					replyStr+='<div class="header">';
+					replyStr+='<strong class="primary-font">'+res[i].replyer+'</strong>';
+					replyStr+='<small class="pull-right text-muted">'+replyService.displayTime(res[i].replyDate)+'</small>';
+					replyStr+='</div>';
+					replyStr+='<p>'+res[i].reply+'</p>';			        		
+					replyStr+='</div>';	
+				}
+				$(".modal-body").html(replyStr);
+			
+		});
 		
+			$("#myModal").modal("show");
+		
+		});
 		
 		
 		

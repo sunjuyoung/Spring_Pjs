@@ -263,14 +263,18 @@ padding : 5px 3px 3px 3px;
 		$("#addReplyBtn").on("click",function(e){
 			var reply = $("input[name='reply']").val();
 			e.preventDefault();
-			var result = replyService.insert({reply:reply,replyer:replyer,bno:bnoValue});
+			replyService.insert({reply:reply,replyer:replyer,bno:bnoValue},function(res){
+				alert(res);
+				
+			});
+			$("input[name='reply']").val('');
 			replyList();
-			reply.empty();
+			
 		})
 		
+		//댓글 출력
 		replyList();
 		function replyList(){
-			
 			replyService.list({bno:bnoValue,pageNum:replyPage},function(list){
 				var replyStr ="";
 				console.log(list);
@@ -282,11 +286,8 @@ padding : 5px 3px 3px 3px;
 					replyStr+='</div>';
 					replyStr+='<p>'+list[i].reply+'</p>';			        		
 					replyStr+='</div>';				
-					
 				}
-				
-				$(".chat").append(replyStr);
-				
+				$(".chat").html(replyStr);
 			});
 		}
 		
@@ -477,37 +478,16 @@ padding : 5px 3px 3px 3px;
 		
 	});
 	
-	
-	
 	</script>
 
 
 	<script>
-	
-	//댓글 목록 처리
-	
-	
-	
-	
-	
-	//입력
-	/* replyService.add({reply:"JS TEST",replyer:"채원이",bno:bnoValue},function(result){
-		alert("RESULT: "+ result);
-	});
-	 */
-	 
-	 
-	 
+ 
 	 //출력
 /* 	replyService.ajaxList({bno:bnoValue,page:1},function(list){
-		
-		
-		
 		for(var i=0, len=list.length||0; i<len; i++){
 			console.log(list[i]);
 		} */
-		
-		
 
 		//삭제
 /* 		replyService.remove(42,function(count){
@@ -530,13 +510,6 @@ padding : 5px 3px 3px 3px;
 		
 		});
 		 */
-
-	
 	</script>
-
-
-
-
-</body>
-
+ </body>
 </html>

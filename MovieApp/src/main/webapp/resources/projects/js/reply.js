@@ -1,8 +1,3 @@
-/**
- * 
- */
-
-
 
 console.log("reply Module..");
 
@@ -12,11 +7,8 @@ var replyService = (function(){
 	
 	
 	function getContextPath() {
-
 		var hostIndex = location.href.indexOf( location.host ) + location.host.length;
-
 		return location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1) );
-
 	}
 	
 	
@@ -32,7 +24,7 @@ var replyService = (function(){
 			contentType : 'application/json; charset=utf-8',
 			success : function(res,status,xhr){
 				if(callback){
-					callback(result);
+					callback(res);
 				}
 			},error: function(xhr,status,er){
 				if(error){
@@ -49,7 +41,6 @@ var replyService = (function(){
 		console.log("list");
 	
 		var contextPath = getContextPath();
-		console.log(contextPath);
 		var bno = param.bno;
 		var pageNum = param.pageNum;
 		
@@ -93,6 +84,10 @@ var replyService = (function(){
 			
 		}
 	}
+	
+	
+	
+	
 	
 	
 	return {insert:insert,

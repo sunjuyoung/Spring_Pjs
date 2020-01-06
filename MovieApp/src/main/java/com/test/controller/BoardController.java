@@ -1,14 +1,11 @@
 package com.test.controller;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +28,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.test.domain.AttachFileDTO;
-import com.test.domain.BoardAttachVO;
 import com.test.domain.BoardVO;
 import com.test.domain.PageDTO;
 import com.test.service.BoardService;
+import com.test.service.ReplyService;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
-import net.coobird.thumbnailator.Thumbnailator;
 
 @Controller
 @RequestMapping("/board")
@@ -49,6 +44,8 @@ public class BoardController {
 	@Setter(onMethod_  = {@Autowired})
 	 private BoardService service;
 	
+	@Setter(onMethod_  = {@Autowired})
+	 private ReplyService replyService;
 	
 	//파일 년/월/일  폴더 생성
 	private String getFolder() {

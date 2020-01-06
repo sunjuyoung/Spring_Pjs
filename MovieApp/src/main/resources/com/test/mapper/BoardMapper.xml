@@ -90,8 +90,14 @@
 
 
 	<select id="getListWithPaging" resultType="com.test.domain.BoardVO">
-		select sub1.bno,sub1.title,sub1.content,sub1.writer,sub1.regdate,sub1.updatedate from
-		(select * from tb1_board order by bno desc) sub1
+	select sub1.bno,
+		sub1.title,
+		sub1.content,
+		sub1.writer,
+		sub1.regdate,
+		sub1.updatedate,
+		(SELECT COUNT(*) FROM tb1_reply WHERE bno =sub1.bno) replyCnt
+	FROM (select * from tb1_board order by bno desc) sub1 
 		<include refid="boardList"></include>
 		limit #{amount} OFFSET #{offset}
 	</select>

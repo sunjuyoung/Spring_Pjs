@@ -38,7 +38,7 @@ public class ReplyController {
 	
 	
 	/**
-	 * 
+	 * 입력
 	 * @param vo
 	 * @return
 	 */
@@ -54,7 +54,7 @@ public class ReplyController {
 	}
 	
 	/**
-	 * 
+	 * 출력
 	 * @param bno
 	 * @param pageNum
 	 * @return
