@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.test.mapper.ReplyMapper">
+  
+  <insert id="insert">
+  
+  insert into tb1_reply (rno,bno,reply,replyer) values (SEQ_REPLY.nextval,#{bno},#{reply},#{replyer})
+  
+  </insert>
+  
+  <select id="read" resultType="com.test.domain.ReplyVO">
+  
+  select * from tb1_reply where rno=#{rno}
+  </select>
+  
+  
+  <delete id="remove">
+  
+  delete from tb1_reply where rno=#{rno}
+  </delete>
+  
+  <update id="update">
+  
+  update tb1_reply set reply=#{reply}, updateDate=sysdate where rno=#{rno}
+  
+  </update>
+  
+  <select id="getListWithPaging" resultType="com.test.domain.ReplyVO">
+<![CDATA[ 
+select bno,rno,reply,replyer,replyDate,updateDate 
+from (
+select /*+INDEX (tb1_reply idx_reply) */
+ rownum rn,bno,rno,reply,replyer,replyDate,updateDate 
+from tb1_reply
+ where bno=#{bno} 
+ and rno > 0 
+ and rownum < #{cri.pageNum} * (#{cri.amount}/2) )
+ where rn >  (#{cri.pageNum}-1) * (#{cri.amount}/2)
+]]>
+  </select>
+  
+  
+  <select id="getCountByBno" resultType="int">
+  <![CDATA[ 
+  select count(*) from tb1_reply where bno = #{bno}
+  ]]>
+  </select>
+  
+  
+  
+  
+  
+  
+  
+  </mapper>
+  
+  
