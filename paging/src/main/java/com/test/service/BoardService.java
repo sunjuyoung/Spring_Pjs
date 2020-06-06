@@ -9,6 +9,7 @@ public interface BoardService {
 	
 	public List<BoardVO> getList(Criteria cri);
 
+	public int total();
 	
-	
+	public void insert (BoardVO board);
 }

@@ -11,8 +11,16 @@ select bno,title  from tb1_board order by bno desc limit 10 offset 0
 
 
 <select id="getListWithPaging" resultType="com.test.domain.BoardVO">
-select bno,title,content  from tb1_board order by bno desc limit 10 offset #{offset}
+select bno,title,content,writer,updatedate  from tb1_board order by bno desc limit 10 offset #{offset}
 </select>
 
+
+<select id="total" resultType="int">
+ select  count(*) from tb1_board
+</select>
+
+<insert id="insert">
+insert into tb1_board(title,content,writer) values(#{title},#{content},#{writer})
+</insert>
 
 </mapper>

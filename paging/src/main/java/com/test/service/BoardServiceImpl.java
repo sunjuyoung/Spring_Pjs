@@ -24,4 +24,21 @@ public class BoardServiceImpl implements BoardService{
 		return mapper.getListWithPaging(cri);
 	}
 
+
+
+	@Override
+	public int total() {
+		// TODO Auto-generated method stub
+		return mapper.total();
+	}
+
+
+
+	@Override
+	public void insert(BoardVO board) {
+		// TODO Auto-generated method stub
+		
+		mapper.insert(board);
+	}
+
 }

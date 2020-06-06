@@ -8,8 +8,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PageDTO {
-	
-	
 	private boolean next; 
 	private boolean prev;
 	
@@ -21,10 +19,12 @@ public class PageDTO {
 	
 	/* private int offset; */
 	
-	
-	
+	/**
+	 * 
+	 * @param cri
+	 * @param total
+	 */
 	public PageDTO(Criteria cri,int total) {
-		
 		this.cri = cri;
 		this.total=total;
 		
