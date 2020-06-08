@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.test.domain.BoardVO;
@@ -53,19 +55,29 @@ public class BoardController {
 	}
 	
 	/**
+	 * 글 작성 화면
+	 */
+	@GetMapping("/get")
+	public void get(@RequestParam("bno") int bno,Model model) {
+		
+		model.addAttribute("board",service.get(bno));
+		
+	}
+	
+	/**
 	 * 
 	 * @param rttr
 	 * @param board
 	 * @return
 	 */
 	@PostMapping("/insert")
-	public String insert(RedirectAttributes rttr,BoardVO board,Model model,Criteria cri) {
+	public String insert(RedirectAttributes rttr,BoardVO board,@ModelAttribute("cri")Criteria cri) {
 		log.info("insert");
 		
 		service.insert(board);
 		rttr.addFlashAttribute("result" ,board.getBno());
-		model.addAttribute("pageNum","1");
-		model.addAttribute("amount","10");
+		rttr.addAttribute("pageNum",cri.getPageNum());
+		rttr.addAttribute("amount",cri.getAmount());
 		
 		return "redirect:/board/main";
 	}

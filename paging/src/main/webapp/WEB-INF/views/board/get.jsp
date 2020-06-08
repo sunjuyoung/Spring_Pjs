@@ -25,8 +25,8 @@
 	 
 	 
 }
-.grid_Table{
-	height:650px;
+.insert{
+	height:auto;
 	
 }
 .head1{
@@ -50,24 +50,20 @@
   transform: translateY(4px);
 }
 
-table.table{
-/* margin-top:5rem; */
+
+input{
+	border-radius: 4px;
+}
+textarea{
+	border-radius: 4px;
 
 }
-
-tr:nth-child(even){
-	background: #f7f7f7;
-}
-
 </style>
 
 
 <script>
 $(document).ready(function(){
 
-	var result = '<c:out value="${result}" />';
-	
-	
 	var form = $("#actionForm");
 	   $(".page-link").on("click",function(e){
 		   e.preventDefault();
@@ -77,10 +73,6 @@ $(document).ready(function(){
 		   form.submit();
 	   });
 
-	   $(".insert").on("click",function(){
-		  self.location = "/board/insert";
-	   });
-	   
 });
 </script>
 </head>
@@ -88,60 +80,47 @@ $(document).ready(function(){
 
 <div class="container">
 <div class="head1">MAIN</div>
-<div class="head2"><button class="insert" type="button">글쓰기</button></div>
+
+
+<div class="head2"><button type="submit">글쓰기</button></div>
 <div></div>
-	<div class="grid_Table">
+	<div class="insert">
+	<form role="form" action="/board/insert" method="post">
+	<div class="col-lg-12">
 	
-	<!-- board Table -->
-	<table class="table">
-		<thead>
-			<tr>
-				<th>No.</th>
-				<th>제목</th>
-				<th>글쓴이</th>
-				<th>날짜</th>
-			</tr>
-		</thead>
-			<tbody>
-			<c:forEach var="board" items="${board }" >
-				<tr>
-					<td>${board.bno}</td>
-					<td><a href="/board/get?bno=${board.bno }">${board.title}</a></td>
-					<td>${board.writer}</td>
-					<td><fmt:formatDate value="${board.updatedate}" type="time" /></td>
-				</tr>
-			</c:forEach>
-			</tbody>
-	</table>
-
-
+	
+	<div class="form-group">
+		<label>제목</label>
+		<input type="text" name="title" id="title" value="${board.title }" />
 	</div>
+	<div class="form-group">
+		<label>내용</label>
+		<textarea name="content" id="content"rows="7" cols="100">${board.content }</textarea>
+	</div>
+	<div class="form-group">
+		<label>글쓴이</label>
+		<input type="text" id="writer"name="writer" value="${board.writer }">
+	</div>
+	
+	</div>
+	<button type="submit">글쓰기</button> 
+	</form>
+	
+	
+	
+	
+	
+	</div>
+	
 	<div></div>
 	<div></div>
 	<div>
-		<!-- 페이지 -->
-	<ul class="pagination">
-	<c:if test="${page.prev }">
-	  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-	  </c:if>
-	  
-	  <c:forEach var="page" begin="${page.startPage }" end="${page.endPage }">
-	  	<li class="page-item"><a class="page-link" href="${page}">${page }</a></li>
-	  </c:forEach>
 	
-	  
-	  <c:if test="${page.next }">
-	  <li class="page-item"><a class="page-link" href="#">Next</a></li>
-	  </c:if>
-	</ul>
 	</div>
 </div>
 
 
-<form action="/board/main" method="get" id="actionForm">
-	<input type="hidden" name="pageNum" value="${page.cri.pageNum }" />
-	<input type="hidden" name="amount" value="${page.cri.amount }" />
-</form>
+
 
 </body>
 </html>

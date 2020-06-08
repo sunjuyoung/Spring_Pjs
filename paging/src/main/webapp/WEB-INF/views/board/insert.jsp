@@ -85,26 +85,24 @@ $(document).ready(function(){
 <div class="head2"><button type="submit">글쓰기</button></div>
 <div></div>
 	<div class="insert">
-	<form role="form" action="/board/insert" method="POST">
+	<form role="form" action="/board/insert" method="post">
 	<div class="col-lg-12">
 	
 	
 	<div class="form-group">
 		<label>제목</label>
-		<input type="text" name="title"  />
+		<input type="text" name="title" id="title"  />
 	</div>
 	<div class="form-group">
 		<label>내용</label>
-		<textarea name="content" rows="7" cols="100"></textarea>
+		<textarea name="content" id="content"rows="7" cols="100"></textarea>
 	</div>
 	<div class="form-group">
 		<label>글쓴이</label>
-		<input type="text" name="writer" >
+		<input type="text" id="writer"name="writer" >
 	</div>
 	
 	</div>
-	<input type="hidden" name="pageNum" value="${page.cri.pageNum }" />
-	<input type="hidden" name="amount" value="${page.cri.amount }" />
 	<button type="submit">글쓰기</button> 
 	</form>
 	

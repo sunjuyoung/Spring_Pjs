@@ -12,4 +12,7 @@ public interface BoardService {
 	public int total();
 	
 	public void insert (BoardVO board);
+	
+	
+	public BoardVO get(int bno);
 }

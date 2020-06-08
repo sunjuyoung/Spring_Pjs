@@ -41,4 +41,12 @@ public class BoardServiceImpl implements BoardService{
 		mapper.insert(board);
 	}
 
+
+
+	@Override
+	public BoardVO get(int bno) {
+		// TODO Auto-generated method stub
+		return mapper.get(bno);
+	}
+
 }
