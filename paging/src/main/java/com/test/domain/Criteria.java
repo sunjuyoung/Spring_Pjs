@@ -21,5 +21,9 @@ public class Criteria {
 		
 		this.offset = (pageNum -1) * amount;
 	}
+	
+	public Criteria() {
+		this(1,10);
+	}
 
 }

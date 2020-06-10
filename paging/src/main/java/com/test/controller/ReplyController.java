@@ -13,9 +13,4 @@ import com.test.domain.ReplyVO;
 public class ReplyController {
 
 	
-	@GetMapping(value="/getList")
-	public List<ReplyVO> getList(){
-		
-		
-	}
 }
