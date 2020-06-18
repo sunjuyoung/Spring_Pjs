@@ -1,8 +1,8 @@
 package com.test.controller;
 
+import java.awt.PageAttributes.MediaType;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,10 +19,12 @@ import com.test.domain.ReplyVO;
 import com.test.service.ReplyService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j;
 
 @RequestMapping("/replies")
 @RestController
 @AllArgsConstructor
+@Log4j
 public class ReplyController {
 
 	private ReplyService service;
@@ -49,7 +51,7 @@ public class ReplyController {
 	 * @param bno
 	 * @return
 	 */
-	@GetMapping(value="/pages/{bno}/{page}")
+	@GetMapping(value="/pages/{bno}/{page}",produces = org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE ,consumes = "application/json")
 	public ResponseEntity<List<ReplyVO>> list(@PathVariable("page") int page,@PathVariable("bno")int bno) {
 		Criteria cri = new Criteria(page,10);
 		

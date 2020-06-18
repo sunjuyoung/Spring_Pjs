@@ -80,6 +80,7 @@ div.reply{
 <script>
 $(document).ready(function(){
 
+	var bnoValue=${board.bno};
 	var form = $("#actionForm");
 	   $(".page-link").on("click",function(e){
 		   e.preventDefault();
@@ -88,6 +89,18 @@ $(document).ready(function(){
 		   form.find("input[name='pageNum']").val(pageNum);
 		   form.submit();
 	   });
+	   
+	replyService.list({bno:bnoValue,page:1},function(result){
+		
+		console.log(result[1]);
+		
+		
+		/* for(var i=0; i<len; i++){
+			console.log(result[i]);
+		} */
+		
+		
+	})
 
 });
 </script>
