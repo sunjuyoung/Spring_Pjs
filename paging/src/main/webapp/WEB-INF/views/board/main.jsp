@@ -26,8 +26,7 @@
 	 
 }
 .grid_Table{
-	height:650px;
-	
+	height:600px;
 }
 .head1{
  	grid-column: 1 / span 3;
@@ -58,7 +57,9 @@ table.table{
 tr:nth-child(even){
 	background: #f7f7f7;
 }
-
+div.menu{
+	padding-right:10px;
+}
 </style>
 
 
@@ -71,10 +72,13 @@ $(document).ready(function(){
 	var form = $("#actionForm");
 	   $(".page-link").on("click",function(e){
 		   e.preventDefault();
+		  
 		   var pageNum = $(this).attr("href");
 		   
 		   form.find("input[name='pageNum']").val(pageNum);
+		  
 		   form.submit();
+		 
 	   });
 
 	   $(".insert").on("click",function(){
@@ -89,7 +93,25 @@ $(document).ready(function(){
 <div class="container">
 <div class="head1">MAIN</div>
 <div class="head2"><button class="insert" type="button">글쓰기</button></div>
-<div></div>
+<div class="menu">
+<nav class="navbar  bg-light navbar-light">
+
+  <!-- Links -->
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 1</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 2</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 3</a>
+    </li>
+  </ul>
+
+</nav>
+
+</div>
 	<div class="grid_Table">
 	
 	<!-- board Table -->

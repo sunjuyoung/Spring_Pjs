@@ -25,8 +25,11 @@
 	 
 	 
 }
+div.replyGrid{
+	padding-left: 70px;
+}
 .insert{
-	height:auto;
+	height:300px;
 	
 }
 .head1{
@@ -58,8 +61,21 @@ textarea{
 	border-radius: 4px;
 
 }
-</style>
+div.menu{
+	padding-right:10px;
+}
+div.reply{
+	height:150px;
+	width:600px;
+	align-items: center;
+	align-content: center;
+	padding-left: 10px;
+	border: 2px outset gray;
+}
 
+</style>
+<!-- reply module -->
+<script type="text/javascript" src="/resources/js/reply.js"></script>
 
 <script>
 $(document).ready(function(){
@@ -83,39 +99,60 @@ $(document).ready(function(){
 
 
 <div class="head2"><button type="submit">글쓰기</button></div>
-<div></div>
+<div class="menu">
+<nav class="navbar  bg-light navbar-light">
+
+  <!-- Links -->
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 1</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 2</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 3</a>
+    </li>
+  </ul>
+
+</nav>
+
+</div>
 	<div class="insert">
 	<form role="form" action="/board/insert" method="post">
 	<div class="col-lg-12">
-	
-	
-	<div class="form-group">
-		<label>제목</label>
-		<input type="text" name="title" id="title" value="${board.title }" />
+		<div class="form-group">
+			<label>제목</label>
+			<input type="text" name="title" id="title" value="${board.title }" / readonly>
+		</div>
+		<div class="form-group">
+			<label>내용</label>
+			<textarea name="content" id="content"rows="7" cols="80" readonly>${board.content }</textarea>
+		</div>
+		<div class="form-group">
+			<label>글쓴이</label>
+			<input type="text" id="writer"name="writer" value="${board.writer }" readonly>
+		</div>
 	</div>
-	<div class="form-group">
-		<label>내용</label>
-		<textarea name="content" id="content"rows="7" cols="100">${board.content }</textarea>
-	</div>
-	<div class="form-group">
-		<label>글쓴이</label>
-		<input type="text" id="writer"name="writer" value="${board.writer }">
-	</div>
-	
-	</div>
-	<button type="submit">글쓰기</button> 
 	</form>
 	
-	
-	
-	
-	
 	</div>
 	
-	<div></div>
-	<div></div>
-	<div>
-	
+	<div>grid4</div>
+	<div>grid5</div>
+	<div class="replyGrid">
+		<div>
+			<span>이름</span>
+			<span>날짜</span>
+			<input value="weoifjewofjifjoji">
+		</div>
+		
+		
+		<div class="reply">
+			<p>이름</p>
+			<textarea name="replyContent"rows="3" cols="70"></textarea>
+			<button>등록</button>
+		</div>
 	</div>
 </div>
 

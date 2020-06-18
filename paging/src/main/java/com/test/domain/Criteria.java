@@ -13,17 +13,15 @@ public class Criteria {
 	private int amount;
 	private int offset;
 	
+	public Criteria() {
+		this(1,10);
+	}
 
 	
 	public Criteria(int pageNum,int amount) {
 		this.pageNum=pageNum;
 		this.amount=amount;
-		
-		this.offset = (pageNum -1) * amount;
 	}
 	
-	public Criteria() {
-		this(1,10);
-	}
-
+	
 }

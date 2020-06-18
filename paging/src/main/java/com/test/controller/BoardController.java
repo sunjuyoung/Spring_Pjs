@@ -35,8 +35,8 @@ public class BoardController {
 	 */
 	@GetMapping("/main")
 	public String main(Model model,Criteria cri) {
-		log.info("basic");
-		
+		int offset = (cri.getPageNum()-1)*cri.getAmount();
+		cri.setOffset(offset);
 		List<BoardVO> board = service.getList(cri);
 		int total = service.total();
 		
