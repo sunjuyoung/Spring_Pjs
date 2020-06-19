@@ -72,6 +72,12 @@ div.reply{
 	padding-left: 10px;
 	border: 2px outset gray;
 }
+div.replyContent{
+	margin:10px;
+}
+div.replyList{
+	margin-bottom: 10px;
+}
 
 </style>
 <!-- reply module -->
@@ -82,6 +88,7 @@ $(document).ready(function(){
 
 	var bnoValue=${board.bno};
 	var form = $("#actionForm");
+	var replyUrl = $(".replyContent");
 	   $(".page-link").on("click",function(e){
 		   e.preventDefault();
 		   var pageNum = $(this).attr("href");
@@ -90,15 +97,31 @@ $(document).ready(function(){
 		   form.submit();
 	   });
 	   
+	   /* reply list */
 	replyService.list({bno:bnoValue,page:1},function(result){
+		var len = result.length || 0;
+		var str ="";
+		console.log(result);
+		if(result ==null || len == 0){
+			replyUrl.html("");
+			return;
+		}
+		 for(var i=0; i<len; i++){
+			 
+		str+='	<div class="replyList">            '
+		str+='		<div class="contentTop">       ' 
+		str+=         result[i].replyer
+		str+='		</div>                         '
+		str+='		<div class="contentMiddle">    '
+		str+=         result[i].reply
+		str+='		</div>                         '
+		str+='		<div class="contentBottom">    '
+		str+=			replyService.displayTime(result[i].upateDate);              
+		str+='		</div>                         '
+		str+='	</div>                             '
 		
-		console.log(result[1]);
-		
-		
-		/* for(var i=0; i<len; i++){
-			console.log(result[i]);
-		} */
-		
+		 }                                      
+		replyUrl.html(str);                                 
 		
 	})
 
@@ -154,10 +177,18 @@ $(document).ready(function(){
 	<div>grid4</div>
 	<div>grid5</div>
 	<div class="replyGrid">
-		<div>
-			<span>이름</span>
-			<span>날짜</span>
-			<input value="weoifjewofjifjoji">
+		<div class="replyContent">
+			<!-- <div class="replyList">
+				<div class="contentTop">
+					아이디
+				</div>
+				<div class="contentMiddle">
+					내용
+				</div>
+				<div class="contentBottom">
+					내용
+				</div>
+			</div> -->
 		</div>
 		
 		

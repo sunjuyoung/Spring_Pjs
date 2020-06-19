@@ -11,7 +11,7 @@ select rno,bno,reply,replyer,upateDate  from tb1_reply where bno=#{bno} order by
 
 
 <select id="getListWithPaging" resultType="com.test.domain.ReplyVO">
-select bno,title,content,writer,updatedate  from tb1_board order by bno desc limit 10 offset #{offset}
+select bno,title,content,writer,updateDate  from tb1_board order by bno desc limit 10 offset #{offset}
 </select>
 
 
