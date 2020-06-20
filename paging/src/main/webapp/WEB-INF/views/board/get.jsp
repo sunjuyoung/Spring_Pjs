@@ -64,8 +64,8 @@ textarea{
 div.menu{
 	padding-right:10px;
 }
-div.reply{
-	height:150px;
+div.reply{ 
+	height:170px;
 	width:600px;
 	align-items: center;
 	align-content: center;
@@ -78,6 +78,12 @@ div.replyContent{
 div.replyList{
 	margin-bottom: 10px;
 }
+div.contentTop{
+	display: flex;
+}
+div.topId{
+	flex: 1;
+}
 
 </style>
 <!-- reply module -->
@@ -87,6 +93,7 @@ div.replyList{
 $(document).ready(function(){
 
 	var bnoValue=${board.bno};
+	var replyerValue = $("#writer").val();
 	var form = $("#actionForm");
 	var replyUrl = $(".replyContent");
 	   $(".page-link").on("click",function(e){
@@ -97,7 +104,11 @@ $(document).ready(function(){
 		   form.submit();
 	   });
 	   
+	  
+	   
+	   
 	   /* reply list */
+function showList(){
 	replyService.list({bno:bnoValue,page:1},function(result){
 		var len = result.length || 0;
 		var str ="";
@@ -110,7 +121,12 @@ $(document).ready(function(){
 			 
 		str+='	<div class="replyList">            '
 		str+='		<div class="contentTop">       ' 
+		str+='			<div class="topId">'
 		str+=         result[i].replyer
+		str+='		</div>                         '
+		str+='			<div class="topId">'
+		str+='<button type="button" class="replyRemoveBtn" id="'+result[i].rno+'">x</button>'
+		str+='		</div>    '
 		str+='		</div>                         '
 		str+='		<div class="contentMiddle">    '
 		str+=         result[i].reply
@@ -118,12 +134,37 @@ $(document).ready(function(){
 		str+='		<div class="contentBottom">    '
 		str+=			replyService.displayTime(result[i].upateDate);              
 		str+='		</div>                         '
+		str+='<input type="hidden" id="rno" name="rno" value="'+result[i].rno+'"/>'
 		str+='	</div>                             '
 		
 		 }                                      
 		replyUrl.html(str);                                 
 		
 	})
+	   }
+	
+	/* 리플 등록 */
+	$(".replyInsertBtn").on("click",function(){
+		var replyValue = $("#replyContent").val();
+ 		replyService.add({bno:bnoValue ,reply:replyValue ,replyer:replyerValue},function(result){
+			alert(result);
+			$("#replyContent").val("");
+			showList();
+		}); 
+	})
+	
+	/* 리플 삭제 */
+	$('body').on("click",".replyRemoveBtn",function(e){ //document
+		var rno = $(this).attr("id");
+		 replyService.remove(rno,function(result){
+			 console.log(result);
+			alert(result);
+			showList();
+		}) 
+	})
+	
+	
+	showList();
 
 });
 </script>
@@ -155,32 +196,36 @@ $(document).ready(function(){
 
 </div>
 	<div class="insert">
-	<form role="form" action="/board/insert" method="post">
-	<div class="col-lg-12">
-		<div class="form-group">
-			<label>제목</label>
-			<input type="text" name="title" id="title" value="${board.title }" / readonly>
+		<div class="col-lg-12">
+			<div class="form-group">
+				<label>제목</label>
+				<input type="text" name="title" id="title" value="${board.title }" / readonly>
+			</div>
+			<div class="form-group">
+				<label>내용</label>
+				<textarea name="content" id="content"rows="7" cols="80" readonly>${board.content }</textarea>
+			</div>
+			<div class="form-group">
+				<label>글쓴이</label>
+				<input type="text" id="writer"name="writer" value="${board.writer }" readonly>
+			</div>
 		</div>
-		<div class="form-group">
-			<label>내용</label>
-			<textarea name="content" id="content"rows="7" cols="80" readonly>${board.content }</textarea>
-		</div>
-		<div class="form-group">
-			<label>글쓴이</label>
-			<input type="text" id="writer"name="writer" value="${board.writer }" readonly>
-		</div>
-	</div>
-	</form>
-	
+		
 	</div>
 	
-	<div>grid4</div>
-	<div>grid5</div>
+	<div></div>
+	<div></div>
 	<div class="replyGrid">
 		<div class="replyContent">
-			<!-- <div class="replyList">
+<!-- 			<div class="replyList">
 				<div class="contentTop">
+					<div class="topId">
 					아이디
+					</div>
+					<div class="topRemoveBtn">
+						<button type="button" class="replyRemoveBtn">x</button>
+					</div>
+					
 				</div>
 				<div class="contentMiddle">
 					내용
@@ -188,19 +233,20 @@ $(document).ready(function(){
 				<div class="contentBottom">
 					내용
 				</div>
-			</div> -->
+			</div>  -->
 		</div>
 		
 		
 		<div class="reply">
-			<p>이름</p>
-			<textarea name="replyContent"rows="3" cols="70"></textarea>
-			<button>등록</button>
+			<p>${board.writer}</p>
+			<textarea name="replyContent"rows="3" cols="77" id="replyContent"></textarea>
+			<button class="replyInsertBtn" type="button">등록</button>
 		</div>
 	</div>
 </div>
 
 
+<input type="hidden" id="replyContent" name="replyContent" value=""/>
 
 
 </body>

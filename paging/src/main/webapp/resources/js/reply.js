@@ -8,8 +8,8 @@ var replyService=(function(){
 		
 		$.ajax({
 			type:'post',
-			url:'/replise/new',
-			data:JSON.springify(reply),
+			url:'/replies/new',
+			data:JSON.stringify(reply), 
 			contentType:"application/json; charset=utf-8",
 			success:function(result,status,xhr){
 				if(callback){
@@ -41,6 +41,21 @@ var replyService=(function(){
 		})
 	};
 	
+	//삭제
+	function remove(rno,callback,error){
+		console.log("reply remove");
+		
+		$.ajax({
+			type:'delete',
+			url:'/replies/'+rno,
+			success:function(result){
+				callback(result);
+			}
+			
+		})
+		
+	}
+	
 	
 	//시간
 	function displayTime(timeValue){
@@ -54,7 +69,7 @@ var replyService=(function(){
 			var mi = dateObj.getMinutes();
 			var ss = dateObj.getSeconds();
 			
-			return [(hh>9? '':'0')+hh, ':' (mi>9? '':'0')+mi, ':' (ss>9? '':'0')+ss].join('');
+			return [(hh>9? '':'0')+hh, ':', (mi>9? '':'0')+mi, ':', (ss>9? '':'0')+ss].join('');
 		}else{
 			var yy = dateObj.getFullYear();
 			var mm = dateObj.getMonth() + 1;
@@ -69,7 +84,8 @@ var replyService=(function(){
 	return {
 		add:add,
 		list:list,
-		displayTime:displayTime
+		displayTime:displayTime,
+		remove:remove
 		
 	};
 })();

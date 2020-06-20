@@ -21,7 +21,7 @@ import com.test.service.ReplyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
-@RequestMapping("/replies")
+@RequestMapping("/replies/")
 @RestController
 @AllArgsConstructor
 @Log4j
