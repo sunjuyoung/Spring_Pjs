@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mapper.BoardMapper">
+
+<select id="getList" resultType="com.test.domain.BoardVO">
+select bno,title  from tb1_board order by bno desc limit 10 offset 0
+</select>
+
+
+
+<select id="getListWithPaging" resultType="com.test.domain.BoardVO">
+select bno,title,content,writer,updatedate  from tb1_board order by bno desc limit 10 offset #{offset}
+</select>
+
+
+<select id="total" resultType="int">
+ select  count(*) from tb1_board
+</select>
+
+<insert id="insert">
+insert into tb1_board(title,content,writer) values(#{title},#{content},#{writer})
+</insert>
+
+
+<select id="get" resultType="com.test.domain.BoardVO">
+select bno,title,content,writer,updatedate from tb1_board where bno=#{bno}
+</select>
+
+</mapper>
