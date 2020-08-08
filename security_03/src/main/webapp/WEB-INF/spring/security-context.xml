@@ -8,11 +8,13 @@
 		
 <bean id="customAccessDenied" class="com.test.security.CustomAccessDeniedHandler"></bean>
 <bean id="customLoginSuccessHandler" class="com.test.security.CustomLoginSuccessHandler"></bean>
+<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+<!-- <bean id="customNoOpPasswordEncoder" class="com.test.security.CustomNoOpPasswordEncoder"></bean> -->
 
 
 <security:http>
 	<security:intercept-url pattern="/sample/all" access="permitAll"/>
-	<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')"/>
+	<security:intercept-url pattern="/sample/member" access="hasAnyRole('ROLE_MEMBER,ROLE_ADMIN')"/>
 	<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')"/>
 	
 	<security:access-denied-handler ref="customAccessDenied"/>
@@ -27,10 +29,9 @@
 <security:authentication-manager>
 
 	<security:authentication-provider>
-		<security:user-service>
-			<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER"/>
-			<security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN"/>
-		</security:user-service>
+		<security:jdbc-user-service data-source-ref="dataSource"/>
+		<!-- <security:password-encoder ref="customNoOpPasswordEncoder"/> passwordEncoder -->
+		<security:password-encoder ref="bcryptPasswordEncoder"/> <!-- 스프링시큐리티 api 포함 -->
 	</security:authentication-provider>
 
 </security:authentication-manager>

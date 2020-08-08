@@ -32,8 +32,18 @@
 <script>
 $(document).ready(function(){
 
-	   // jQuery methods go here...
+	  var er = '<c:out value="${error}" />';
+	  var logout = '<c:out value="${logout}" />';
+	 
+	  history.replaceState({},null,null);
+	  if(er === 'Login Error'){
+		  alert('회원정보를 확인하세요'+history.state);
+	  }
 
+	 if(logout === 'Logtout'){
+		 alert('로그아웃 되었습니다.'+history.state);
+	  }
+	
 });
 </script>
 </head>
