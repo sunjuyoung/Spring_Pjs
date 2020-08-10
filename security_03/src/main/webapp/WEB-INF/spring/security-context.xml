@@ -9,6 +9,7 @@
 <bean id="customAccessDenied" class="com.test.security.CustomAccessDeniedHandler"></bean>
 <bean id="customLoginSuccessHandler" class="com.test.security.CustomLoginSuccessHandler"></bean>
 <bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+<bean id="customUserDetailsService" class="com.test.security.CustomUserDetailsService"></bean>
 <!-- <bean id="customNoOpPasswordEncoder" class="com.test.security.CustomNoOpPasswordEncoder"></bean> -->
 
 
@@ -28,8 +29,8 @@
 
 <security:authentication-manager>
 
-	<security:authentication-provider>
-		<security:jdbc-user-service data-source-ref="dataSource"/>
+	<security:authentication-provider user-service-ref="customUserDetailsService">
+	<!-- 	<security:jdbc-user-service data-source-ref="dataSource"/> -->
 		<!-- <security:password-encoder ref="customNoOpPasswordEncoder"/> passwordEncoder -->
 		<security:password-encoder ref="bcryptPasswordEncoder"/> <!-- 스프링시큐리티 api 포함 -->
 	</security:authentication-provider>
