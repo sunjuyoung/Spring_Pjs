@@ -15,6 +15,7 @@ local.properties
 .loadpath
 .recommenders
 */target/**
+root-context.xml
 
 # External tool builders
 .externalToolBuilders/
@@ -22,20 +23,11 @@ local.properties
 # Locally stored "Eclipse launch configurations"
 *.launch
 
-# PyDev specific (Python IDE for Eclipse)
-*.pydevproject
-
-# CDT-specific (C/C++ Development Tooling)
-.cproject
-
 # CDT- autotools
 .autotools
 
 # Java annotation processor (APT)
 .factorypath
-
-# PDT-specific (PHP Development Tools)
-.buildpath
 
 # sbteclipse plugin
 .target

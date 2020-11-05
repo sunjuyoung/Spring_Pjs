@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- 네임스페이스 수정 -->
+	<!-- 스프링 시큐리티는  단독으로 설정할 수 있기 때문에 별도로 context.xml 관리  -->
+
+	<!-- CustomAccessDeniedHandler 빈등록 -->
+	<bean id="customAccessDeniedHandler"
+		class="com.test.security.CustomAccessDeniedHandler"></bean>
+
+
+	<!-- 로그인한 사용자에 부여된  -->
+	<!-- customLoginSuccessHandler" 빈등록 -->
+	<bean id="customLoginSuccessHandler"
+		class="com.test.security.CustomLoginSuccessHandler"></bean>
+
+	<security:http>
+
+		<!--특정 uri접근할 떄 이용하는 설정 -->
+		<security:intercept-url pattern="/sample/all"
+			access="permitAll" />
+
+		<security:intercept-url
+			pattern="/sample/member" access="hasRole('ROLE_MEMBER')" />
+		<!--access 속성값으로 사용되는 문자열은 1.표현식, 2.권한명을 의미하는 문자열 표현식을 권장한다 -->
+
+		<security:intercept-url pattern="/sample/admin"
+			access="hasRole('ROLE_ADMIN')" />
+
+		<!--error 페이지 지정할 수 있따. -->
+		<!--에러페이지만 제공하는 경우 사용자가 접근했던 URI자체는 변화가 없다 접근 제한이 된 경우 다양한 처리를 하고 싶다면 직접 
+			AccessDeniedHandler 인터페이스를 구현하는 것이 좋다 접근 제한되었을때 쿠키나 세션에 특정한 작업을하거나 특정한 헤더 
+			정보를 추가하는 등의 행위 -->
+		<!-- <security:access-denied-handler error-page="/accessError"/> -->
+
+		<!--에러 페이지 속성 대신 customAccessDeniedHandler 빈으로 등록해서 사용 -->
+		<security:access-denied-handler
+			ref="customAccessDeniedHandler" />
+			
+		<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccessHandler"/>
+	
+		<!-- 로그아웃시 페이지 설정과 세션 무효화  -->
+		<security:logout logout-url="/customLogout" invalidate-session="true" /> <!-- 로그아웃 후 이동페이지 기본값은 security:form-login  설정된 login-page="/customLogin" 
+																					 변경할려면 logout-success-url 속성으로 변경가능 		 -->
+
+
+		
+
+		<!-- 로그인 화면 디자인문제로 별도의 uri이용해서 로그인 페이지 제작해서 사용 -->
+		<security:form-login login-page="/customLogin" />
+
+	</security:http>
+
+	<!--단순 문자열만 이용하고 싶은 경우 -->
+	<!-- <security:http auto-config="true" use-expressions="false"> <security:intercept-url 
+		pattern="/sample/all" access="ROLE_MEMBER"/> <security:intercept-url pattern="/sample/all" 
+		access="ROLE_ADMIN"/> </security:http> -->
+
+	<security:authentication-manager>
+
+		<security:authentication-provider>
+			<security:user-service>
+
+				<!-- admin사용자는 2개의 권한을 가지도록 설정 --><!-- InMemory User -->
+				<security:user name="admin" password="{noop}admin"
+					authorities="ROLE_MEMBER, ROLE_ADMIN" />
+				<security:user name="member" password="{noop}member"
+					authorities="ROLE_MEMBER" /> <!-- 5버전부터 PasswordEncoder 지정 -->
+
+
+
+			</security:user-service>
+		</security:authentication-provider>
+
+	</security:authentication-manager>
+
+</beans>
