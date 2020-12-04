@@ -1,11 +1,15 @@
 package jpabook.jpaWeb.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Entity
+@Getter @Setter
 public class Member {
 
     @Id @GeneratedValue
@@ -18,5 +22,7 @@ public class Member {
     private Address address;
 
     @OneToMany(mappedBy = "member")//order 테이블에있는 member
-    private List<Order> orderList = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
+
+    
 }
