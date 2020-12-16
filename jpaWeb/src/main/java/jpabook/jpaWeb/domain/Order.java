@@ -63,7 +63,39 @@ public class Order {
         for(OrderItem orderItem : orderItems){
             order.addOrdersItem(orderItem);
         }
+        order.setStaus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
     }
 
+    //비즈니스 로직
+
+    /**
+     * 주문취소
+     */
+    public void cancel(){
+        if(delivery.getStatus()==DeliveryStatus.COMP){
+            throw new IllegalStateException("이미 배송중입니다.");
+        }
+        this.setStaus(OrderStatus.CANCEL);
+        for(OrderItem orderItem : orderItems){
+            orderItem.cancel();
+        }
+    }
+
+    /**
+     * 전체 주문 가격 조회
+     * @return
+     */
+    public int getTotalPrice(){
+        int totalPrice = 0;
+        for(OrderItem orderItem : orderItems){
+            totalPrice  += orderItem.getTotalPrice();
+        }
+        //int totalPrice = orderItems.stream().mapToInt(OrderItem::getTotalPrice).sum();
+
+        return totalPrice;
+
+    }
 
 }
