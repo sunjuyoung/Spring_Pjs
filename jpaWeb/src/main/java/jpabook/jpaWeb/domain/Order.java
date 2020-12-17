@@ -24,10 +24,11 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    //CascadeType.ALL persist 전파 저장 ,삭제
+    //CascadeType.ALL persist 전파 저장 ,삭제   //order를 persist하면 같이
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    //CascadeType.ALL  order를 persist하면 같이
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "deliver_id")
     private Delivery delivery;
@@ -54,6 +55,11 @@ public class Order {
         delivery.setOrder(this);
     }
 
+    //@NoArgsConstructor(access = AccessLevel.PROTECTED) 롬복으로 사용가능
+    //직접생성 방지
+    protected Order(){
+
+    }
 
     //생성 메서드
     public static Order createOrder(Member member,Delivery delivery, OrderItem... orderItems){
@@ -81,6 +87,7 @@ public class Order {
         for(OrderItem orderItem : orderItems){
             orderItem.cancel();
         }
+        //데이터만 바꾸면 update쿼리가 생성
     }
 
     /**
