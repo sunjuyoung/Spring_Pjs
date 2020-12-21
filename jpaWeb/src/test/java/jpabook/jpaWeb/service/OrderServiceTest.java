@@ -39,7 +39,6 @@ public class OrderServiceTest {
         Item book = createBook();
         int orderCcunt = 2;
         //when
-
         Long orderId = orderService.order(member.getId(),book.getId(),orderCcunt);
 
         //then
@@ -63,6 +62,7 @@ public class OrderServiceTest {
         Long orderId = orderService.order(member.getId(),book.getId(),orderCount);
         //when
         orderService.cancelOrder(orderId);
+
         //then
         Order getOrder = orderRepository.findOne(orderId);
         assertEquals("주문취소시 주문상태",OrderStatus.CANCEL,getOrder.getStaus());
@@ -84,11 +84,6 @@ public class OrderServiceTest {
         fail("예외발생해야한다.");
 
     }
-
-
-
-
-
 
 
 
