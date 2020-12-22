@@ -49,4 +49,17 @@ public abstract class Item {
         this.stockQuantity= restStock;
 
     }
+
+    /**
+     * 제품 수정
+     * @param name
+     * @param price
+     * @param stockQuantity
+     */
+    public void change(String name,int price,int stockQuantity){
+        this.name=name;
+        this.price=price;
+        this.stockQuantity=stockQuantity;
+        
+    }
 }
