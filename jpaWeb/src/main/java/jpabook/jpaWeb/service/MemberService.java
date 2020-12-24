@@ -60,4 +60,12 @@ public class MemberService {
 
     }
 
+    @Transactional
+    public void update(Long id,String name){
+        Member member = repository.findOne(id);
+        member.setName(name);
+        //member를 반환해도 된다
+        //커맨드와 쿼리를 분리
+    }
+
 }
