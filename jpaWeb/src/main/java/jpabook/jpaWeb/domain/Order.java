@@ -36,7 +36,7 @@ public class Order {
     private LocalDateTime orderDate; //order_date
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus staus; //주문 상태
+    private OrderStatus status; //주문 상태
 
     //양방향일때 연관관계 메서드
     public void setMember(Member member){
@@ -69,7 +69,7 @@ public class Order {
         for(OrderItem orderItem : orderItems){
             order.addOrdersItem(orderItem);
         }
-        order.setStaus(OrderStatus.ORDER);
+        order.setStatus(OrderStatus.ORDER);
         order.setOrderDate(LocalDateTime.now());
         return order;
     }
@@ -83,7 +83,7 @@ public class Order {
         if(delivery.getStatus()==DeliveryStatus.COMP){
             throw new IllegalStateException("이미 배송중입니다.");
         }
-        this.setStaus(OrderStatus.CANCEL);
+        this.setStatus(OrderStatus.CANCEL);
         for(OrderItem orderItem : orderItems){
             orderItem.cancel();
         }

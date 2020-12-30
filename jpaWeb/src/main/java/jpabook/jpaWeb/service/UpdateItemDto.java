@@ -7,8 +7,6 @@ import lombok.Setter;
 public class UpdateItemDto {
 
         private Long id;
-
-
         private String name;
 
         private int price;
