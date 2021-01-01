@@ -1,5 +1,6 @@
 package jpabook.jpaWeb.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpabook.jpaWeb.domain.item.Item;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class OrderItem {
     @JoinColumn(name = "item_id")
     private Item item;
 
+    @JsonIgnore//양방향일때 한쪽은 끊어준다
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;

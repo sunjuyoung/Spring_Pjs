@@ -22,7 +22,7 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member member; // new ByteBuddyInterceptor(Proxy)
 
     //CascadeType.ALL persist 전파 저장 ,삭제   //order를 persist하면 같이
     @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)

@@ -33,6 +33,13 @@ public class OrderController {
         return "order/oderForm";
     }
 
+    /**
+     * 주문
+     * @param memberId
+     * @param itemId
+     * @param count
+     * @return
+     */
     @PostMapping("/order")
     public String order(@RequestParam("memberId") Long memberId,@RequestParam("itemId")Long itemId
                         ,@RequestParam("count")int count){
@@ -40,6 +47,12 @@ public class OrderController {
         return "redirect:/orders";
     }
 
+    /**
+     * 주문 내역
+     * @param orderSearch
+     * @param model
+     * @return
+     */
     @GetMapping("/orders")
     public String orderList(@ModelAttribute("orderSearch")OrderSearch orderSearch,Model model){
         List<Order> orders = orderService.findOrders(orderSearch);
@@ -49,6 +62,11 @@ public class OrderController {
         return "order/orderList";
     }
 
+    /**
+     * 주문 취소
+     * @param orderId
+     * @return
+     */
     @PostMapping("/orders/{orderId}/cancel")
     public String cancelOrder(@PathVariable("orderId")Long orderId){
         orderService.cancelOrder(orderId);
