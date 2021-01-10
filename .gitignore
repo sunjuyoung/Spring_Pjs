@@ -9,6 +9,12 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+HELP.md
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 ### Eclipse ###
 .metadata
 bin/
