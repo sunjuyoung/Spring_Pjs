@@ -1,9 +1,16 @@
 package com.test.board.service;
 
 import com.test.board.dto.GuestbookDTO;
+import com.test.board.dto.PageRequestDTO;
+import com.test.board.dto.PageResultDTO;
+import com.test.board.entity.Guestbook;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,6 +30,22 @@ class GuestbookServiceTest {
                 .build();
 
         System.out.println(service.register(guestbookDTO));
+    }
+
+    @Test
+    public void testList(){
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(1).size(10).build();
+
+
+      
+
+
+
+        PageResultDTO<GuestbookDTO, Guestbook> resultDTO = service.getList(pageRequestDTO);
+
+        for(GuestbookDTO dto : resultDTO.getDtoList()){
+            System.out.println(dto);
+        }
     }
 
 }
