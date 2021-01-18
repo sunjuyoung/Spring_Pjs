@@ -6,9 +6,12 @@ import com.test.board.dto.PageResultDTO;
 import com.test.board.entity.Guestbook;
 
 public interface GuestbookService {
+
     Long register(GuestbookDTO dto);
 
     PageResultDTO<GuestbookDTO,Guestbook> getList(PageRequestDTO requestDTO);
+
+    GuestbookDTO read(Long gno);
 
     default Guestbook dtoToEntity(GuestbookDTO dto){
         Guestbook entity = Guestbook.builder()

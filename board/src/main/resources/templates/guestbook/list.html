@@ -3,6 +3,82 @@
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
     <th:block th:fragment="content">
         <h1>GuestBook List Page</h1>
+        <span>
+            <a th:href="@{/guestbook/register}">
+                <button type="button" class="btn btn-outline-primary"></button>
+            </a>
+        </span>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Gno</th>
+                <th scope="col">Title</th>
+                <th scope="col">RegDate</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="dto : ${result.dtoList}">
+                <th scope="row"><a th:href="@{/guestbook/read(gno=${dto.gno},page=${result.page})}">[[${dto.gno}]]</a></th>
+                <td>[[${dto.title}]]</td>
+                <td>[[${dto.writer}]]</td>
+                <td>[[${#temporals.format(dto.regDate,'yyyy/MM/dd')}]]</td>
+            </tr>
+            </tbody>
+        </table>
+        <ul class="pagination justify-content-center align-items-center">
+            <li class="page-item" th:if="${result.prev}">
+                <a class="page-link" th:href="@{/guestbook/list(page=${result.start-1})}">Previous</a>
+            </li>
+
+            <li th:class=" 'page-item ' + ${result.page==page?'active':''}" th:each="page : ${result.pageList}">
+                <a class="page-link" th:href="@{/guestbook/list(page=${page})}">[[${page}]]</a>
+            </li>
+
+            <li class="page-item" th:if="${result.next}">
+                <a class="page-link" th:href="@{/guestbook/list(page=${result.end +1})}">Next</a>
+            </li>
+
+        </ul>
+
+        <!-- The Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modal Heading</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        Modal body..
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <script th:inline="javascript">
+            var msg = [[${msg}]];
+
+            if(msg){
+                $(".modal").modal();
+
+
+
+            }
+
+        </script>
     </th:block>
 </th:block>
 <head>
