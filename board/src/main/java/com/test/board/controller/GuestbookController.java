@@ -24,7 +24,6 @@ public class GuestbookController {
 
     @GetMapping("/")
     public String index(){
-
         return "redirect:/guestbook/list";
     }
 
@@ -42,15 +41,24 @@ public class GuestbookController {
 
     @PostMapping("/register")
     public String registerPost(GuestbookDTO dto, RedirectAttributes redirectAttributes){
-       Long id =  guestbookService.register(dto);
+        Long id =  guestbookService.register(dto);
         redirectAttributes.addFlashAttribute("msg",id);
         return "redirect:/guestbook/list";
 
     }
 
-    @GetMapping("/read")
+    @GetMapping({"/read","/modify"})
     public void read(Long gno, @ModelAttribute("requestDTO") PageRequestDTO requestDTO, Model model){
         GuestbookDTO dto = guestbookService.read(gno);
         model.addAttribute("dto",dto);
+    }
+
+    @PostMapping("/remove")
+    public String remove(Long gno, RedirectAttributes redirectAttributes){
+        guestbookService.remove(gno);
+        redirectAttributes.addFlashAttribute("msg",gno);
+
+        return "redirect:/guestbook/list";
+
     }
 }

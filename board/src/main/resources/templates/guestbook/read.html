@@ -5,14 +5,14 @@
 
         <h1>GuestBook Read Page</h1>
 
-        <div class="form-group" th:object="${dto}">
-            <label>Gno</label>
-            <input type="text" class="form-control" th:field="*{gno}" placeholder="Enter title">
-        </div>
+            <div class="form-group" th:object="${dto}">
+                <label>Gno</label>
+                <input type="text" class="form-control" th:field="*{gno}" readonly>
+            </div>
 
             <div class="form-group" th:object="${dto}">
                 <label>Title</label>
-                <input type="text" class="form-control" th:field="*{title}" placeholder="Enter title">
+                <input type="text" class="form-control" th:field="*{title}" readonly>
             </div>
             <div class="form-group">
                 <label>Content</label>
@@ -20,9 +20,29 @@
             </div>
             <div class="form-group">
                 <label>Writer</label>
-                <input type="text" class="form-control" name="writer" placeholder="Enter writer" th:value="${dto.writer}">
+                <input type="text" class="form-control" name="writer" readonly th:value="${dto.writer}">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+
+            <div class="form-group">
+                <label>RegDate</label>
+                <input type="text" class="form-control" name="regDate"
+                th:value="${#temporals.format(dto.regDate,'yyyy/MM/dd')}" readonly>
+            </div>
+        <div class="form-group">
+            <label>ModDate</label>
+            <input type="text" class="form-control" name="modDate"
+                   th:value="${#temporals.format(dto.modDate,'yyyy/MM/dd')}" readonly>
+        </div>
+        <a th:href="@{/guestbook/modify(gno=${dto.gno},page=${requestDTO.page})}">
+            <button type="button" class="btn btn-primary">Modify</button>
+        </a>
+        <a th:href="@{/guestbook/list(page=${requestDTO.page})}">
+            <button type="button" class="btn btn-info">List</button>
+        </a>
+        <a th:href="@{/guestbook/modify(gno=${dto.gno},page=${requestDTO.page})}">
+            <button type="button" class="btn btn-danger">Remove</button>
+        </a>
+
 
 
     </th:block>
