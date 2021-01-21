@@ -4,6 +4,7 @@ import com.test.board.dto.GuestbookDTO;
 import com.test.board.dto.PageRequestDTO;
 import com.test.board.dto.PageResultDTO;
 import com.test.board.entity.Guestbook;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,6 +50,24 @@ class GuestbookServiceTest {
 
         System.out.println("========================");
         resultDTO.getPageList().forEach(i-> System.out.println(i));
+    }
+
+    @DisplayName("검색조건 테스트")
+    @Test
+    public void testSearch(){
+
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(1)
+                .size(10)
+                .type("tc")
+                .keyword("한글")
+                .build();
+
+        PageResultDTO<GuestbookDTO,Guestbook> resultDTO = service.getList(pageRequestDTO);
+
+        for(GuestbookDTO dto : resultDTO.getDtoList()){
+            System.out.println(dto);
+        }
     }
 
 }

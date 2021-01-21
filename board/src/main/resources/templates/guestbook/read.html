@@ -16,7 +16,7 @@
             </div>
             <div class="form-group">
                 <label>Content</label>
-                <textarea class="form-control" rows="5" name="content">[[${dto.content}]]</textarea>
+                <textarea class="form-control" rows="5" name="content" readonly>[[${dto.content}]]</textarea>
             </div>
             <div class="form-group">
                 <label>Writer</label>
@@ -39,11 +39,27 @@
         <a th:href="@{/guestbook/list(page=${requestDTO.page})}">
             <button type="button" class="btn btn-info">List</button>
         </a>
-        <a th:href="@{/guestbook/modify(gno=${dto.gno},page=${requestDTO.page})}">
-            <button type="button" class="btn btn-danger">Remove</button>
-        </a>
+       <!-- <a th:href="@{/guestbook/remove(gno=${dto.gno},page=${requestDTO.page})}">-->
+            <button type="button" class="btn btn-danger" id="removeBtn">Remove</button>
+       <!-- </a>-->
 
+        <form action="/guestbook/remove" method="post">
+            <input type="hidden" name="gno" th:value="${dto.gno}">
+            <input type="hidden" name="gno" th:value="${requestDTO.page}">
+        </form>
 
+        <script>
+            var actionForm = document.querySelector("form");
+
+            document.getElementById("removeBtn").onclick=function () {
+                if(!confirm("삭제하시겠습니까?")){
+                    return;
+                }
+                actionForm.action = "/guestbook/remove";
+                actionForm.method = "post";
+                actionForm.submit();
+            }
+        </script>
 
     </th:block>
 

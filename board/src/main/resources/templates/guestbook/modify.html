@@ -5,7 +5,8 @@
 
         <h1>GuestBook Modify Page</h1>
 
-        <form action="" method="post">
+        <form action="/guestbook/modify" method="post">
+            <input type="hidden" name="page" th:value="${requestDTO.page}"></input>
         <div class="form-group" th:object="${dto}">
             <label>Gno</label>
             <input type="text" class="form-control" th:field="*{gno}" readonly>
@@ -26,21 +27,20 @@
 
         <div class="form-group">
             <label>RegDate</label>
-            <input type="text" class="form-control" name="regDate"
-                   th:value="${#temporals.format(dto.regDate,'yyyy/MM/dd')}" readonly>
+            <input type="text" class="form-control"
+                   th:value="${#temporals.format(dto.regDate,'yyyy/MM/dd HH:mm:ss')}" readonly>
         </div>
         <div class="form-group">
             <label>ModDate</label>
-            <input type="text" class="form-control" name="modDate"
-                   th:value="${#temporals.format(dto.modDate,'yyyy/MM/dd')}" readonly>
+            <input type="text" class="form-control"
+                   th:value="${#temporals.format(dto.modDate,'yyyy/MM/dd HH:mm:ss')}" readonly>
         </div>
         </form>
-            <button type="button" class="btn btn-primary">Modify</button>
+            <button type="button" class="btn btn-primary" id="modifyBtn">Modify</button>
 
-
+            <a th:href="@{/guestbook/list(page=${requestDTO.page})}">
             <button type="button" class="btn btn-info">List</button>
-
-
+            </a>
             <button type="button" class="btn btn-danger" id="removeBtn">Remove</button>
 
 
@@ -50,11 +50,23 @@
             var actionForm = document.querySelector("form");
 
             document.getElementById("removeBtn").onclick=function () {
+                if(!confirm("삭제하시겠습니까?")){
+                    return;
+                }
                 actionForm.action = "/guestbook/remove";
                 actionForm.method = "post";
                 actionForm.submit();
             }
 
+            document.getElementById("modifyBtn").addEventListener("click",function () {
+                    if(!confirm("수정하시겠습니까?")){
+                        return;
+                    }
+                actionForm.action = "/guestbook/modify";
+                actionForm.method = "post";
+                actionForm.submit();
+
+            })
 /*            $(".removeBtn").on("click",function () {
                 actionForm.attr("action","/guestbook/remove")
                 .attr("method","post");
