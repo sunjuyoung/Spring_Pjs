@@ -3,7 +3,7 @@
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
     <th:block th:fragment="content">
         <h1>GuestBook List Page</h1>
-        <form action="/guestbook/list" method="get" id="searchForm">
+        <form action="/guestbook/list" method="get" id="searchForm" name="searchForm">
             <div class="input-group">
                 <input type="hidden" name="page" value = "1">
                 <div class="input-group-prepend">
@@ -18,8 +18,8 @@
                 </div>
                 <input class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}">
                 <div class="input-group-append" id="button-addon4">
-                    <button class="btn btn-outline-secondary btn-search" type="button">Search</button>
-                    <button class="btn btn-outline-secondary btn-clear" type="button">Clear</button>
+                    <button class="btn btn-outline-secondary" id="btn-search" type="button">Search</button>
+                    <button class="btn btn-outline-secondary" id="btn-clear" type="button">Clear</button>
                 </div>
             </div>
         </form>
@@ -32,15 +32,16 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th scope="col">#</th>
                 <th scope="col">Gno</th>
                 <th scope="col">Title</th>
+                <th scope="col">User</th>
                 <th scope="col">RegDate</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="dto : ${result.dtoList}">
-                <th scope="row"><a th:href="@{/guestbook/read(gno=${dto.gno},page=${result.page})}">[[${dto.gno}]]</a></th>
+                <th scope="row"><a th:href="@{/guestbook/read(gno=${dto.gno},page=${result.page},
+                type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">[[${dto.gno}]]</a></th>
                 <td>[[${dto.title}]]</td>
                 <td>[[${dto.writer}]]</td>
                 <td>[[${#temporals.format(dto.regDate,'yyyy/MM/dd')}]]</td>
@@ -53,7 +54,7 @@
             </li>
 
             <li th:class=" 'page-item ' + ${result.page==page?'active':''}" th:each="page : ${result.pageList}">
-                <a class="page-link" th:href="@{/guestbook/list(page=${page})}">[[${page}]]</a>
+                <a class="page-link" th:href="@{/guestbook/list(page=${page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
             </li>
 
             <li class="page-item" th:if="${result.next}">
@@ -91,10 +92,23 @@
         <script th:inline="javascript">
 
             var msg = [[${msg}]];
+            var form = document.querySelector("form");
 
             if(msg){
-
+                alert(msg);
             }
+            var search = document.getElementById("btn-search");
+            search.addEventListener("click",function () {
+                form.submit();
+            })
+
+            var clear = document.getElementById("btn-clear");
+            clear.addEventListener("click",function () {
+                document.querySelector("input[name='keyword']").value="";
+               // document.forms["searchForm"]["keyword"].value="";
+            })
+
+
 
         </script>
     </th:block>

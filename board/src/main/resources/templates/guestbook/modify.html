@@ -7,6 +7,8 @@
 
         <form action="/guestbook/modify" method="post">
             <input type="hidden" name="page" th:value="${requestDTO.page}"></input>
+            <input type="hidden" name="type" th:value="${requestDTO.type}"></input>
+            <input type="hidden" name="keyword" th:value="${requestDTO.keyword}"></input>
         <div class="form-group" th:object="${dto}">
             <label>Gno</label>
             <input type="text" class="form-control" th:field="*{gno}" readonly>
@@ -38,7 +40,7 @@
         </form>
             <button type="button" class="btn btn-primary" id="modifyBtn">Modify</button>
 
-            <a th:href="@{/guestbook/list(page=${requestDTO.page})}">
+            <a th:href="@{/guestbook/list(page=${requestDTO.page},type=${requestDTO.type},keyword=${requestDTO.keyword})}">
             <button type="button" class="btn btn-info">List</button>
             </a>
             <button type="button" class="btn btn-danger" id="removeBtn">Remove</button>
