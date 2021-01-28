@@ -24,4 +24,9 @@ public class Board extends BaseEntity{
     private Member writer;
 
 
+    public void modifycontentTitle(String title,String content){
+        this.title = title;
+        this.content = content;
+    }
+
 }

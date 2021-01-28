@@ -1,7 +1,11 @@
 package com.test.board1.repository;
 
+import com.test.board1.dto.BoardDTO;
+import com.test.board1.dto.PageRequestDTO;
+import com.test.board1.dto.PageResultDTO;
 import com.test.board1.entity.Board;
 import com.test.board1.entity.Member;
+import com.test.board1.service.BoardService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,9 @@ class BoardRepositoryTest {
 
     @Autowired
     BoardRepository boardRepoitory;
+    @Autowired
+    BoardService service;
+
 
     @Test
     public void insertBoard(){
@@ -40,7 +47,7 @@ class BoardRepositoryTest {
         });
     }
 
-
+/*
     @Test
     public void BoardWithMember(){
         //Optional<Board> result = boardRepoitory.findById(105L);
@@ -61,7 +68,7 @@ class BoardRepositoryTest {
            System.out.println(Arrays.toString(a));
        }
 
-    }
+    }*/
 
     @DisplayName("목록화면")
     @Test
@@ -88,4 +95,43 @@ class BoardRepositoryTest {
 
     }
 
+    @DisplayName("목록화면 페이지")
+    @Test
+    public void boardWithPage(){
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+
+        PageResultDTO<BoardDTO,Object[]> arr = service.getList(pageRequestDTO);
+
+        for( BoardDTO ar : arr.getDtoList()){
+            System.out.println(ar);
+        }
+    }
+
+
+    @DisplayName("조회화면")
+    @Test
+    public void read(){
+        BoardDTO dto =  service.read(115L);
+
+        System.out.println(dto);
+    }
+
+    @DisplayName("삭제 댓글 포함")
+    @Test
+    public void removeWithReplies(){
+        service.removeWithReplies(204L);
+    }
+
+
+    @DisplayName("수정")
+    @Test
+    public void modify(){
+        BoardDTO dto = BoardDTO.builder()
+                .bno(115L)
+                .content("테스트 수정")
+                .title("테스트 수정")
+                .build();
+
+        service.modify(dto);
+    }
 }
