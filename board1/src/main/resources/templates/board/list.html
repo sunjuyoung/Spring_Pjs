@@ -24,7 +24,7 @@
             </div>
         </form>
         <span>
-            <a th:href="@{/guestbook/register}">
+            <a th:href="@{/board/register}">
                 <button type="button" class="btn btn-outline-primary">Register</button>
             </a>
         </span>
@@ -32,7 +32,7 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th scope="col">Gno</th>
+                <th scope="col">Bno</th>
                 <th scope="col">Title</th>
                 <th scope="col">User</th>
                 <th scope="col">RegDate</th>
@@ -40,7 +40,7 @@
             </thead>
             <tbody>
             <tr th:each="dto : ${result.dtoList}">
-                <th scope="row"><a th:href="@{/guestbook/read(gno=${dto.bno},page=${result.page},
+                <th scope="row"><a th:href="@{/board/read(bno=${dto.bno},page=${result.page},
                 type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">[[${dto.bno}]]</a></th>
                 <td>[[${dto.title}]] <a href="#">[ [[${dto.replyCount}]] ]</a></td>
                 <td>[[${dto.writerName}]]</td>

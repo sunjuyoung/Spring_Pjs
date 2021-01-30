@@ -33,6 +33,25 @@ class BoardRepositoryTest {
 
 
     @Test
+    public void testSearch1(){
+        //boardRepoitory.search1();
+        //boardRepoitory.search2();
+        boardRepoitory.search3();
+    }
+
+    @Test
+    public void testSearchPage(){
+       Pageable pageable = PageRequest.of(0,10,Sort.by("bno").descending());
+       Page<Object[]> arr = boardRepoitory.searchPage("t","9",pageable);
+/*       Object ar = arr.get();
+       Object[] result = (Object[])ar;
+       for(Object a : result){
+           System.out.println(a);
+       }*/
+
+    }
+
+    @Test
     public void insertBoard(){
 
         IntStream.rangeClosed(1,100).forEach(i->{
@@ -134,4 +153,6 @@ class BoardRepositoryTest {
 
         service.modify(dto);
     }
+
+
 }

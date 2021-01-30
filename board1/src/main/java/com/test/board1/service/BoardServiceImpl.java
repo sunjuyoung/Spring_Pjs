@@ -72,6 +72,8 @@ public class BoardServiceImpl implements BoardService{
         board.modifycontentTitle(dto.getTitle(),dto.getContent());
 
         boardRepository.save(board);
+
+
     }
 
 
