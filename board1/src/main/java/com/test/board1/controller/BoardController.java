@@ -6,6 +6,7 @@ import com.test.board1.dto.PageResultDTO;
 import com.test.board1.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,6 @@ public class BoardController {
 
     private final BoardService boardService;
 
-
     /**
      * 목록화면
      * @param pageRequestDTO
@@ -33,8 +33,13 @@ public class BoardController {
     @GetMapping("/list")
     public void list(PageRequestDTO pageRequestDTO, Model model){
 
+        log.info("controller---------------------------------");
+        log.info("list............." + pageRequestDTO);
+
         PageResultDTO dto = boardService.getList(pageRequestDTO);
 
+        log.info("controller---------------------------------");
+        log.info("dto"+dto);
         model.addAttribute("result",dto);
     }
 

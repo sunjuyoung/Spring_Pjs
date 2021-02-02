@@ -12,6 +12,7 @@ public interface BoardService {
 
     PageResultDTO<BoardDTO,Object[]> getList(PageRequestDTO pageRequestDTO);
 
+
     BoardDTO read(Long bno);
 
     void removeWithReplies(Long bno);
@@ -33,19 +34,20 @@ public interface BoardService {
         return board;
     }
 
-    default BoardDTO entityToDTO(Board board,Member member, Long replyCount){
+    default BoardDTO entityToDTO(Board board, Member member, Long replyCount) {
 
-        BoardDTO dto = BoardDTO.builder()
+        BoardDTO boardDTO = BoardDTO.builder()
                 .bno(board.getBno())
                 .title(board.getTitle())
                 .content(board.getContent())
-                .modDate(board.getModDate())
                 .regDate(board.getRegDate())
+                .modDate(board.getModDate())
                 .writerEmail(member.getEmail())
                 .writerName(member.getName())
-                .replyCount(replyCount.intValue())
+                .replyCount(replyCount.intValue()) //int로 처리하도록
                 .build();
 
-        return dto;
+        return boardDTO;
+
     }
 }

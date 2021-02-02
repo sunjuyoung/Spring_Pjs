@@ -36,18 +36,14 @@ class BoardRepositoryTest {
     public void testSearch1(){
         //boardRepoitory.search1();
         //boardRepoitory.search2();
-        boardRepoitory.search3();
+       // boardRepoitory.search3();
     }
 
     @Test
     public void testSearchPage(){
        Pageable pageable = PageRequest.of(0,10,Sort.by("bno").descending());
        Page<Object[]> arr = boardRepoitory.searchPage("t","9",pageable);
-/*       Object ar = arr.get();
-       Object[] result = (Object[])ar;
-       for(Object a : result){
-           System.out.println(a);
-       }*/
+
 
     }
 
