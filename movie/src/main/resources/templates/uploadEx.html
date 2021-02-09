@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input name="uploadFiles" type="file" multiple>
+<button id="uploadBtn">upload</button>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    document.getElementById("uploadBtn").addEventListener("click",function () {
+        var formData = new FormData();
+        var inputFile = document.getElementsByName("uploadFiles");
+
+        var files = inputFile[0].files;
+
+        for(var i=0; i < files.length; i++){
+            console.log(files[i]);
+            formData.append("uploadFiles",files[i]);
+
+
+        }
+
+        $.ajax({
+            url:'/uploadAjax',
+            processData:false,
+            contentType:false,
+            data:formData,
+            type:'POST',
+            dataType:'json',
+            success:function (result) {
+                console.log(result);
+            },
+            error:function (xhr,textStatus,errorThrown) {
+                console.log(textStatus);
+            }
+        })
+    })
+</script>
+</body>
+</html>
