@@ -2,15 +2,22 @@ package com.test.movie.controller;
 
 import com.test.movie.dto.UploadResultDTO;
 import lombok.extern.log4j.Log4j2;
+import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -59,7 +66,14 @@ public class UploadController {
             Path savePath = Paths.get(saveName);
 
             try{
+                //파일저장
                 uploadFile.transferTo(savePath);
+
+                //섬네일 생성  s_
+                String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator + "s_"+ uuid +"_"+fileName;
+                File thumbnailFile = new File(thumbnailSaveName);
+                Thumbnailator.createThumbnail(savePath.toFile(),thumbnailFile,100,100);
+
                 resultDTOS.add(new UploadResultDTO(fileName,uuid,folderPath));
             }catch (IOException e){
                 e.printStackTrace();
@@ -68,6 +82,30 @@ public class UploadController {
         }
         return new ResponseEntity<>(resultDTOS,HttpStatus.OK);
 
+    }
+
+    @GetMapping("/display")
+    public ResponseEntity<byte[]> getFile(String fileName){
+        //URL인코딩된 파일 이름을 파라미터로 받아서 byte[]로 만들어서 브라우저로 전송
+        ResponseEntity<byte[]> result = null;
+
+        try {
+            String srcFileName = URLDecoder.decode(fileName,"UTF-8");
+            log.info("filename : "+srcFileName);
+            File file = new File(uploadPath+File.separator+srcFileName);
+            log.info("file : "+file);
+            HttpHeaders header = new HttpHeaders();
+
+            //파일 확장자에 따른 MIME타입 처리
+            header.add("Content-Type", Files.probeContentType(file.toPath()));
+            //파일 데이터 처리
+            result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file),header,HttpStatus.OK);
+
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return result;
     }
 
     private String makeFolder(){

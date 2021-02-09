@@ -7,6 +7,9 @@
 <body>
 <input name="uploadFiles" type="file" multiple>
 <button id="uploadBtn">upload</button>
+
+<div id="uploadResult"></div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     document.getElementById("uploadBtn").addEventListener("click",function () {
@@ -31,11 +34,21 @@
             dataType:'json',
             success:function (result) {
                 console.log(result);
+                showUploadImage(result);
             },
             error:function (xhr,textStatus,errorThrown) {
                 console.log(textStatus);
             }
-        })
+        })//ajax
+
+        function showUploadImage(arr) {
+            let divArea = document.getElementById("uploadResult");
+
+            for(let i=0; i<arr.length; i++){
+                divArea.innerHTML="<img src='/display?fileName="+arr[i].thumbnailURL+"'>"
+            }
+        }
+
     })
 </script>
 </body>
