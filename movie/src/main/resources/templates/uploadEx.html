@@ -21,8 +21,6 @@
         for(var i=0; i < files.length; i++){
             console.log(files[i]);
             formData.append("uploadFiles",files[i]);
-
-
         }
 
         $.ajax({
@@ -40,16 +38,54 @@
                 console.log(textStatus);
             }
         })//ajax
+    })//upload func
 
-        function showUploadImage(arr) {
-            let divArea = document.getElementById("uploadResult");
+    function showUploadImage(arr) {
+        var divArea = document.getElementById("uploadResult");
 
-            for(let i=0; i<arr.length; i++){
-                divArea.innerHTML="<img src='/display?fileName="+arr[i].thumbnailURL+"'>"
-            }
+        let str="";
+        for(let i=0; i<arr.length; i++){
+            str += "<div>";
+            str +="<img src='/display?fileName="+arr[i].thumbnailURL+"'>";
+            str += "<button class='removeBtn' data-name='"+arr[i].imageURL+"'>REMOVE</button>"
+            str += "</div>";
+
         }
+        divArea.innerHTML = str;
+    }
 
-    })
+
+    $(document).on('click','.removeBtn',function () {
+        var target = $(this);
+
+        var fileName = target.data("name");
+
+        var targetDiv = $(this).closest("div");
+        console.log("filename :"+fileName);
+        console.log("targetDiv : "+ targetDiv);
+
+        $.ajax({
+            url:'/removeFile',
+            type:'POST',
+            dataType: 'json',
+            data: {fileName:fileName},
+            success:function (result) {
+                console.log("result : "+result);
+                if(result == true){
+                    targetDiv.remove();
+                }
+            }
+        })//ajax
+    })//removebtn
+
+
+
+
+
+
+
+
+
 </script>
 </body>
 </html>

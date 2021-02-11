@@ -3,6 +3,7 @@ package com.test.movie.controller;
 import com.test.movie.dto.UploadResultDTO;
 import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnailator;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.file.Files;
@@ -107,6 +109,39 @@ public class UploadController {
 
         return result;
     }
+
+
+    @PostMapping("/removeFile")
+    public ResponseEntity<Boolean> removeFile(String fileName){
+        String srcFileName = null;
+        log.info("filename : " + fileName);
+
+        try {
+            srcFileName = URLDecoder.decode(fileName,"UTF-8");
+            File file = new File(uploadPath+File.separator+srcFileName);
+            boolean result = file.delete();
+
+            //섬네일삭제
+            log.info("parent: "+file.getParent() +" ::::"+ file.getName());
+            File thumbanil = new File(file.getParent(),"s_"+file.getName());
+
+            result = thumbanil.delete();
+
+            return new ResponseEntity<>(result,HttpStatus.OK);
+        }catch (UnsupportedEncodingException e){
+            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
+
+
+
+
+
+
+
+
 
     private String makeFolder(){
         String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
