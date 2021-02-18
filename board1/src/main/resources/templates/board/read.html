@@ -1,74 +1,128 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
+
     <th:block th:fragment="content">
 
-        <h1>GuestBook Read Page</h1>
+        <h1 class="mt-4">Board Read Page</h1>
 
-        <div class="form-group" th:object="${dto}">
-            <label>Bno</label>
-            <input type="text" class="form-control" th:field="*{bno}" readonly>
+        <div class="form-group">
+            <label >Bno</label>
+            <input type="text" class="form-control" name="gno" th:value="${dto.bno}" readonly >
         </div>
 
-        <div class="form-group" th:object="${dto}">
-            <label>Title</label>
-            <input type="text" class="form-control" th:field="*{title}" readonly>
+        <div class="form-group">
+            <label >Title</label>
+            <input type="text" class="form-control" name="title" th:value="${dto.title}" readonly >
         </div>
         <div class="form-group">
-            <label>Content</label>
+            <label >Content</label>
             <textarea class="form-control" rows="5" name="content" readonly>[[${dto.content}]]</textarea>
         </div>
         <div class="form-group">
-            <label>Writer</label>
-            <input type="text" class="form-control" name="writer" readonly th:value="${dto.writerEmail}">
+            <label >Writer</label>
+            <input type="text" class="form-control" name="writer" th:value="${dto.writerName}" readonly>
+        </div>
+        <div class="form-group">
+            <label >RegDate</label>
+            <input type="text" class="form-control" name="regDate" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+        </div>
+        <div class="form-group">
+            <label >ModDate</label>
+            <input type="text" class="form-control" name="modDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
         </div>
 
-        <div class="form-group">
-            <label>RegDate</label>
-            <input type="text" class="form-control" name="regDate"
-                   th:value="${#temporals.format(dto.regDate,'yyyy/MM/dd')}" readonly>
-        </div>
-        <div class="form-group">
-            <label>ModDate</label>
-            <input type="text" class="form-control" name="modDate"
-                   th:value="${#temporals.format(dto.modDate,'yyyy/MM/dd')}" readonly>
-        </div>
-        <a th:href="@{/board/modify(bno=${dto.bno},page=${pageRequestDTO.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">
+        <a th:href="@{/board/modify(bno = ${dto.bno}, page=${requestDTO.page}, type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
             <button type="button" class="btn btn-primary">Modify</button>
         </a>
-        <a th:href="@{/board/list(page=${pageRequestDTO.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">
+
+        <a th:href="@{/board/list(page=${requestDTO.page} , type=${requestDTO.type}, keyword =${requestDTO.keyword})}">
             <button type="button" class="btn btn-info">List</button>
         </a>
-        <!-- <a th:href="@{/guestbook/remove(gno=${dto.gno},page=${requestDTO.page})}">-->
-        <button type="button" class="btn btn-danger" id="removeBtn">Remove</button>
-        <!-- </a>-->
+        <div class="row">
+            <div class="mt-4">
+                <h5><span class="badge badge-secondary "id="replyCount">Reply Count [[${dto.replyCount}]]</span></h5>
+            </div>
+            <div class="ml-3 mt-4">
+            <button type="button" class="badge badge-secondary" data-toggle="modal" data-target="#exampleModal">
+                Add Reply
+            </button>
+            </div>
+        </div>
+        <div class="list-group" id="replyList">
 
-        <form action="/guestbook/remove" method="post">
-            <input type="hidden" name="bno" th:value="${dto.bno}">
-            <input type="hidden" name="bno" th:value="${pageRequestDTO.page}">
-        </form>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script>
-            var actionForm = document.querySelector("form");
+            document.addEventListener("DOMContentLoaded",function () {
 
-            document.getElementById("removeBtn").onclick=function () {
-                if(!confirm("삭제하시겠습니까?")){
-                    return;
-                }
-                actionForm.action = "/board/remove";
-                actionForm.method = "post";
-                actionForm.submit();
+                var bno = [[${dto.bno}]];
+
+                document.getElementById("replyCount").addEventListener("click",function () {
+                    loadReplyJSON();
+                })//click
+
+
+             // 날짜 처리
+            function formatTime(str) {
+                var date = new Date(str);
+                return date.getFullYear()+'/'+
+                    (date.getMonth()+1)+'/'+
+                        date.getDate()+' '+
+                        date.getHours()+':'+
+                        date.getMinutes();
             }
+
+            //댓글 처리
+             function loadReplyJSON() {
+
+                 $.ajax({
+                     dataType:'json',
+                     type:'get',
+                     url:'/replies/list/'+bno,
+                     success:function (arr) {
+                        var str="";
+
+                        $.each(arr,function (idx,reply) {
+                            str += '    <div class="card-body" data-rno="'+reply.rno+'"><b>'+reply.rno +'</b>';
+                            str += '    <h5 class="card-title">'+reply.text+'</h5>';
+                            str += '    <h6 class="card-subtitle mb-2 text-muted">'+reply.replyer+'</h6>';
+                            str += '    <p class="card-text">'+ formatTime(reply.regDate) +'</p>';
+                            str += '    </div>';
+                        })
+                         document.getElementById("replyList").innerHTML=str;
+                     }
+                 })//ajax
+             }
+
+
+
+            })
         </script>
 
     </th:block>
 
 </th:block>
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>

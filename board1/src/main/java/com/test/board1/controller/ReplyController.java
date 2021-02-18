@@ -5,6 +5,7 @@ import com.test.board1.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
-    @GetMapping("/list/{bno}")
+    @GetMapping(value = "/list/{bno}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ReplyDTO>> getListByBoard(@PathVariable Long bno){
 
         return new ResponseEntity<>(replyService.getList(bno), HttpStatus.OK);

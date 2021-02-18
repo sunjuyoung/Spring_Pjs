@@ -57,6 +57,7 @@ public class PageResultDTO<DTO,EN> {
 
         next = totalPage > tempEnd;
 
+        //boxed() 메서드는 int, long, double 요소를 Integer, Long, Double 요소로 박싱해서 Stream을 생성한다
         pageList = IntStream.rangeClosed(start,end).boxed().collect(Collectors.toList());
 
 
