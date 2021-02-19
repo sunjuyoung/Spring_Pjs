@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 
@@ -20,6 +21,7 @@ public class AccountServiceImpl implements AccountService{
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     @Override
     public Account newAccount(@Valid SignUpForm signUpForm) {
 
@@ -38,7 +40,7 @@ public class AccountServiceImpl implements AccountService{
         return newAccount;
     }
 
-
+    //회원 가입 인증 메일 전송
     public void signUpEmailSend(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
