@@ -65,8 +65,9 @@ public class AccountController {
             return "account/checked-email";
         }
 
-        account.setEmailVerified(true);
-        account.setJoinedAt(LocalDateTime.now());
+        account.completeSignUp();
+    /*    account.setEmailVerified(true);
+        account.setJoinedAt(LocalDateTime.now());*/
         model.addAttribute("numberOfUser",accountRepository.count());
         model.addAttribute("nickname",account.getNickname());
 
