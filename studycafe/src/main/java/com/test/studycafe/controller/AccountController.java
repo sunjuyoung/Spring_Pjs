@@ -47,6 +47,7 @@ public class AccountController {
             return "account/sign-up";
         }
         Account newAccount = accountService.newAccount(signUpForm);
+        accountService.login(newAccount);
 
         return "redirect:/";
     }
@@ -66,8 +67,7 @@ public class AccountController {
         }
 
         account.completeSignUp();
-    /*    account.setEmailVerified(true);
-        account.setJoinedAt(LocalDateTime.now());*/
+        accountService.login(account);
         model.addAttribute("numberOfUser",accountRepository.count());
         model.addAttribute("nickname",account.getNickname());
 

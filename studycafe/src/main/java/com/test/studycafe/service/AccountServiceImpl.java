@@ -6,12 +6,18 @@ import com.test.studycafe.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +46,8 @@ public class AccountServiceImpl implements AccountService{
         return newAccount;
     }
 
+
+
     //회원 가입 인증 메일 전송
     public void signUpEmailSend(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -52,5 +60,20 @@ public class AccountServiceImpl implements AccountService{
         javaMailSender.send(mailMessage);
     }
 
+
+    @Override
+    public void login(Account account) {
+
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                account.getNickname(),
+                account.getPassword(),
+                Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(token);
+
+      /*  SecurityContext context = SecurityContextHolder.getContext();
+        context.setAuthentication(token);*/
+    }
 
 }

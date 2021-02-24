@@ -8,6 +8,8 @@ public interface AccountService {
 
     Account newAccount(SignUpForm signUpForm);
 
+    void login(Account newAccount);
+
     // void signUpEmailSend(Account account);
 
 
