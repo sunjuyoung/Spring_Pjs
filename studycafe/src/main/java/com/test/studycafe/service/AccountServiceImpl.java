@@ -3,6 +3,7 @@ package com.test.studycafe.service;
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.dto.SignUpForm;
 import com.test.studycafe.repository.AccountRepository;
+import com.test.studycafe.security.UserAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -65,12 +66,15 @@ public class AccountServiceImpl implements AccountService{
     public void login(Account account) {
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                account.getNickname(),
+                new UserAccount(account), //첫번째 파라미터가 Principle
                 account.getPassword(),
                 Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))
         );
+        //authenticationMananger 하는 ROLE 주입을 직접한다
 
         SecurityContextHolder.getContext().setAuthentication(token);
+        //인코딩된 패스워드만 접근이 가능하다
+        //plain패스워드는 db에 저장도 안 하고 사용될 일도 없다
 
       /*  SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(token);*/

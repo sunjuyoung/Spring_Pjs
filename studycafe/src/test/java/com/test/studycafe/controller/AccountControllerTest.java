@@ -42,7 +42,8 @@ class AccountControllerTest {
         .param("token","")
         .param("email",""))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("error"));
+                .andExpect(model().attributeExists("error"))
+                .andExpect(unauthenticated());;
     }
 
     @Transactional
@@ -67,7 +68,7 @@ class AccountControllerTest {
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("numberOfUser"))
                 .andExpect(view().name("account/checked-email"))
-        .andExpect(unauthenticated());
+                .andExpect(authenticated().withUsername("test"));
     }
 
 
