@@ -10,7 +10,7 @@ public interface AccountService {
 
     void login(Account newAccount);
 
-    // void signUpEmailSend(Account account);
+     void signUpEmailSend(Account account);
 
 
 }

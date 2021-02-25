@@ -3,6 +3,7 @@ package com.test.studycafe.controller;
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.dto.SignUpForm;
 import com.test.studycafe.repository.AccountRepository;
+import com.test.studycafe.security.CurrentUser;
 import com.test.studycafe.service.AccountService;
 import com.test.studycafe.valid.SignUpFormValidator;
 import lombok.RequiredArgsConstructor;
@@ -72,5 +73,23 @@ public class AccountController {
         model.addAttribute("nickname",account.getNickname());
 
         return "account/checked-email";
+    }
+
+    @GetMapping("/check-email")
+    public String checkEmail(@CurrentUser Account account, Model model){
+        model.addAttribute("account",account);
+        return "account/check-email";
+
+    }
+
+    @GetMapping("/resend-confirm-email")
+    public String resendConfirmEmail(@CurrentUser Account account, Model model){
+        if(!account.canSendConfirmEmail()){
+            model.addAttribute("error","10분뒤에 다시 시도해주세요");
+            model.addAttribute(account);
+            return "account/check-email";
+        }
+        accountService.signUpEmailSend(account);
+        return  "redirect:/";
     }
 }

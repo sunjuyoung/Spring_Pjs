@@ -64,7 +64,6 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public void login(Account account) {
-
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 new UserAccount(account), //첫번째 파라미터가 Principle
                 account.getPassword(),

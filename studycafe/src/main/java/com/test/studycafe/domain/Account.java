@@ -33,6 +33,8 @@ public class Account {
 
     private LocalDateTime joinedAt;
 
+    private LocalDateTime  confirmEmailAt; //인증 메일 재전송 방지
+
     private String bio;
 
     private String url;
@@ -57,6 +59,7 @@ public class Account {
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
+        this.confirmEmailAt = LocalDateTime.now();
     }
 
     public void completeSignUp() {
@@ -64,5 +67,10 @@ public class Account {
         this.joinedAt = LocalDateTime.now();
 
     }
+
+    public boolean canSendConfirmEmail(){
+        return this.confirmEmailAt.isBefore(LocalDateTime.now().minusMinutes(2));
+    }
+
 }
 
