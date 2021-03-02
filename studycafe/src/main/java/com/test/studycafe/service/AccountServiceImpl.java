@@ -5,12 +5,16 @@ import com.test.studycafe.dto.SignUpForm;
 import com.test.studycafe.repository.AccountRepository;
 import com.test.studycafe.security.UserAccount;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +26,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AccountServiceImpl implements AccountService{
+@Log4j2
+public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
@@ -79,4 +84,18 @@ public class AccountServiceImpl implements AccountService{
         context.setAuthentication(token);*/
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
+
+        Account account = accountRepository.findByEmail(emailOrNickname);
+        if(account == null){
+            account = accountRepository.findByNickname(emailOrNickname);
+        }
+        if(account == null){
+            log.info("iwfehowheoifhoh");
+            throw new UsernameNotFoundException(emailOrNickname);
+        }
+
+        return new UserAccount(account);
+    }
 }

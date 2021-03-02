@@ -92,4 +92,6 @@ public class AccountController {
         accountService.signUpEmailSend(account);
         return  "redirect:/";
     }
+
+
 }
