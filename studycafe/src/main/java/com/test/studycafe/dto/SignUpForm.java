@@ -1,5 +1,6 @@
 package com.test.studycafe.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
