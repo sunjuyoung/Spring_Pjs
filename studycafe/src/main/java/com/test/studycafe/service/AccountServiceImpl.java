@@ -82,9 +82,7 @@ public class AccountServiceImpl implements AccountService {
         account.setUrl(profile.getUrl());
         account.setOccupation(profile.getOccupation());
         account.setLocation(profile.getLocation());
-        //프로필 이미지
-
-
+        account.setProfileImage(profile.getProfileImage());
         accountRepository.save(account);
 
         //
