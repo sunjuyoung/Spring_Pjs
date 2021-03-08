@@ -1,6 +1,7 @@
 package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
+import com.test.studycafe.dto.Profile;
 import com.test.studycafe.dto.SignUpForm;
 import com.test.studycafe.repository.AccountRepository;
 import com.test.studycafe.security.UserAccount;
@@ -28,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log4j2
 public class AccountServiceImpl implements AccountService {
+
 
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
@@ -73,6 +75,16 @@ public class AccountServiceImpl implements AccountService {
         login(account);
     }
 
+    @Transactional
+    @Override
+    public void updateProfile(Account account, Profile profile) {
+        account.setBio(profile.getBio());
+        account.setUrl(profile.getUrl());
+        account.setOccupation(profile.getOccupation());
+        account.setLocation(profile.getLocation());
+        accountRepository.save(account);
+    }
+
 
     @Override
     public void login(Account account) {
@@ -99,7 +111,6 @@ public class AccountServiceImpl implements AccountService {
             account = accountRepository.findByNickname(emailOrNickname);
         }
         if(account == null){
-            log.info("iwfehowheoifhoh");
             throw new UsernameNotFoundException(emailOrNickname);
         }
 
