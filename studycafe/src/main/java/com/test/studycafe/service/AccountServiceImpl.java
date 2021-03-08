@@ -66,6 +66,13 @@ public class AccountServiceImpl implements AccountService {
         javaMailSender.send(mailMessage);
     }
 
+    @Transactional
+    @Override
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
+    }
+
 
     @Override
     public void login(Account account) {

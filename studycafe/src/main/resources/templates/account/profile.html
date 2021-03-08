@@ -68,7 +68,7 @@
                                     가입을 완료하려면 이메일을 확인하세요
                                 </a>
                             </span>
-                        <span th:text="${#temporals.format(account.joinedAt,'yyyy년 M월 가입')}" class="col-9"></span>
+                        <span th:text="${#temporals.format(account.joinedAt,'yyyy년 M월 dd일 가입')}" class="col-9"></span>
                     </p>
                     <!--수정 버튼-->
                     <div th:if="${isOwner}">

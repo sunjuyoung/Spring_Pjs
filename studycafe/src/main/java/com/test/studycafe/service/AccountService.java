@@ -11,7 +11,8 @@ public interface AccountService extends UserDetailsService {
 
     void login(Account newAccount);
 
-     void signUpEmailSend(Account account);
+    void signUpEmailSend(Account account);
 
 
+    void completeSignUp(Account account);
 }
