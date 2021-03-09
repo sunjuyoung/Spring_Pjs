@@ -1,6 +1,7 @@
 package com.test.studycafe.controller;
 
 import com.test.studycafe.domain.Account;
+import com.test.studycafe.dto.Notifications;
 import com.test.studycafe.dto.PasswordForm;
 import com.test.studycafe.dto.Profile;
 import com.test.studycafe.dto.SignUpForm;
@@ -74,6 +75,27 @@ public class SettingsController {
 
         accountService.updatePassword(account,passwordForm);
         redirectAttributes.addFlashAttribute("message","패스워드 변경 완료");
+        return "redirect:/profile/"+account.getNickname();
+    }
+    @GetMapping("/settings/notifications")
+    public String notificationsForm(@CurrentUser Account account,Model model){
+        model.addAttribute(account);
+        model.addAttribute(new Notifications(account));
+
+        return "settings/notifications";
+    }
+
+    @PostMapping("/settings/notifications")
+    public String updateNotifications(@CurrentUser Account account,@Valid Notifications notifications, Errors errors,
+                                 Model model,RedirectAttributes redirectAttributes){
+
+        if(errors.hasErrors()){
+            model.addAttribute(account);
+            return "settings/profile";
+        }
+
+        accountService.updateNotifications(account,notifications);
+        redirectAttributes.addFlashAttribute("message","알림설정 변경 완료");
         return "redirect:/profile/"+account.getNickname();
     }
 }

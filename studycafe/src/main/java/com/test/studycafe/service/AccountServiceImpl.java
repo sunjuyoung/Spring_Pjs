@@ -1,6 +1,7 @@
 package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
+import com.test.studycafe.dto.Notifications;
 import com.test.studycafe.dto.PasswordForm;
 import com.test.studycafe.dto.Profile;
 import com.test.studycafe.dto.SignUpForm;
@@ -93,6 +94,18 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void updatePassword(Account account, PasswordForm passwordForm) {
         account.setPassword(passwordEncoder.encode(passwordForm.getNewPassword()));
+        accountRepository.save(account);
+    }
+
+    @Transactional
+    @Override
+    public void updateNotifications(Account account, Notifications notifications) {
+        account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
+        account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
+        account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
+        account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
+        account.setStudyUpdatedByEmail(notifications.isStudyUpdatedByEmail());
+        account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());
         accountRepository.save(account);
     }
 

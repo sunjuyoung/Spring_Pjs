@@ -1,6 +1,7 @@
 package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
+import com.test.studycafe.dto.Notifications;
 import com.test.studycafe.dto.PasswordForm;
 import com.test.studycafe.dto.Profile;
 import com.test.studycafe.dto.SignUpForm;
@@ -21,4 +22,6 @@ public interface AccountService extends UserDetailsService {
     void updateProfile(Account account, Profile profile);
 
     void updatePassword(Account account, PasswordForm passwordForm);
+
+    void updateNotifications(Account account, Notifications notifications);
 }

@@ -50,12 +50,12 @@ public class Account {
 
     /* 알림 */
     private boolean studyCreatedByEmail; //스터디 개설
-    private boolean studyCreatedByWeb;
+    private boolean studyCreatedByWeb = true;
 
     private boolean studyEnrollmentResultByEmail; //스터디 가입신청결과
-    private boolean studyEnrollmentResultByWeb;
+    private boolean studyEnrollmentResultByWeb  = true;
 
-    private boolean studyUpdatedByWeb;
+    private boolean studyUpdatedByWeb  = true;
     private boolean studyUpdatedByEmail;
 
 
