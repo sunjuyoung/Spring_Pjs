@@ -1,6 +1,7 @@
 package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
+import com.test.studycafe.dto.PasswordForm;
 import com.test.studycafe.dto.Profile;
 import com.test.studycafe.dto.SignUpForm;
 import com.test.studycafe.repository.AccountRepository;
@@ -86,6 +87,13 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
 
         //
+    }
+
+    @Transactional
+    @Override
+    public void updatePassword(Account account, PasswordForm passwordForm) {
+        account.setPassword(passwordEncoder.encode(passwordForm.getNewPassword()));
+        accountRepository.save(account);
     }
 
 
