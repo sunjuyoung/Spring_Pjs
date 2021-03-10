@@ -10,19 +10,23 @@
             <div th:replace="fragments.html :: settings-menu(currentMenu='account')"></div>
         </div>
         <div class="col-8">
+            <div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+                <span th:text="${message}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">x</button>
+            </div>
             <div class="row m-1">
                 <h1 class="col-sm-12">닉네임 변경</h1>
             </div>
             <div class="row mt-3">
-                <form class="needs-validation col-sm-6" th:action="@{/settings/account}" th:object="${signUpForm}" method="POST" novalidate >
+                <form id="needs-validation"class="col-sm-6" th:action="@{/settings/account}" th:object="${nicknameForm}" method="POST" novalidate >
                     <div class="form-group">
                         <label for="nickname">새 패스워드</label>
                         <input id="nickname" type="text" th:field="*{nickname}" class="form-control"
                                placeholder="new nickname" aria-describedby="nicknameHelp" required min="3" max="20">
                         <small id="nicknameHelp" class="form-text text-muted">
-                            길지 않게 35자 이내로 입력하세요.
+                            길지 않게 30자 이내로 입력하세요.
                         </small>
-                        <small class="invalid-feedback">패스워드를 입력하세요.</small>
+                        <small class="invalid-feedback">닉네임을 입력하세요.</small>
                     </div>
 
 
@@ -30,8 +34,8 @@
                         <button class="btn btn-primary btn-block" type="submit"
                                 aria-describedby="submitHelp">변경하기</button>
                     </div>
-                    <div class="row m-1">
-                        <h1 class="col-sm-12">계정 삭제</h1>
+                    <div class="row mt-3">
+                        <h1 class="col-sm-12 text-danger">계정 삭제</h1>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary btn-block" type="submit"
@@ -42,6 +46,7 @@
             </div>
         </div>
     </div>
+    <th:block th:replace="fragments.html :: footer"></th:block>
 </div>
 <script th:replace="fragments.html :: form-validation">
 

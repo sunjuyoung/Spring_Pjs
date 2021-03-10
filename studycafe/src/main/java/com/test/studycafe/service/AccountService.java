@@ -1,10 +1,7 @@
 package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
-import com.test.studycafe.dto.Notifications;
-import com.test.studycafe.dto.PasswordForm;
-import com.test.studycafe.dto.Profile;
-import com.test.studycafe.dto.SignUpForm;
+import com.test.studycafe.dto.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface AccountService extends UserDetailsService {
@@ -24,4 +21,6 @@ public interface AccountService extends UserDetailsService {
     void updatePassword(Account account, PasswordForm passwordForm);
 
     void updateNotifications(Account account, Notifications notifications);
+
+    void updateNickname(Account account, NicknameForm nicknameForm);
 }

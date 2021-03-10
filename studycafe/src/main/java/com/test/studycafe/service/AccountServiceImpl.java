@@ -1,10 +1,7 @@
 package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
-import com.test.studycafe.dto.Notifications;
-import com.test.studycafe.dto.PasswordForm;
-import com.test.studycafe.dto.Profile;
-import com.test.studycafe.dto.SignUpForm;
+import com.test.studycafe.dto.*;
 import com.test.studycafe.repository.AccountRepository;
 import com.test.studycafe.security.UserAccount;
 import lombok.RequiredArgsConstructor;
@@ -112,6 +109,14 @@ public class AccountServiceImpl implements AccountService {
         account.setStudyUpdatedByEmail(notifications.isStudyUpdatedByEmail());
         account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());*/
         accountRepository.save(account);
+    }
+
+
+    @Override
+    public void updateNickname(Account account, NicknameForm nicknameForm) {
+        account.setNickname(nicknameForm.getNickname());
+        accountRepository.save(account);
+        login(account);
     }
 
 

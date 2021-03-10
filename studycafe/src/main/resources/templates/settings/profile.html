@@ -10,6 +10,10 @@
             <div th:replace="fragments.html :: settings-menu(currentMenu='profile')"></div>
         </div>
         <div class="col-8">
+            <div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+                <span th:text="${message}"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">x</button>
+            </div>
             <div class="row m-1">
                 <h1 class="col-sm-12" th:text="${account.nickname}"></h1>
             </div>
@@ -95,6 +99,7 @@
             </div>
         </div>
     </div>
+    <th:block th:replace="fragments.html :: footer"></th:block>
 </div>
 <link  href="/node_modules/cropper/dist/cropper.min.css" rel="stylesheet">
 <script src="/node_modules/cropper/dist/cropper.min.js"></script>

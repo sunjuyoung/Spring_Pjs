@@ -99,9 +99,10 @@
 <script type="application/javascript" th:fragment="form-validation">
     (function() {//input required 검증
         "use strict";
-        window.addEventListener("load", function() {
+        window.addEventListener("DOMContentLoaded", function() {
             var forms = document.getElementById("needs-validation");
 
+            console.log(forms);
             Array.prototype.filter.call(forms,function (form) {
                 form.addEventListener("submit", function(event) {
                     if (form.checkValidity() == false) {  //required minlength="3" maxlength="20"....

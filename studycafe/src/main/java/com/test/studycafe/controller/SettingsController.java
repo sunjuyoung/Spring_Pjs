@@ -1,12 +1,10 @@
 package com.test.studycafe.controller;
 
 import com.test.studycafe.domain.Account;
-import com.test.studycafe.dto.Notifications;
-import com.test.studycafe.dto.PasswordForm;
-import com.test.studycafe.dto.Profile;
-import com.test.studycafe.dto.SignUpForm;
+import com.test.studycafe.dto.*;
 import com.test.studycafe.security.CurrentUser;
 import com.test.studycafe.service.AccountService;
+import com.test.studycafe.valid.NicknameValidator;
 import com.test.studycafe.valid.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -28,11 +26,13 @@ import javax.validation.Valid;
 public class SettingsController {
 
     private final AccountService accountService;
+    private final NicknameValidator nicknameValidator;
 
     @InitBinder("passwordForm")
-    public void initBinder(WebDataBinder webDataBinder){
+    public void passwordInitBinder(WebDataBinder webDataBinder){
         webDataBinder.addValidators(new PasswordFormValidator());
     }
+
 
 
     @GetMapping("/settings/profile")
@@ -121,8 +121,24 @@ public class SettingsController {
     @GetMapping("/settings/account")
     public String accountForm(@CurrentUser Account account,Model model){
         model.addAttribute(account);
-        model.addAttribute(new SignUpForm());
+        model.addAttribute(new NicknameForm());
 
         return "settings/account";
+    }
+
+    @PostMapping("/settings/account")
+    public String accountUpdate(@CurrentUser Account account,@Valid NicknameForm nicknameForm,Errors errors,
+                                Model model,RedirectAttributes redirectAttributes){
+        nicknameValidator.validate(nicknameForm,errors);
+
+        if(errors.hasErrors()){
+            model.addAttribute(account);
+            model.addAttribute("message","해당 닉네임을 사용할 수 없습니다.");
+            return "settings/account";
+        }
+        accountService.updateNickname(account,nicknameForm);
+
+        redirectAttributes.addFlashAttribute("message","닉네임 변경 완료");
+        return "redirect:/settings/profile";
     }
 }
