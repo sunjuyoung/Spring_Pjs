@@ -20,9 +20,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
+/**
+ * 프로필 수정
+ */
 @Controller
 @RequiredArgsConstructor
 public class SettingsController {
+
+    private final AccountService accountService;
 
     @InitBinder("passwordForm")
     public void initBinder(WebDataBinder webDataBinder){
@@ -30,18 +35,13 @@ public class SettingsController {
     }
 
 
-
-    private final AccountService accountService;
-
     @GetMapping("/settings/profile")
     public String profileForm(@CurrentUser Account account, Model model){
         model.addAttribute(account);
         model.addAttribute(new Profile(account));
 
         return "settings/profile";
-
     }
-
 
     @PostMapping("/settings/profile")
     public String updateProfile(@CurrentUser Account account, @Valid Profile profile, Errors errors, Model model,
@@ -56,6 +56,12 @@ public class SettingsController {
         return "redirect:/profile/"+account.getNickname();
     }
 
+    /**
+     * 패스워드
+     * @param account
+     * @param model
+     * @return
+     */
     @GetMapping("/settings/password")
     public String passwordForm(@CurrentUser Account account,Model model){
         model.addAttribute(account);
@@ -77,6 +83,13 @@ public class SettingsController {
         redirectAttributes.addFlashAttribute("message","패스워드 변경 완료");
         return "redirect:/profile/"+account.getNickname();
     }
+
+    /**
+     * 알림
+     * @param account
+     * @param model
+     * @return
+     */
     @GetMapping("/settings/notifications")
     public String notificationsForm(@CurrentUser Account account,Model model){
         model.addAttribute(account);
@@ -97,5 +110,19 @@ public class SettingsController {
         accountService.updateNotifications(account,notifications);
         redirectAttributes.addFlashAttribute("message","알림설정 변경 완료");
         return "redirect:/profile/"+account.getNickname();
+    }
+
+    /**
+     * 계정
+     * @param account
+     * @param model
+     * @return
+     */
+    @GetMapping("/settings/account")
+    public String accountForm(@CurrentUser Account account,Model model){
+        model.addAttribute(account);
+        model.addAttribute(new SignUpForm());
+
+        return "settings/account";
     }
 }

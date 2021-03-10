@@ -9,6 +9,7 @@ import com.test.studycafe.repository.AccountRepository;
 import com.test.studycafe.security.UserAccount;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,6 +37,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     @Transactional
     @Override
@@ -80,14 +82,14 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public void updateProfile(Account account, Profile profile) {
+        modelMapper.map(profile,account);
+/*
         account.setBio(profile.getBio());
         account.setUrl(profile.getUrl());
         account.setOccupation(profile.getOccupation());
         account.setLocation(profile.getLocation());
-        account.setProfileImage(profile.getProfileImage());
+        account.setProfileImage(profile.getProfileImage());*/
         accountRepository.save(account);
-
-        //
     }
 
     @Transactional
@@ -100,12 +102,15 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public void updateNotifications(Account account, Notifications notifications) {
-        account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
+        modelMapper.map(notifications,account);
+
+        //NameTokenizers 설정을 추가로 해줘야한다.
+      /*  account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
         account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
         account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
         account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
         account.setStudyUpdatedByEmail(notifications.isStudyUpdatedByEmail());
-        account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());
+        account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());*/
         accountRepository.save(account);
     }
 
