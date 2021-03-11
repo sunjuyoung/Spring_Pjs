@@ -1,22 +1,25 @@
 package com.test.studycafe.controller;
 
 import com.test.studycafe.domain.Account;
+import com.test.studycafe.domain.Tag;
 import com.test.studycafe.dto.*;
+import com.test.studycafe.repository.TagRepository;
 import com.test.studycafe.security.CurrentUser;
 import com.test.studycafe.service.AccountService;
 import com.test.studycafe.valid.NicknameValidator;
 import com.test.studycafe.valid.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 /**
  * 프로필 수정
@@ -27,6 +30,7 @@ public class SettingsController {
 
     private final AccountService accountService;
     private final NicknameValidator nicknameValidator;
+    private final TagRepository tagRepository;
 
     @InitBinder("passwordForm")
     public void passwordInitBinder(WebDataBinder webDataBinder){
@@ -140,5 +144,25 @@ public class SettingsController {
 
         redirectAttributes.addFlashAttribute("message","닉네임 변경 완료");
         return "redirect:/settings/profile";
+    }
+
+    @GetMapping("/settings/tags")
+    public String tagsForm(@CurrentUser Account account,Model model){
+        model.addAttribute(account);
+
+        return "settings/tags";
+    }
+    @PostMapping("/settings/tags/add")
+    @ResponseBody
+    public ResponseEntity<String> addTag(@CurrentUser Account account, @RequestBody TagForm tagForm){
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title);
+        if(tag == null){
+            tag = tagRepository.save(Tag.builder().title(title).build());
+        }
+
+        accountService.addTag(account,tag);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,6 +1,7 @@
 package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
+import com.test.studycafe.domain.Tag;
 import com.test.studycafe.dto.*;
 import com.test.studycafe.repository.AccountRepository;
 import com.test.studycafe.security.UserAccount;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -117,6 +119,13 @@ public class AccountServiceImpl implements AccountService {
         account.setNickname(nicknameForm.getNickname());
         accountRepository.save(account);
         login(account);
+    }
+
+    @Override
+    public void addTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().add(tag));
+
     }
 
 

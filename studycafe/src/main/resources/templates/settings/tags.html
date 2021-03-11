@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="fragments.html :: head"></th:block>
+<body>
+<th:block th:replace="fragments.html :: main-nav"></th:block>
+
+<div class="container">
+    <div class="row mt-5 justify-content-center">
+        <div class="col-2">
+            <div th:replace="fragments.html :: settings-menu(currentMenu='tags')"></div>
+        </div>
+        <div class="col-8">
+            <div class="row m-1">
+                <h1 class="col-sm-12">관심있는 스터디 주제</h1>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12">
+                  <div class="alert alert-info" role="alert">
+                      참여하고 싶은 스터디 주제를 입력해 주세요. 해당 주제의 스터디가 생기면 알림을 받을 수 있습니다. 태그를 입력하고 콤마(,)
+                      또는 엔트를 입력하세요.
+                  </div>
+
+                  <input id="tags" name='tags-outside' class='tagify--outside' placeholder='JPA Python'>
+              </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+<script th:inline="javascript">
+    $(function () {
+        var csrfToken = [[${_csrf.token}]];
+        var csrfHeader = [[${_csrf.headerName}]];
+        $(document).ajaxSend(function (e,xhr,options) {
+            xhr.setRequestHeader(csrfHeader,csrfToken);
+        })
+    })
+</script>
+<script>
+$(function () {
+    function tagRequest(url,tagTitle) {
+        $.ajax({
+            dataType:"json",
+            autocomplete:{
+                enabled:true,
+                rightKey:true
+            },
+            contentType:"application/json; charset=utf-8",
+            method:"post",
+            url:"/settings/tags"+url,
+            data:JSON.stringify({'tagTitle':tagTitle})
+        }).done(function (data,status) {
+            console.log(`${data} and status is ${status}`);
+        });
+    }
+
+    function onAdd(e) {
+        tagRequest("/add",e.detail.data.value);
+    }
+    function onRemove(e) {
+        tagRequest("/remove",e.detail.data.value);
+    }
+
+    var input = document.querySelector('input[name=tags-outside]')
+
+
+
+    var tagify = new Tagify(input, {
+        pattern:/^.{0,20}$/,
+        dropdown: {
+            position: "input",
+            enabled : 0 // always opens dropdown when input gets focus
+        }
+    })
+
+    tagify.on("add",onAdd);
+    tagify.on("remove",onRemove);
+
+
+});
+</script>
+</body>
+</html>

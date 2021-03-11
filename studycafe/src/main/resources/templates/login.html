@@ -14,11 +14,11 @@
     <div class="row justify-content-center">
         <div class="alert alert-danger" th:if="${param.error}" role="alert">
             <p>이메일(또는 닉네임) 또는 패스워드가 정확하지 않습니다</p>
-            <p>확인 후 다시 입력하거나, <a href="@{/find-password">패스워드 찾기</a>를 이용하세요.</p>
+            <p>확인 후 다시 입력하거나, <a th:href="@{/find-password}">패스워드 찾기</a>를 이용하세요.</p>
             <p></p>
         </div>
 
-        <form class="needs-validation col-sm-6" action="#"
+        <form id="needs-validation" class="col-sm-6" action="#"
               th:action="@{/login}" method="post" novalidate>
             <div class="form-group">
                 <label for="username">이메일 또는 닉네임</label>
@@ -35,6 +35,10 @@
                 <input id="password" type="password"  name="password" class="form-control"
                        aria-describedby="passwordHelp" required minlength="8" maxlength="50">
                 <small class="invalid-feedback">패스워드를 입력하세요.</small>
+                <small id="passwordHelp" class="form-text text-muted">
+                    패스워드가 기억나지 않는다면, <a href="#" th:href="@{/email-login}">패스워드 없이 로그인하기</a>
+                </small>
+
             </div>
 
             <div class="form-group">
@@ -47,6 +51,7 @@
                         aria-describedby="submitHelp">로그인</button>
                 <small id="submitHelp" class="form-text text-muted">
                     <a th:href="@{/sign-up}">회원 가입</a>하기
+
                 </small>
             </div>
         </form>

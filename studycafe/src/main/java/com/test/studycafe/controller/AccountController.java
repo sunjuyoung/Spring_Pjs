@@ -38,6 +38,7 @@ public class AccountController {
         webDataBinder.addValidators(signUpFormValidator);
     }
 
+
     @GetMapping("/sign-up")
     public String signUpForm(Model model){
        model.addAttribute("signUpForm",new SignUpForm());
@@ -107,5 +108,12 @@ public class AccountController {
         model.addAttribute("isOwner",byNickname.equals(account));
         return "account/profile";
     }
+
+
+    @GetMapping("/email-login")
+    public String emailLoginForm() {
+        return "account/email-log";
+    }
+
 
 }

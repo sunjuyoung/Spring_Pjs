@@ -1,6 +1,7 @@
 package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
+import com.test.studycafe.domain.Tag;
 import com.test.studycafe.dto.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -23,4 +24,6 @@ public interface AccountService extends UserDetailsService {
     void updateNotifications(Account account, Notifications notifications);
 
     void updateNickname(Account account, NicknameForm nicknameForm);
+
+    void addTag(Account account, Tag tag);
 }

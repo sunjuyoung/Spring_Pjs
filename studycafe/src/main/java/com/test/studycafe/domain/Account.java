@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -26,7 +27,6 @@ public class Account {
     @Column(unique = true)
     private String nickname;
 
-
     private String password;
 
     private boolean emailVerified;
@@ -44,6 +44,9 @@ public class Account {
     private String occupation;
 
     private String location;
+
+    @ManyToMany
+    private Set<Tag> tags;
 
     @Lob @Basic(fetch = FetchType.EAGER)
     private String profileImage;
