@@ -20,7 +20,8 @@
                       또는 엔트를 입력하세요.
                   </div>
 
-                  <input id="tags" name='tags-outside' class='tagify--outside' placeholder='JPA Python'>
+                  <input id="tags" name='tags-outside' class='tagify--outside' placeholder='JPA Python'
+                  th:value="${#strings.listJoin(tags,',')}">
               </div>
 
             </div>
@@ -64,8 +65,6 @@ $(function () {
     }
 
     var input = document.querySelector('input[name=tags-outside]')
-
-
 
     var tagify = new Tagify(input, {
         pattern:/^.{0,20}$/,

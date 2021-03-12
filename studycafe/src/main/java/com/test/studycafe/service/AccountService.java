@@ -5,6 +5,8 @@ import com.test.studycafe.domain.Tag;
 import com.test.studycafe.dto.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.Set;
+
 public interface AccountService extends UserDetailsService {
 
 
@@ -26,4 +28,8 @@ public interface AccountService extends UserDetailsService {
     void updateNickname(Account account, NicknameForm nicknameForm);
 
     void addTag(Account account, Tag tag);
+
+    Set<Tag> getTags(Account account);
+
+    void removeTag(Account account, Tag tag);
 }

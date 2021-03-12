@@ -26,10 +26,12 @@ import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
+@Transactional
 public class AccountServiceImpl implements AccountService {
 
 
@@ -38,7 +40,7 @@ public class AccountServiceImpl implements AccountService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
-    @Transactional
+
     @Override
     public Account newAccount(@Valid SignUpForm signUpForm) {
 
@@ -60,6 +62,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     //회원 가입 인증 메일 전송
+    @Transactional(readOnly = true)
     public void signUpEmailSend(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
@@ -71,14 +74,14 @@ public class AccountServiceImpl implements AccountService {
         javaMailSender.send(mailMessage);
     }
 
-    @Transactional
+
     @Override
     public void completeSignUp(Account account) {
         account.completeSignUp();
         login(account);
     }
 
-    @Transactional
+
     @Override
     public void updateProfile(Account account, Profile profile) {
         modelMapper.map(profile,account);
@@ -91,14 +94,14 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
     }
 
-    @Transactional
+
     @Override
     public void updatePassword(Account account, PasswordForm passwordForm) {
         account.setPassword(passwordEncoder.encode(passwordForm.getNewPassword()));
         accountRepository.save(account);
     }
 
-    @Transactional
+
     @Override
     public void updateNotifications(Account account, Notifications notifications) {
         modelMapper.map(notifications,account);
@@ -114,12 +117,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
+
     @Override
     public void updateNickname(Account account, NicknameForm nicknameForm) {
         account.setNickname(nicknameForm.getNickname());
         accountRepository.save(account);
         login(account);
     }
+
 
     @Override
     public void addTag(Account account, Tag tag) {
@@ -128,7 +133,24 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Set<Tag> getTags(Account account) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
 
+        byId.orElseThrow().getTags();
+
+        return byId.get().getTags();
+    }
+
+    @Override
+    public void removeTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().remove(tag));
+    }
+
+
+    @Transactional(readOnly = true)
     @Override
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
@@ -146,6 +168,7 @@ public class AccountServiceImpl implements AccountService {
         context.setAuthentication(token);*/
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
 

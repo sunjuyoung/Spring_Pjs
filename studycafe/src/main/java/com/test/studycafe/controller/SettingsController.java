@@ -20,6 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 프로필 수정
@@ -146,9 +148,19 @@ public class SettingsController {
         return "redirect:/settings/profile";
     }
 
+    /**
+     * 관심분야 Tag
+     * @param account
+     * @param model
+     * @return
+     */
     @GetMapping("/settings/tags")
     public String tagsForm(@CurrentUser Account account,Model model){
         model.addAttribute(account);
+        Set<Tag> tags =  accountService.getTags(account);
+
+
+        model.addAttribute("tags",tags.stream().map(a->a.getTitle()).collect(Collectors.toList()));
 
         return "settings/tags";
     }
@@ -163,6 +175,15 @@ public class SettingsController {
 
         accountService.addTag(account,tag);
 
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping("/settings/tags/remove")
+    @ResponseBody
+    public ResponseEntity<String> removeTag(@CurrentUser Account account,@RequestBody TagForm tagForm){
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title);
+
+        accountService.removeTag(account,tag);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
