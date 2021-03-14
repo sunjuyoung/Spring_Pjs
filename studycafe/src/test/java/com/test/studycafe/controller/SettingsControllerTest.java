@@ -1,9 +1,13 @@
 package com.test.studycafe.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.studycafe.WithAccount;
 import com.test.studycafe.domain.Account;
+import com.test.studycafe.domain.Tag;
 import com.test.studycafe.dto.SignUpForm;
+import com.test.studycafe.dto.TagForm;
 import com.test.studycafe.repository.AccountRepository;
+import com.test.studycafe.repository.TagRepository;
 import com.test.studycafe.service.AccountService;
 import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterEach;
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithSecurityContext;
 import org.springframework.security.test.context.support.WithUserDetails;
@@ -22,6 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -36,6 +42,12 @@ class SettingsControllerTest {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Autowired
+    TagRepository tagRepository;
 
 /*    @BeforeEach
     void before(){
@@ -52,8 +64,36 @@ class SettingsControllerTest {
         accountRepository.deleteAll();
     }
 
+    @DisplayName("태그 폼")
+    @WithAccount("syseoz")
+    @Test
+    void updateTagForm()throws Exception{
+        mockMvc.perform(get("/settings/tags"))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("tags"))
+                .andExpect(model().attributeExists("whitelist"));
+    }
+    @DisplayName("태그 추가")
+    @WithAccount("syseoz")
+    @Test
+    void addTag()throws Exception{
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+
+        mockMvc.perform(post("/settings/tags/add")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsBytes(tagForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        Tag tag = tagRepository.findByTitle("newTag");
+        assertNotNull(tag);
+
+    }
+
 
     //@WithUserDetails(value = "syseoz", setupBefore = TestExecutionEvent.TEST_EXECUTION) //2.3.x junit5 에서 오류
+    @DisplayName("프로필 수정")
     @WithAccount("syseoz")
     @Test
     public void profileUpdate() throws Exception{
@@ -85,5 +125,7 @@ class SettingsControllerTest {
         assertNull(ac.getBio());
 
     }
+
+
 
 }

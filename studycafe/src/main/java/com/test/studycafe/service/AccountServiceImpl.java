@@ -34,7 +34,6 @@ import java.util.Set;
 @Transactional
 public class AccountServiceImpl implements AccountService {
 
-
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
@@ -43,16 +42,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account newAccount(@Valid SignUpForm signUpForm) {
+        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        Account account =  modelMapper.map(signUpForm,Account.class);
 
-        Account account = Account.builder()
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-                .password(passwordEncoder.encode(signUpForm.getPassword()))
-                .studyCreatedByWeb(true)
-                .studyUpdatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .build();
         Account newAccount = accountRepository.save(account);
+
         newAccount.generateEmailCheckToken();
         signUpEmailSend(newAccount);
 

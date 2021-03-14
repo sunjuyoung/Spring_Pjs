@@ -1,5 +1,7 @@
 package com.test.studycafe.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Tag;
 import com.test.studycafe.dto.*;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -155,11 +158,14 @@ public class SettingsController {
      * @return
      */
     @GetMapping("/settings/tags")
-    public String tagsForm(@CurrentUser Account account,Model model){
-        model.addAttribute(account);
+    public String tagsForm(@CurrentUser Account account,Model model) throws JsonProcessingException {
         Set<Tag> tags =  accountService.getTags(account);
 
+        List<String> allTag = tagRepository.findAll().stream().map(a->a.getTitle()).collect(Collectors.toList());
+        ObjectMapper objectMapper = new ObjectMapper();
 
+        model.addAttribute(account);
+        model.addAttribute("whitelist",objectMapper.writeValueAsString(allTag));
         model.addAttribute("tags",tags.stream().map(a->a.getTitle()).collect(Collectors.toList()));
 
         return "settings/tags";

@@ -20,6 +20,7 @@
                       또는 엔트를 입력하세요.
                   </div>
 
+                    <div ></div>
                   <input id="tags" name='tags-outside' class='tagify--outside' placeholder='JPA Python'
                   th:value="${#strings.listJoin(tags,',')}">
               </div>
@@ -32,6 +33,7 @@
 <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
 <script th:inline="javascript">
     $(function () {
+
         var csrfToken = [[${_csrf.token}]];
         var csrfHeader = [[${_csrf.headerName}]];
         $(document).ajaxSend(function (e,xhr,options) {
@@ -39,8 +41,13 @@
         })
     })
 </script>
-<script>
+
+<script th:inline="javascript">
 $(function () {
+    var alltags = [[${whitelist}]];
+    console.log(alltags);
+
+
     function tagRequest(url,tagTitle) {
         $.ajax({
             dataType:"json",
@@ -67,6 +74,7 @@ $(function () {
     var input = document.querySelector('input[name=tags-outside]')
 
     var tagify = new Tagify(input, {
+        whitelist:["JPA","C#","C++","JAVA"], //JSON.parse
         pattern:/^.{0,20}$/,
         dropdown: {
             position: "input",

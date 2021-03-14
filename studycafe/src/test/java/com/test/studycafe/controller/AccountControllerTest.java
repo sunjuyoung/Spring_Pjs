@@ -51,11 +51,11 @@ class AccountControllerTest {
     @Test
     public void checkEmailToken() throws Exception{
 
-        Account account = Account.builder()
-                .nickname("test")
-                .password("12341234")
-                .email("test@test.com")
-                .build();
+        Account account = new Account();
+        account.setNickname("test");
+        account.setPassword("12341234");
+        account.setEmail("test@test.com");
+
         Account newAccount =  accountRepository.save(account);
         newAccount.generateEmailCheckToken();
 
