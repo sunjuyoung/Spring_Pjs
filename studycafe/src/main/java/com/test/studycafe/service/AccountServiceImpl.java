@@ -2,8 +2,10 @@ package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Tag;
+import com.test.studycafe.domain.Zone;
 import com.test.studycafe.dto.*;
 import com.test.studycafe.repository.AccountRepository;
+import com.test.studycafe.repository.ZoneRepository;
 import com.test.studycafe.security.UserAccount;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -35,6 +37,7 @@ import java.util.Set;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+    private final ZoneRepository zoneRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
@@ -141,6 +144,33 @@ public class AccountServiceImpl implements AccountService {
     public void removeTag(Account account, Tag tag) {
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getTags().remove(tag));
+    }
+
+    @Override
+    public Set<Zone> getZone(Account account) {
+        Optional<Account> byIdZone = accountRepository.findById(account.getId());
+        return byIdZone.get().getZones();
+    }
+
+    @Override
+    public void addZone(Account account, ZoneForm zones) {
+       Optional<Account> byId = accountRepository.findById(account.getId());
+       Zone zone =  zoneRepository.findByCityAndProvince(zones.getCity(),zones.getProvince());
+       //Zone zone = zones.getZone();
+       byId.ifPresent(a->{
+           a.getZones().add(zone);
+       });
+
+    }
+
+    @Override
+    public void removeZone(Account account, ZoneForm zones) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        Zone zone =  zoneRepository.findByCityAndProvince(zones.getCity(),zones.getProvince());
+        byId.ifPresent(a->{
+            a.getZones().remove(zone);
+        });
+
     }
 
 

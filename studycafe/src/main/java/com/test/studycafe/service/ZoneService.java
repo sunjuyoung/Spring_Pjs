@@ -1,5 +1,6 @@
 package com.test.studycafe.service;
 
+import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Zone;
 import com.test.studycafe.repository.ZoneRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,4 +42,9 @@ public class ZoneService {
         }
     }
 
+
+
+    public List<String> zoneList() {
+        return zoneRepository.findAll().stream().map(a->a.toString()).collect(Collectors.toList());
+    }
 }

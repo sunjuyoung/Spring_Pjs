@@ -4,10 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Tag;
+import com.test.studycafe.domain.Zone;
 import com.test.studycafe.dto.*;
 import com.test.studycafe.repository.TagRepository;
 import com.test.studycafe.security.CurrentUser;
 import com.test.studycafe.service.AccountService;
+import com.test.studycafe.service.ZoneService;
 import com.test.studycafe.valid.NicknameValidator;
 import com.test.studycafe.valid.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,8 @@ public class SettingsController {
     private final AccountService accountService;
     private final NicknameValidator nicknameValidator;
     private final TagRepository tagRepository;
+    private final ZoneService zoneService;
+    private final ObjectMapper objectMapper;
 
     @InitBinder("passwordForm")
     public void passwordInitBinder(WebDataBinder webDataBinder){
@@ -162,7 +166,6 @@ public class SettingsController {
         Set<Tag> tags =  accountService.getTags(account);
 
         List<String> allTag = tagRepository.findAll().stream().map(a->a.getTitle()).collect(Collectors.toList());
-        ObjectMapper objectMapper = new ObjectMapper();
 
         model.addAttribute(account);
         model.addAttribute("whitelist",objectMapper.writeValueAsString(allTag));
@@ -190,6 +193,36 @@ public class SettingsController {
         Tag tag = tagRepository.findByTitle(title);
 
         accountService.removeTag(account,tag);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/settings/zones")
+    public String zoneForm(@CurrentUser Account account,Model model) throws JsonProcessingException {
+       Set<Zone> zones =  accountService.getZone(account);
+       List<String> zoneList =  zoneService.zoneList();
+
+       model.addAttribute("zones",zones.stream().map(a->a.toString()).collect(Collectors.toList()));
+       model.addAttribute("whitelist",objectMapper.writeValueAsString(zoneList));
+
+        return "settings/zone";
+    }
+
+    @PostMapping("/settings/zones/add")
+    @ResponseBody
+    public ResponseEntity<String> addZone(@CurrentUser Account account,@RequestBody ZoneForm zones){
+
+
+        accountService.addZone(account,zones);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/settings/zones/remove")
+    @ResponseBody
+    public ResponseEntity<String> removeZone(@CurrentUser Account account,@RequestBody ZoneForm zones){
+
+        accountService.removeZone(account,zones);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

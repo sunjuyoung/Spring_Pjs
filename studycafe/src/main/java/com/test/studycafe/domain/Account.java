@@ -49,6 +49,9 @@ public class Account {
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
 
+    @ManyToMany
+    private Set<Zone> zones = new HashSet<>();
+
     @Lob @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 

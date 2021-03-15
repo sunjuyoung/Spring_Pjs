@@ -2,6 +2,7 @@ package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Tag;
+import com.test.studycafe.domain.Zone;
 import com.test.studycafe.dto.*;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -32,4 +33,10 @@ public interface AccountService extends UserDetailsService {
     Set<Tag> getTags(Account account);
 
     void removeTag(Account account, Tag tag);
+
+    Set<Zone> getZone(Account account);
+
+    void addZone(Account account, ZoneForm zones);
+
+    void removeZone(Account account, ZoneForm zones);
 }
