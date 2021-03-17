@@ -1,6 +1,8 @@
 package com.test.studycafe.controller;
 
 import com.test.studycafe.domain.Account;
+import com.test.studycafe.dto.EmailMessage;
+import com.test.studycafe.mail.EmailService;
 import com.test.studycafe.repository.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
@@ -31,7 +35,7 @@ class AccountControllerTest {
     AccountRepository accountRepository;
 
     @MockBean
-    JavaMailSender javaMailSender;
+    EmailService emailService;
 
 
     @DisplayName("인증메일 입력값 오류")
@@ -94,8 +98,8 @@ class AccountControllerTest {
         Account a = accountRepository.findByEmail("syseoz@naver.com");
         assertNotNull(a);
         assertNotEquals(a.getPassword(),"12341234");//패스워드 확인
-
         assertTrue(accountRepository.existsByEmail("syseoz@naver.com"));
+        then(emailService).should().sendEmail(any(EmailMessage.class));
 
     }
 

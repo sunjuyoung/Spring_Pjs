@@ -4,6 +4,7 @@ import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Tag;
 import com.test.studycafe.domain.Zone;
 import com.test.studycafe.dto.*;
+import com.test.studycafe.mail.EmailService;
 import com.test.studycafe.repository.AccountRepository;
 import com.test.studycafe.repository.ZoneRepository;
 import com.test.studycafe.security.UserAccount;
@@ -12,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -24,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
@@ -38,7 +41,8 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final ZoneRepository zoneRepository;
-    private final JavaMailSender javaMailSender;
+   // private final JavaMailSender javaMailSender;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
@@ -61,14 +65,14 @@ public class AccountServiceImpl implements AccountService {
     //회원 가입 인증 메일 전송
     @Transactional(readOnly = true)
     public void signUpEmailSend(Account newAccount) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(newAccount.getEmail())
+                .subject("스터디 회원가입 인증")
+                .message("/check-email-token?email="+newAccount.getEmail()+
+                        "&token="+newAccount.getEmailCheckToken())
+                .build();
 
-        mailMessage.setTo(newAccount.getEmail());
-        mailMessage.setText("/check-email-token?email="+newAccount.getEmail()+
-                "&token="+newAccount.getEmailCheckToken());
-        mailMessage.setSubject("스터디올래, 회원가입 인증");
-
-        javaMailSender.send(mailMessage);
+       emailService.sendEmail(emailMessage);
     }
 
 
