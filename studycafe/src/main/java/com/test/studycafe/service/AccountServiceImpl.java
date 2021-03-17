@@ -1,5 +1,6 @@
 package com.test.studycafe.service;
 
+import com.test.studycafe.config.AppProperties;
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Tag;
 import com.test.studycafe.domain.Zone;
@@ -25,6 +26,8 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
@@ -45,6 +48,8 @@ public class AccountServiceImpl implements AccountService {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final TemplateEngine templateEngine;
+    private final AppProperties appProperties;
 
 
     @Override
@@ -65,11 +70,21 @@ public class AccountServiceImpl implements AccountService {
     //회원 가입 인증 메일 전송
     @Transactional(readOnly = true)
     public void signUpEmailSend(Account newAccount) {
+        Context context = new Context(); //model 역활
+        context.setVariable("link","/check-email-token?email="+newAccount.getEmail()+
+                "&token="+newAccount.getEmailCheckToken());
+        context.setVariable("nicname",newAccount.getNickname());
+        context.setVariable("linkName","이메일 인증하기");
+        context.setVariable("message","링크를 클릭하세요");
+        context.setVariable("host",appProperties.getHost());
+
+        String message = templateEngine.process("simple-link",context);
+
+
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(newAccount.getEmail())
                 .subject("스터디 회원가입 인증")
-                .message("/check-email-token?email="+newAccount.getEmail()+
-                        "&token="+newAccount.getEmailCheckToken())
+                .message(message)
                 .build();
 
        emailService.sendEmail(emailMessage);
