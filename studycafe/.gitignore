@@ -1,4 +1,4 @@
-application-dev.properties
+**/resources/main/application-dev.properties
 
 HELP.md
 .gradle
