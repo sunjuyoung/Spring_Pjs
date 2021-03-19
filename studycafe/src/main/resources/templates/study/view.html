@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- head -->
+<th:block th:replace="fragments.html :: head"></th:block>
+
+<body class="bg-light">
+<th:block th:replace="fragments.html :: main-nav"></th:block>
+<div th:replace="fragments.html :: study-banner"></div>
+
+<div class="container">
+    <div th:replace="fragments.html :: study-info"></div>
+    <!--menu -->
+    <div th:replace="fragments.html :: study-menu(studyMenu='info')"></div>
+
+    <div class="row px-3 justify-content-center">
+        <div class="col-10 pt-3" th:utext="${study.fullDescription}"></div>
+    </div>
+
+    <!--footer -->
+    <th:block th:replace="fragments.html :: footer"></th:block>
+</div>
+<script type="application/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+
+</body>
+</html>
