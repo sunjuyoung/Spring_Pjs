@@ -2,6 +2,7 @@ package com.test.studycafe.controller;
 
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Study;
+import com.test.studycafe.dto.DescriptionForm;
 import com.test.studycafe.dto.StudyForm;
 import com.test.studycafe.repository.StudyRepository;
 import com.test.studycafe.security.CurrentUser;
@@ -30,6 +31,7 @@ public class StudyController {
     private final StudyService studyService;
     private final StudyFormValidator studyFormValidator;
     private final StudyRepository studyRepository;
+    private final ModelMapper modelMapper;
 
     @InitBinder("studyForm")
     public void StudyFormBinder(WebDataBinder webDataBinder){
@@ -45,9 +47,10 @@ public class StudyController {
     }
 
     @PostMapping("/new-study")
-    public String studySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors){
+    public String studySubmit(@CurrentUser Account account, @Valid StudyForm studyForm, Errors errors,Model model){
         //studyFormValidator.validate(studyForm,errors);
         if(errors.hasErrors()){
+            model.addAttribute(account);
             return "study/form";
         }
 
@@ -58,9 +61,39 @@ public class StudyController {
     @GetMapping("/study/{path}")
     public String viewForm(@CurrentUser Account account,@PathVariable String path, Model model){
         model.addAttribute(account);
-        System.out.println(path);
+
         model.addAttribute(studyRepository.findByPath(path));
         return "study/view";
+
+    }
+
+    @GetMapping("/study/{path}/members")
+    public String members(@CurrentUser Account account,@PathVariable String path ,Model model){
+        model.addAttribute(account);
+        model.addAttribute(studyRepository.findByPath(path));
+
+        return "study/members";
+    }
+
+
+    @GetMapping("/study/{path}/events")
+    public String events(@CurrentUser Account account,@PathVariable String path ,Model model){
+        model.addAttribute(account);
+        model.addAttribute(studyRepository.findByPath(path));
+
+        return "study/events";
+    }
+
+    @GetMapping("/study/{path}/settings/description")
+    public String settingsDescription(@CurrentUser Account account,Model model,@PathVariable String path){
+        Study study = studyRepository.findByPath(path);
+
+        model.addAttribute(account);
+        model.addAttribute(modelMapper.map(study,DescriptionForm.class));
+        model.addAttribute(study);
+
+        return "study/settings/description";
+
 
     }
 }

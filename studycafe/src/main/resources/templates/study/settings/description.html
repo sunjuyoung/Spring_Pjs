@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- head -->
+<th:block th:replace="fragments.html :: head"></th:block>
+
+<body class="bg-light">
+<th:block th:replace="fragments.html :: main-nav"></th:block>
+<div th:replace="fragments.html :: study-banner"></div>
+
+<div class="container">
+    <div th:replace="fragments.html :: study-info"></div>
+    <!--menu -->
+    <div th:replace="fragments.html :: study-menu(studyMenu='members')"></div>
+
+
+    <div class="row mt-3 justify-content-center">
+        <div class="col-2">
+            <div th:replace="fragments.html ::study-settings-menu ('description')" class="list-group"></div>
+        </div>
+
+        <div class="col-8">
+            <form id="needs-validation"class="col-sm-8" action="#"
+                  th:action="@{/new-study}" th:object="${descriptionForm}" method="post" novalidate>
+
+                <div class="form-group">
+                    <label for="shortDescription">짧은 소개</label>
+                    <textarea id="shortDescription" type="textarea" th:field="*{shortDescription}" class="form-control"
+                              placeholder="your@email.com" aria-describedby="shortDescriptionHelp" required maxlength="80"></textarea>
+                    <small id="shortDescriptionHelp" class="form-text text-muted">
+
+                    </small>
+                    <small class="invalid-feedback">이메일을 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}">소개 Error</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullDescription">상세 소개</label>
+                    <textarea id="fullDescription" type="textarea" th:field="*{fullDescription}" class="form-control"
+                              placeholder="your@email.com" aria-describedby="emailHelp" required></textarea>
+                    <small id="emailHelp" class="form-text text-muted">
+
+                    </small>
+                    <small class="invalid-feedback">이메일을 입력하세요.</small>
+                    <small class="form-text text-danger" th:if="${#fields.hasErrors('fullDescription')}" th:errors="*{email}">Email Error</small>
+                </div>
+
+
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block" type="submit"
+                            aria-describedby="submitHelp">스터디 만들기</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--footer -->
+    <th:block th:replace="fragments.html :: footer"></th:block>
+</div>
+<script type="application/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+    <script th:replace="fragments.html :: form-validation"></script>
+    <script src="/node_modules/summernote/dist/summernote-bs4.js"></script>
+    <script type="application/javascript">
+        $(function () {
+            $('#fullDescription').summernote({
+                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New','Noto Sans KR'],
+                placeholder:'스터디 목표, 일정, 진행방식, 모집인원 등 스터디에 대해 자세히 적어주세요.',
+                tabSize:2,
+                height: 300,
+            });
+        });
+    </script>
+
+</body>
+</html>
