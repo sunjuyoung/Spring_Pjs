@@ -25,9 +25,11 @@ public class Study {
     @Id @GeneratedValue
     private Long id;
 
+    @Builder.Default
     @ManyToMany
     private Set<Account> managers = new HashSet<>(); //권한 이임 및
 
+    @Builder.Default
     @ManyToMany
     private Set<Account> members = new HashSet<>();
 
@@ -45,9 +47,11 @@ public class Study {
     @Lob @Basic
     private String image;
 
+    @Builder.Default
     @ManyToMany
     private Set<Tag>tags = new HashSet<>();
 
+    @Builder.Default
     @ManyToMany
     private Set<Zone> zones = new HashSet<>();
 

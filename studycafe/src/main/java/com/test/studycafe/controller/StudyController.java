@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,7 +32,6 @@ public class StudyController {
 
     private final StudyService studyService;
     private final StudyFormValidator studyFormValidator;
-    private final StudyRepository studyRepository;
     private final ModelMapper modelMapper;
 
     @InitBinder("studyForm")
@@ -62,7 +63,7 @@ public class StudyController {
     public String viewForm(@CurrentUser Account account,@PathVariable String path, Model model){
         model.addAttribute(account);
 
-        model.addAttribute(studyRepository.findByPath(path));
+        model.addAttribute(studyService.getStudyByPath(path));
         return "study/view";
 
     }
@@ -70,7 +71,7 @@ public class StudyController {
     @GetMapping("/study/{path}/members")
     public String members(@CurrentUser Account account,@PathVariable String path ,Model model){
         model.addAttribute(account);
-        model.addAttribute(studyRepository.findByPath(path));
+        model.addAttribute(studyService.getStudyByPath(path));
 
         return "study/members";
     }
@@ -79,21 +80,63 @@ public class StudyController {
     @GetMapping("/study/{path}/events")
     public String events(@CurrentUser Account account,@PathVariable String path ,Model model){
         model.addAttribute(account);
-        model.addAttribute(studyRepository.findByPath(path));
+        model.addAttribute(studyService.getStudyByPath(path));
 
         return "study/events";
     }
 
+    /**
+     *  소개
+     * @param account
+     * @param model
+     * @param path
+     * @return
+     */
     @GetMapping("/study/{path}/settings/description")
     public String settingsDescription(@CurrentUser Account account,Model model,@PathVariable String path){
-        Study study = studyRepository.findByPath(path);
+       Study study = studyService.getStudyByPath(path);
 
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(study,DescriptionForm.class));
-        model.addAttribute(study);
+        model.addAttribute("study",study);
 
         return "study/settings/description";
+    }
 
+    @PostMapping("/study/{path}/settings/description")
+    public String updateDescription(@CurrentUser Account account, @Valid DescriptionForm descriptionForm, Errors errors,
+                                    @PathVariable String path,
+                                    Model model, RedirectAttributes redirectAttributes){
+
+        Study study = studyService.getStudyByPath(path);
+
+        if(errors.hasErrors()){
+            model.addAttribute(study);
+            model.addAttribute(account);
+            return "study/settings/description";
+        }
+        studyService.updateDescription(study,descriptionForm);
+        redirectAttributes.addFlashAttribute("message","소개를 수정했습니다.");
+
+        return "redirect:/study/"+ URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8);
 
     }
+
+    /**
+     * 배너
+     * @param account
+     * @param model
+     * @param path
+     * @return
+     */
+    @GetMapping("/study/{path}/settings/banner")
+    public String settingsBanner(@CurrentUser Account account,Model model,@PathVariable String path){
+        Study study = studyService.getStudyByPath(path);
+
+        model.addAttribute(account);
+        model.addAttribute("study",study);
+        return "study/settings/banner";
+    }
+
+
 }
