@@ -47,9 +47,11 @@ public class Account {
     private String location;
 
     @ManyToMany
+    @Builder.Default
     private Set<Tag> tags = new HashSet<>();
 
     @ManyToMany
+    @Builder.Default
     private Set<Zone> zones = new HashSet<>();
 
     @Lob @Basic(fetch = FetchType.EAGER)
@@ -78,6 +80,11 @@ public class Account {
 
     public boolean canSendConfirmEmail(){
         return this.confirmEmailAt.isBefore(LocalDateTime.now().minusMinutes(2));
+    }
+
+    public boolean isManager(Study study){
+
+        return study.getManagers().contains(nickname);
     }
 
 }

@@ -29,14 +29,18 @@ public class StudyService {
     }
 
     public void updateDescription(Study study, DescriptionForm descriptionForm) {
-        study.setFullDescription(descriptionForm.getFullDescription());
-        study.setShortDescription(descriptionForm.getShortDescription());
-        studyRepository.save(study);
+     /*   study.setFullDescription(descriptionForm.getFullDescription());
+        study.setShortDescription(descriptionForm.getShortDescription());*/
+        modelMapper.map(descriptionForm,study);
     }
 
 
     public Study getStudyByPath(String path) {
         Optional<Study> study = studyRepository.findByPath(path);
         return study.get();
+    }
+
+    public void banner(Study study){
+        study.banner();
     }
 }

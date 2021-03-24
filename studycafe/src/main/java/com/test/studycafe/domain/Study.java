@@ -84,7 +84,16 @@ public class Study {
         return this.members.contains(userAccount.getAccount());
 
     }
+
     public boolean isManager(UserAccount userAccount){
         return this.managers.contains(userAccount.getAccount());
+    }
+
+    public void banner(){
+        this.useBanner = !this.useBanner;
+    }
+
+    public String getImage(){
+        return this.image != null ? this.image:"/images/default-banner.jpg";
     }
 }
