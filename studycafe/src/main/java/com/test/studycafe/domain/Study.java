@@ -93,7 +93,7 @@ public class Study {
         this.useBanner = !this.useBanner;
     }
 
-    public String getImage(){
+    public String defaultImage(){
         return this.image != null ? this.image:"/images/default-banner.jpg";
     }
 }

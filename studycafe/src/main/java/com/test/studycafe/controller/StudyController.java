@@ -2,6 +2,7 @@ package com.test.studycafe.controller;
 
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Study;
+import com.test.studycafe.dto.BannerImageForm;
 import com.test.studycafe.dto.DescriptionForm;
 import com.test.studycafe.dto.StudyForm;
 import com.test.studycafe.repository.StudyRepository;
@@ -145,7 +146,10 @@ public class StudyController {
     @GetMapping("/study/{path}/settings/banner")
     public String settingsBanner(@CurrentUser Account account,Model model,@PathVariable String path){
         Study study = studyService.getStudyByPath(path);
-        study.setImage(study.getImage());
+        if(!study.isUseBanner()){
+            study.setImage(study.defaultImage());
+        }
+
 
         model.addAttribute(account);
         model.addAttribute("study",study);
@@ -159,17 +163,26 @@ public class StudyController {
         studyService.banner(study);
 
         return "redirect:/study/"+ URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8);
-
-
     }
+
     @PostMapping("/study/{path}/settings/banner/disable")
     public String disableBanner(@CurrentUser Account account,Model model,@PathVariable String path ){
         Study study = studyService.getStudyByPath(path);
         studyService.banner(study);
 
         return "redirect:/study/"+ URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8);
+    }
 
 
+    @PostMapping("/study/{path}/settings/banner/image")
+    public String updateBannerImage(@CurrentUser Account account, Model model, String image,
+                                    RedirectAttributes redirectAttributes,@PathVariable String path){
+        System.out.println("iamge:"+image);
+        Study study = studyService.updateBannerImage(path,image);
+
+
+
+        return "redirect:/study/"+ URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8);
     }
 
 

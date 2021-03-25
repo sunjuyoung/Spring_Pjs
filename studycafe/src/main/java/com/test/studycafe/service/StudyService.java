@@ -2,6 +2,7 @@ package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Study;
+import com.test.studycafe.dto.BannerImageForm;
 import com.test.studycafe.dto.DescriptionForm;
 import com.test.studycafe.dto.StudyForm;
 import com.test.studycafe.repository.StudyRepository;
@@ -42,5 +43,11 @@ public class StudyService {
 
     public void banner(Study study){
         study.banner();
+    }
+
+    public Study updateBannerImage(String path, String image) {
+        Optional<Study> study = studyRepository.findByPath(path);
+        study.get().setImage(image);
+        return study.get();
     }
 }
