@@ -2,10 +2,13 @@ package com.test.studycafe.service;
 
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Study;
+import com.test.studycafe.domain.Tag;
 import com.test.studycafe.dto.BannerImageForm;
 import com.test.studycafe.dto.DescriptionForm;
 import com.test.studycafe.dto.StudyForm;
+import com.test.studycafe.dto.TagForm;
 import com.test.studycafe.repository.StudyRepository;
+import com.test.studycafe.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final ModelMapper modelMapper;
+    private final TagRepository tagRepository;
 
 
     public Study createNewStudy(Account account, StudyForm studyForm) {
@@ -49,5 +53,14 @@ public class StudyService {
         Optional<Study> study = studyRepository.findByPath(path);
         study.get().setImage(image);
         return study.get();
+    }
+
+    public void updateTag(Study study, TagForm tagForm) {
+        Tag tag = tagRepository.findByTitle(tagForm.getTagTitle());
+        if(tag == null){
+            tagRepository.save(Tag.builder().title(tagForm.getTagTitle()).build());
+        }
+       study.getTags().add(tag);
+
     }
 }

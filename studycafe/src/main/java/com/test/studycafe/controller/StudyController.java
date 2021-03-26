@@ -2,9 +2,7 @@ package com.test.studycafe.controller;
 
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Study;
-import com.test.studycafe.dto.BannerImageForm;
-import com.test.studycafe.dto.DescriptionForm;
-import com.test.studycafe.dto.StudyForm;
+import com.test.studycafe.dto.*;
 import com.test.studycafe.repository.StudyRepository;
 import com.test.studycafe.security.CurrentUser;
 import com.test.studycafe.service.StudyService;
@@ -12,20 +10,21 @@ import com.test.studycafe.valid.StudyFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.dom4j.rule.Mode;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -149,8 +148,6 @@ public class StudyController {
         if(!study.isUseBanner()){
             study.setImage(study.defaultImage());
         }
-
-
         model.addAttribute(account);
         model.addAttribute("study",study);
         return "study/settings/banner";
@@ -185,5 +182,49 @@ public class StudyController {
         return "redirect:/study/"+ URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8);
     }
 
+
+    @GetMapping("/study/{path}/settings/tags")
+    public String settingsTags(@CurrentUser Account account,Model model,@PathVariable String path){
+        Study study = studyService.getStudyByPath(path);
+        if(!study.isUseBanner()){
+            study.setImage(study.defaultImage());
+        }
+        model.addAttribute(account);
+        model.addAttribute("study",study);
+        model.addAttribute("tags",study.getTags().stream().map(a->a.getTitle()).collect(Collectors.toList()));
+        return "study/settings/tags";
+    }
+
+    @GetMapping("/study/{path}/settings/zones")
+    public String settingsZones(@CurrentUser Account account,Model model,@PathVariable String path){
+        Study study = studyService.getStudyByPath(path);
+        if(!study.isUseBanner()){
+            study.setImage(study.defaultImage());
+        }
+        model.addAttribute(account);
+        model.addAttribute("study",study);
+        return "study/settings/zone";
+    }
+
+    @PostMapping("/study/{path}/settings/tags/add")
+    @ResponseBody
+    public ResponseEntity<String> addTag(@CurrentUser Account account, @RequestBody TagForm tagForm,
+                                         @PathVariable String path){
+
+
+        Study study = studyService.getStudyByPath(path);
+        studyService.updateTag(study,tagForm);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/study/{path}/settings/zones/add")
+    @ResponseBody
+    public ResponseEntity<String> addZone(@CurrentUser Account account, @RequestBody ZoneForm zoneForm,
+                                          @PathVariable String path){
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- head -->
+<th:block th:replace="fragments.html :: head"></th:block>
+
+<body class="bg-light">
+<th:block th:replace="fragments.html :: main-nav"></th:block>
+<div th:replace="fragments.html :: study-banner"></div>
+
+<div class="container">
+    <div th:replace="fragments.html :: study-info"></div>
+    <!--menu -->
+    <div th:replace="fragments.html :: study-menu(studyMenu='settings')"></div>
+
+
+    <div class="row mt-3 justify-content-center">
+        <div class="col-2">
+            <div th:replace="fragments.html ::study-settings-menu ('zones')" class="list-group"></div>
+        </div>
+        <div class="col-8">
+            <div class="row m-1">
+                <h1 class="col-sm-12">주요 활동 지역</h1>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="alert alert-info" role="alert">
+                        참여하고 싶은 스터디 주제를 입력해 주세요. 해당 주제의 스터디가 생기면 알림을 받을 수 있습니다. 태그를 입력하고 콤마(,)
+                        또는 엔트를 입력하세요.
+                    </div>
+
+                    <div ></div>
+                    <!-- <input id="tags" name='tags-outside' class='tagify&#45;&#45;outside' placeholder='JPA Python'
+                            th:value="${#strings.listJoin(tags,',')}">-->
+                    <input id="zones" name='tags-manual-suggestions' placeholder='write some tags'
+                           th:value="${#strings.listJoin(study.zones,',')}">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
+<script th:inline="javascript">
+    /*    $(function () {
+
+            var csrfToken = [[${_csrf.token}]];
+            var csrfHeader = [[${_csrf.headerName}]];
+            $(document).ajaxSend(function (e,xhr,options) {
+                xhr.setRequestHeader(csrfHeader,csrfToken);
+            })
+        })*/
+    var test = [[${zones}]];
+    console.log(test);
+</script>
+
+<script th:inline="javascript">
+
+    function tagRequest(url,zones) {
+        var csrfToken = [[${_csrf.token}]];
+        var csrfHeader = [[${_csrf.headerName}]];
+        $(document).ajaxSend(function (e,xhr,options) {
+            xhr.setRequestHeader(csrfHeader,csrfToken);
+        })
+
+        $.ajax({
+            dataType:"json",
+            autocomplete:{
+                enabled:true,
+                rightKey:true
+            },
+            contentType:"application/json; charset=utf-8",
+            method:"post",
+            url:"/settings/zones"+url,
+            data:JSON.stringify({'zones':zones})
+        }).done(function (data,status) {
+            console.log(`${data} and status is ${status}`);
+        });
+    }
+
+    function onAdd(e) {
+        tagRequest("/add",e.detail.data.value);
+    }
+    function onRemove(e) {
+        tagRequest("/remove",e.detail.data.value);
+    }
+
+    var zoneList = [[${whitelist}]];
+
+    var input = document.querySelector('input[name=tags-manual-suggestions]'),
+        // init Tagify script on the above inputs
+        tagify = new Tagify(input, {
+            whitelist : JSON.parse(zoneList),
+            dropdown: {
+                position: "manual",
+                maxItems: Infinity,
+                enabled: 0,
+                classname: "customSuggestionsList"
+            },
+            enforceWhitelist: true
+        })
+
+
+
+    tagify.on("dropdown:show", onSuggestionsListUpdate)
+        .on("dropdown:hide", onSuggestionsListHide)
+        .on('dropdown:scroll', onDropdownScroll)
+        .on("add",onAdd)
+        .on("remove",onRemove);
+
+    renderSuggestionsList()
+
+    // ES2015 argument destructuring
+    function onSuggestionsListUpdate({ detail:suggestionsElm }){
+        console.log(  suggestionsElm  )
+    }
+
+    function onSuggestionsListHide(){
+        console.log("hide dropdown")
+    }
+
+    function onDropdownScroll(e){
+        console.log(e.detail)
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
+    function renderSuggestionsList(){
+        tagify.dropdown.show.call(tagify) // load the list
+        tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
+    }
+</script>
+</body>
+</html>
