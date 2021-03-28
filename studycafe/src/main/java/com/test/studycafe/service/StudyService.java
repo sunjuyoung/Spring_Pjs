@@ -3,6 +3,7 @@ package com.test.studycafe.service;
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Study;
 import com.test.studycafe.domain.Tag;
+import com.test.studycafe.domain.Zone;
 import com.test.studycafe.dto.BannerImageForm;
 import com.test.studycafe.dto.DescriptionForm;
 import com.test.studycafe.dto.StudyForm;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -63,4 +65,6 @@ public class StudyService {
        study.getTags().add(tag);
 
     }
+
+
 }

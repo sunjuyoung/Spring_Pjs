@@ -236,6 +236,18 @@
        href="#" th:href="@{'/study/' + ${study.path} + '/settings/study'}">스터디</a>
 </div>
 
+<script th:inline="javascript" th:fragment="ajax-csrf-header">
+    $(function () {
+
+        var csrfToken = [[${_csrf.token}]];
+        var csrfHeader = [[${_csrf.headerName}]];
+        $(document).ajaxSend(function (e,xhr,options) {
+            xhr.setRequestHeader(csrfHeader,csrfToken);
+        })
+    })
+    var test = [[${zones}]];
+    console.log(test);
+</script>
 
 <script type="application/javascript" th:fragment="form-validation">
     (function() {//input required 검증

@@ -1,11 +1,15 @@
 package com.test.studycafe.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Study;
+import com.test.studycafe.domain.Zone;
 import com.test.studycafe.dto.*;
 import com.test.studycafe.repository.StudyRepository;
 import com.test.studycafe.security.CurrentUser;
 import com.test.studycafe.service.StudyService;
+import com.test.studycafe.service.ZoneService;
 import com.test.studycafe.valid.StudyFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.dom4j.rule.Mode;
@@ -23,7 +27,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -33,6 +39,8 @@ public class StudyController {
     private final StudyService studyService;
     private final StudyFormValidator studyFormValidator;
     private final ModelMapper modelMapper;
+    private final ZoneService zoneService;
+    private final ObjectMapper objectMapper;
 
     @InitBinder("studyForm")
     public void StudyFormBinder(WebDataBinder webDataBinder){
@@ -177,8 +185,6 @@ public class StudyController {
         System.out.println("iamge:"+image);
         Study study = studyService.updateBannerImage(path,image);
 
-
-
         return "redirect:/study/"+ URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8);
     }
 
@@ -196,13 +202,15 @@ public class StudyController {
     }
 
     @GetMapping("/study/{path}/settings/zones")
-    public String settingsZones(@CurrentUser Account account,Model model,@PathVariable String path){
+    public String settingsZones(@CurrentUser Account account,Model model,@PathVariable String path) throws JsonProcessingException {
         Study study = studyService.getStudyByPath(path);
-        if(!study.isUseBanner()){
-            study.setImage(study.defaultImage());
-        }
+        List<String> zoneList =  zoneService.zoneList();
+
         model.addAttribute(account);
         model.addAttribute("study",study);
+        model.addAttribute("zones",study.getZones().stream().map(a->a.toString()).collect(Collectors.toList()));
+        model.addAttribute("whitelist",objectMapper.writeValueAsString(zoneList));
+
         return "study/settings/zone";
     }
 
