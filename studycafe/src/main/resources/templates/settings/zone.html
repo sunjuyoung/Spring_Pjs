@@ -38,11 +38,6 @@
 <script th:inline="javascript">
 
     function tagRequest(url,zones) {
-        var csrfToken = [[${_csrf.token}]];
-        var csrfHeader = [[${_csrf.headerName}]];
-        $(document).ajaxSend(function (e,xhr,options) {
-            xhr.setRequestHeader(csrfHeader,csrfToken);
-        })
 
         $.ajax({
             dataType:"json",

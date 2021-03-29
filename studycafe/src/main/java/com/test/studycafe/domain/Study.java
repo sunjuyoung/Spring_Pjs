@@ -14,6 +14,15 @@ import java.util.Set;
         @NamedAttributeNode("zones"),
         @NamedAttributeNode("managers"),
         @NamedAttributeNode("members")})
+
+@NamedEntityGraph(name="Study.withTagsAndManagers",attributeNodes = {
+        @NamedAttributeNode("tags"),
+        @NamedAttributeNode("managers"),})
+
+@NamedEntityGraph(name="Study.withZonesAndManagers",attributeNodes = {
+        @NamedAttributeNode("zones"),
+        @NamedAttributeNode("managers"),})
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -96,4 +105,41 @@ public class Study {
     public String defaultImage(){
         return this.image != null ? this.image:"/images/default-banner.jpg";
     }
+
+    public void publish(){
+        if(!this.closed && !this.published){
+            this.published = true;
+            this.publishedDateTime = LocalDateTime.now();
+        }else{
+            throw new RuntimeException("스터디를 공개할 수 없습니다. 이미 공개했거나 종료했습니다.");
+        }
+    }
+    public void close(){
+        if(!this.closed && !this.published){
+            this.closed = true;
+            this.publishedDateTime = LocalDateTime.now();
+        }else{
+            throw new RuntimeException("스터디를 종료할 수 없습니다. 이미  종료했습니다.");
+        }
+    }
+
+    public void startRecruit(){
+        if(this.recruitUpdateDateTime != null){
+            if(!this.recruitUpdateDateTime.isBefore(LocalDateTime.now().minusMinutes(10))) {
+                throw new RuntimeException("10분뒤 다시 시도하세요.");
+            }
+        }
+
+        if(!this.closed && this.published){
+            this.recruiting = true;
+            this.recruitUpdateDateTime = LocalDateTime.now();
+        }
+
+    }
+
+    public void closeRecruit(){
+        this.recruiting = false;
+    }
+
+
 }

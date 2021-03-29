@@ -45,14 +45,9 @@
 <script th:replace="fragments.html :: ajax-csrf-header"></script>
 
 <script th:inline="javascript">
+    var path = [[${study.path}]]
 
     function tagRequest(url,zones) {
-        var csrfToken = [[${_csrf.token}]];
-        var csrfHeader = [[${_csrf.headerName}]];
-        $(document).ajaxSend(function (e,xhr,options) {
-            xhr.setRequestHeader(csrfHeader,csrfToken);
-        })
-
         $.ajax({
             dataType:"json",
             autocomplete:{
@@ -61,7 +56,7 @@
             },
             contentType:"application/json; charset=utf-8",
             method:"post",
-            url:"/settings/zones"+url,
+            url:"/study/"+path+"/settings/zones"+url,
             data:JSON.stringify({'zones':zones})
         }).done(function (data,status) {
             console.log(`${data} and status is ${status}`);

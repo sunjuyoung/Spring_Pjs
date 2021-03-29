@@ -4,10 +4,7 @@ import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Study;
 import com.test.studycafe.domain.Tag;
 import com.test.studycafe.domain.Zone;
-import com.test.studycafe.dto.BannerImageForm;
-import com.test.studycafe.dto.DescriptionForm;
-import com.test.studycafe.dto.StudyForm;
-import com.test.studycafe.dto.TagForm;
+import com.test.studycafe.dto.*;
 import com.test.studycafe.repository.StudyRepository;
 import com.test.studycafe.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +44,11 @@ public class StudyService {
         return study.get();
     }
 
+    public Study getStudyToUpdateTag(Account account,String path){
+        Study study = studyRepository.findAccountWithTagByPath(path);
+        return study;
+    }
+
     public void banner(Study study){
         study.banner();
     }
@@ -67,4 +69,22 @@ public class StudyService {
     }
 
 
+    public void updateZone(Study study, ZoneForm zoneForm) {
+        study.getZones().add(Zone.builder().province(zoneForm.getProvince())
+        .localName(zoneForm.getLocalname()).city(zoneForm.getCity()).build());
+
+        //studyRepository.save(study);
+    }
+
+    public void removeTag(Study study, Tag tag) {
+        study.getTags().remove(tag);
+    }
+
+    public void publish(Study study) {
+        study.publish();
+    }
+
+    public void close(Study study) {
+        study.close();
+    }
 }

@@ -4,11 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Study;
+import com.test.studycafe.domain.Tag;
 import com.test.studycafe.domain.Zone;
 import com.test.studycafe.dto.*;
 import com.test.studycafe.repository.StudyRepository;
 import com.test.studycafe.security.CurrentUser;
 import com.test.studycafe.service.StudyService;
+import com.test.studycafe.service.TagService;
 import com.test.studycafe.service.ZoneService;
 import com.test.studycafe.valid.StudyFormValidator;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,7 @@ public class StudyController {
     private final ModelMapper modelMapper;
     private final ZoneService zoneService;
     private final ObjectMapper objectMapper;
+    private final TagService tagService;
 
     @InitBinder("studyForm")
     public void StudyFormBinder(WebDataBinder webDataBinder){
@@ -192,9 +195,7 @@ public class StudyController {
     @GetMapping("/study/{path}/settings/tags")
     public String settingsTags(@CurrentUser Account account,Model model,@PathVariable String path){
         Study study = studyService.getStudyByPath(path);
-        if(!study.isUseBanner()){
-            study.setImage(study.defaultImage());
-        }
+
         model.addAttribute(account);
         model.addAttribute("study",study);
         model.addAttribute("tags",study.getTags().stream().map(a->a.getTitle()).collect(Collectors.toList()));
@@ -218,11 +219,24 @@ public class StudyController {
     @ResponseBody
     public ResponseEntity<String> addTag(@CurrentUser Account account, @RequestBody TagForm tagForm,
                                          @PathVariable String path){
-
-
-        Study study = studyService.getStudyByPath(path);
+        Study study = studyService.getStudyToUpdateTag(account,path);
         studyService.updateTag(study,tagForm);
 
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @PostMapping("/study/{path}/settings/tags/remove")
+    @ResponseBody
+    public ResponseEntity<String> removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm,
+                                         @PathVariable String path){
+
+        Study study = studyService.getStudyToUpdateTag(account,path);
+        Tag tag = tagService.findtagTitle(tagForm.getTagTitle());
+        if(tag==null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        studyService.removeTag(study,tag);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -230,9 +244,79 @@ public class StudyController {
     @ResponseBody
     public ResponseEntity<String> addZone(@CurrentUser Account account, @RequestBody ZoneForm zoneForm,
                                           @PathVariable String path){
-
-
+        Study study = studyService.getStudyByPath(path);
+        studyService.updateZone(study,zoneForm);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/study/{path}/settings/zones/remove")
+    @ResponseBody
+    public ResponseEntity<String> removeZone(@CurrentUser Account account, @RequestBody TagForm tagForm,
+                                            @PathVariable String path){
+        Study study = studyService.getStudyByPath(path);
+        Tag tag = tagService.findtagTitle(tagForm.getTagTitle());
+        if(tag==null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        studyService.removeTag(study,tag);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/study/{path}/settings/study")
+    public String settingsStudy(@CurrentUser Account account,Model model,@PathVariable String path){
+        Study study = studyService.getStudyByPath(path);
+
+        model.addAttribute(account);
+        model.addAttribute(study);
+
+        return "study/settings/study";
+    }
+
+    @PostMapping("/study/{path}/settings/study/publish")
+    public String publishStudy(@CurrentUser Account account,Model model,@PathVariable String path){
+        Study study = studyService.getStudyByPath(path);
+        studyService.publish(study);
+
+        model.addAttribute(account);
+        model.addAttribute(study);
+        model.addAttribute("message","스터디를 공개했습니다.");
+
+        return "redirect:/study/"+ URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8)+"/settings/study";
+    }
+
+    @PostMapping("/study/{path}/settings/study/close")
+    public String closeStudy(@CurrentUser Account account,Model model,@PathVariable String path){
+        Study study = studyService.getStudyByPath(path);
+        studyService.close(study);
+
+        model.addAttribute(account);
+        model.addAttribute(study);
+        model.addAttribute("message","스터디를 공개했습니다.");
+
+        return "redirect:/study/"+ URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8)+"/settings/study";
+    }
+
+    @PostMapping("/study/{path}/settings/recruit/start")
+    public String startRecruit(@CurrentUser Account account,Model model,@PathVariable String path){
+        Study study = studyService.getStudyByPath(path);
+
+
+        model.addAttribute(account);
+        model.addAttribute(study);
+        model.addAttribute("message","스터디를 공개했습니다.");
+
+        return "redirect:/study/"+ URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8)+"/settings/study";
+    }
+
+    @PostMapping("/study/{path}/settings/recruit/stop")
+    public String stopRecruit(@CurrentUser Account account,Model model,@PathVariable String path){
+        Study study = studyService.getStudyByPath(path);
+
+
+        model.addAttribute(account);
+        model.addAttribute(study);
+        model.addAttribute("message","스터디를 공개했습니다.");
+
+        return "redirect:/study/"+ URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8)+"/settings/study";
+    }
 }
