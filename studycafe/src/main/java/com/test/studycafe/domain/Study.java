@@ -23,6 +23,9 @@ import java.util.Set;
         @NamedAttributeNode("zones"),
         @NamedAttributeNode("managers"),})
 
+@NamedEntityGraph(name="Study.withManagers",attributeNodes = {
+        @NamedAttributeNode("managers")})
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -114,8 +117,10 @@ public class Study {
             throw new RuntimeException("스터디를 공개할 수 없습니다. 이미 공개했거나 종료했습니다.");
         }
     }
+
+
     public void close(){
-        if(!this.closed && !this.published){
+        if(!this.closed && this.published){
             this.closed = true;
             this.publishedDateTime = LocalDateTime.now();
         }else{
@@ -123,15 +128,20 @@ public class Study {
         }
     }
 
-    public void startRecruit(){
-        if(this.recruitUpdateDateTime != null){
-            if(!this.recruitUpdateDateTime.isBefore(LocalDateTime.now().minusMinutes(10))) {
-                throw new RuntimeException("10분뒤 다시 시도하세요.");
-            }
-        }
+    public boolean canRecruitStart(){
+        return  this.published && this.recruitUpdateDateTime == null || this.recruitUpdateDateTime.isBefore(LocalDateTime.now().minusMinutes(10));
+    }
 
+    public void startRecruit(){
         if(!this.closed && this.published){
             this.recruiting = true;
+            this.recruitUpdateDateTime = LocalDateTime.now();
+        }
+
+    }
+    public void stopRecruit(){
+        if(!this.closed && this.published){
+            this.recruiting = false;
             this.recruitUpdateDateTime = LocalDateTime.now();
         }
 

@@ -1,5 +1,6 @@
 package com.test.studycafe.service;
 
+import ch.qos.logback.classic.spi.IThrowableProxy;
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Study;
 import com.test.studycafe.domain.Tag;
@@ -14,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
+
+import static com.test.studycafe.dto.StudyForm.PATH_PATTERN;
+
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +49,7 @@ public class StudyService {
     }
 
     public Study getStudyToUpdateTag(Account account,String path){
-        Study study = studyRepository.findAccountWithTagByPath(path);
+        Study study = studyRepository.findStudyWithTagByPath(path);
         return study;
     }
 
@@ -65,14 +69,12 @@ public class StudyService {
             tagRepository.save(Tag.builder().title(tagForm.getTagTitle()).build());
         }
        study.getTags().add(tag);
-
     }
 
 
     public void updateZone(Study study, ZoneForm zoneForm) {
         study.getZones().add(Zone.builder().province(zoneForm.getProvince())
         .localName(zoneForm.getLocalname()).city(zoneForm.getCity()).build());
-
         //studyRepository.save(study);
     }
 
@@ -86,5 +88,39 @@ public class StudyService {
 
     public void close(Study study) {
         study.close();
+    }
+
+    public void startRecruit(Study study){
+        study.startRecruit();
+    }
+    public void stopRecruit(Study study) {
+        study.stopRecruit();
+    }
+
+    public Study getStudyWithManagersByPath(String path) {
+        return studyRepository.findStudyWithManagersByPath(path);
+    }
+
+    public Study getStudyOnlyByPath(String path) {
+        return studyRepository.findStudyOnlyByPath(path);
+    }
+
+    public void updatePath(Study study, String newPath) {
+        study.setPath(newPath);
+    }
+
+    public boolean existsByPath(String newPath) {
+        if(!newPath.matches(PATH_PATTERN)){
+            return false;
+        }
+        return !studyRepository.existsByPath(newPath);
+    }
+
+    public boolean isValidTitle(String newTitle) {
+        return newTitle.length() <=50;
+    }
+
+    public void updateTitle(Study study, String newTitle) {
+        study.setTitle(newTitle);
     }
 }
