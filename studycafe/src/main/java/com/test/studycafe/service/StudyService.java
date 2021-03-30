@@ -10,6 +10,7 @@ import com.test.studycafe.repository.StudyRepository;
 import com.test.studycafe.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -122,5 +123,25 @@ public class StudyService {
 
     public void updateTitle(Study study, String newTitle) {
         study.setTitle(newTitle);
+    }
+
+    public void removeStudy(Study study) {
+        if(study.isRemovable()){
+            studyRepository.delete(study);
+        }else{
+            throw new IllegalArgumentException("스터디를 삭제할 수 없습니다.");
+        }
+    }
+
+    public Study getStudyToUpdateStatus(Account account, String path){
+        Study study = studyRepository.findStudyWithManagersByPath(path);
+        checkManager(account,study);
+        return study;
+    }
+
+    private void checkManager(Account account, Study study) {
+        if (!study.isManagerBy(account)){
+            throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
+        }
     }
 }

@@ -151,5 +151,13 @@ public class Study {
         this.recruiting = false;
     }
 
+    public boolean isRemovable() {
+        return !this.published; 
+    }
+
+    public boolean isManagerBy(Account account){
+        return this.getManagers().contains(account);
+
+    }
 
 }

@@ -83,7 +83,6 @@ public class Account {
     }
 
     public boolean isManager(Study study){
-
         return study.getManagers().contains(nickname);
     }
 

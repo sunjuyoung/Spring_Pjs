@@ -150,7 +150,11 @@
     </div>
     <div th:replace="fragments.html :: footer"></div>
 </div>
-<script th:replace="fragments.html :: tooltip"></script>
+<script type="application/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
 <script th:replace="fragments.html :: form-validation"></script>
 </body>
 </html>
