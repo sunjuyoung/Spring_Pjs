@@ -42,6 +42,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .tokenRepository(tokenRepository());
     }
 
+
     @Bean
     public PersistentTokenRepository tokenRepository(){
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
@@ -56,6 +57,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .mvcMatchers("/node_modules/**")
                 .mvcMatchers("/images/**")
+                .antMatchers("/favicon.ico")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 

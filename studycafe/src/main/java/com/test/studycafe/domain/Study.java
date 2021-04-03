@@ -81,6 +81,8 @@ public class Study {
 
     private boolean useBanner;
 
+    private int memberCount;
+
 
     public void addManager(Account account) {
         this.managers.add(account);
@@ -90,11 +92,9 @@ public class Study {
         Account account = userAccount.getAccount();
         return this.isPublished() && this.isRecruiting()
                 && !this.members.contains(account) && !this.managers.contains(account);
-
     }
     public boolean isMember(UserAccount userAccount){
         return this.members.contains(userAccount.getAccount());
-
     }
 
     public boolean isManager(UserAccount userAccount){
@@ -137,14 +137,13 @@ public class Study {
             this.recruiting = true;
             this.recruitUpdateDateTime = LocalDateTime.now();
         }
-
     }
+
     public void stopRecruit(){
         if(!this.closed && this.published){
             this.recruiting = false;
             this.recruitUpdateDateTime = LocalDateTime.now();
         }
-
     }
 
     public void closeRecruit(){
@@ -152,12 +151,18 @@ public class Study {
     }
 
     public boolean isRemovable() {
-        return !this.published; 
+        return !this.published;
     }
 
     public boolean isManagerBy(Account account){
         return this.getManagers().contains(account);
-
     }
 
+    public void addMember() {
+        this.memberCount++;
+    }
+
+    public void removeMember(){
+        this.memberCount--;
+    }
 }

@@ -110,6 +110,27 @@ public class StudyController {
     }
 
     /**
+     * 스터디 가입, 탈퇴
+     * @param account
+     * @param path
+     * @param model
+     * @return
+     */
+    @GetMapping("/study/{path}/join")
+    public String joinStudy(@CurrentUser Account account,@PathVariable String path ,Model model){
+       Study study = studyService.getStudyWithMembersByPath(path,account);
+       studyService.addMember(study,account);
+        return "redirect:/study/"+URLEncoder.encode(study.getPath(),StandardCharsets.UTF_8)+"/members";
+    }
+
+    @GetMapping("/study/{path}/leave")
+    public String leaveStudy(@CurrentUser Account account,@PathVariable String path ,Model model){
+        Study study = studyService.getStudyWithMembersByPath(path,account);
+        studyService.removeMember(study,account);
+        return "redirect:/";
+    }
+
+    /**
      *  소개
      * @param account
      * @param model
@@ -119,6 +140,7 @@ public class StudyController {
     @GetMapping("/study/{path}/settings/description")
     public String settingsDescription(@CurrentUser Account account,Model model,@PathVariable String path){
        Study study = studyService.getStudyByPath(path);
+       studyService.checkManager(account,study);
 
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(study,DescriptionForm.class));
@@ -133,6 +155,7 @@ public class StudyController {
                                     Model model, RedirectAttributes redirectAttributes){
 
         Study study = studyService.getStudyByPath(path);
+        studyService.checkManager(account,study);
 
         if(errors.hasErrors()){
             model.addAttribute(study);
@@ -156,6 +179,7 @@ public class StudyController {
     @GetMapping("/study/{path}/settings/banner")
     public String settingsBanner(@CurrentUser Account account,Model model,@PathVariable String path){
         Study study = studyService.getStudyByPath(path);
+        studyService.checkManager(account,study);
         if(!study.isUseBanner()){
             study.setImage(study.defaultImage());
         }
@@ -195,6 +219,7 @@ public class StudyController {
     @GetMapping("/study/{path}/settings/tags")
     public String settingsTags(@CurrentUser Account account,Model model,@PathVariable String path){
         Study study = studyService.getStudyByPath(path);
+        studyService.checkManager(account,study);
 
         model.addAttribute(account);
         model.addAttribute("study",study);
@@ -206,6 +231,7 @@ public class StudyController {
     public String settingsZones(@CurrentUser Account account,Model model,@PathVariable String path) throws JsonProcessingException {
         Study study = studyService.getStudyByPath(path);
         List<String> zoneList =  zoneService.zoneList();
+        studyService.checkManager(account,study);
 
         model.addAttribute(account);
         model.addAttribute("study",study);
@@ -265,6 +291,7 @@ public class StudyController {
     @GetMapping("/study/{path}/settings/study")
     public String settingsStudy(@CurrentUser Account account,Model model,@PathVariable String path){
         Study study = studyService.getStudyByPath(path);
+        studyService.checkManager(account,study);
 
         model.addAttribute(account);
         model.addAttribute(study);

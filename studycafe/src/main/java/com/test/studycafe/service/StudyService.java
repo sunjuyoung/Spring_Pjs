@@ -49,6 +49,8 @@ public class StudyService {
         return study.get();
     }
 
+
+
     public Study getStudyToUpdateTag(Account account,String path){
         Study study = studyRepository.findStudyWithTagByPath(path);
         return study;
@@ -139,9 +141,26 @@ public class StudyService {
         return study;
     }
 
-    private void checkManager(Account account, Study study) {
+    public void checkManager(Account account, Study study) {
         if (!study.isManagerBy(account)){
             throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
         }
+    }
+
+    public Study getStudyWithMembersByPath(String path,Account account) {
+        Study study = studyRepository.findStudyWithMembersByPath(path);
+        return study;
+    }
+
+
+    public void addMember(Study study, Account account){
+        study.getMembers().add(account);
+        study.addMember();
+    }
+
+
+    public void removeMember(Study study, Account account){
+        study.getMembers().remove(account);
+        study.removeMember();
     }
 }
