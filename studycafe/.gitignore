@@ -1,4 +1,4 @@
-**/application-dev.properties
+
 
 HELP.md
 .gradle
@@ -19,6 +19,7 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -38,7 +39,7 @@ out/
 ### VS Code ###
 .vscode/
 
-
+src/main/resource/application-dev.properties
 ###  NPM ###
 src/main/resource/static/node_modules/
 

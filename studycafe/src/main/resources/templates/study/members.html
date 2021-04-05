@@ -13,29 +13,8 @@
     <!--menu -->
     <div th:replace="fragments.html :: study-menu(studyMenu='members')"></div>
 
-    <div class="row px-3 justify-content-center">
-
-        <li th:each="member : ${study.managers}">
-            <svg th:if="${#strings.isEmpty(member.profileImage)}"></svg>
-            <img th:if="${!#strings.isEmpty(member.profileImage)}" />
-            <h5 class="mt-0 mb-1"><span th:text="${member.nickname}"></span>
-
-            </h5>
-            <span th:text="${member.bio}">
-
-            </span>
-        </li>
-        <li th:each="member : ${study.members}">
-            <svg th:if="${#strings.isEmpty(member.profileImage)}"></svg>
-            <img th:if="${!#strings.isEmpty(member.profileImage)}" />
-            <h5 class="mt-0 mb-1"><span th:text="${member.nickname}"></span>
-
-            </h5>
-            <span th:text="${member.bio}">
-
-            </span>
-        </li>
-    </div>
+    <div th:replace="fragments.html :: member-list(members=${study.managers},isManager=${true})"></div>
+    <div th:replace="fragments.html :: member-list(members=${study.members},isManager=${false})"></div>
     <!--footer -->
     <th:block th:replace="fragments.html :: footer"></th:block>
 </div>
