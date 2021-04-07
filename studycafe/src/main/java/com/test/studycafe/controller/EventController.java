@@ -55,4 +55,16 @@ public class EventController {
         Event event = eventService.createEvent(study,eventForm,account);
         return "redirect:/study/"+ URLEncoder.encode(study.getPath(), StandardCharsets.UTF_8)+"/events/"+event.getId();
     }
+
+    @GetMapping("/events/{id}")
+    public String getEvent(@CurrentUser Account account, @PathVariable String path, @PathVariable Long id,
+                           Model model){
+        Study study = studyService.getStudyByPath(path);
+        Event event = eventService.getEvent(id);
+        model.addAttribute(account);
+        model.addAttribute(event);
+        model.addAttribute(study);
+
+        return "event/view";
+    }
 }

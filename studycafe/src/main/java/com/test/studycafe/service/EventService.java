@@ -23,13 +23,23 @@ public class EventService {
     private final ModelMapper modelMapper;
 
     public Event createEvent(Study study, EventForm eventForm, Account account) {
-       modelMapper.map(eventForm, Event.class);
        Event event = Event.builder()
                .createBy(account)
                .createdDateTime(LocalDateTime.now())
                .study(study)
+               .title(eventForm.getTitle())
+               .description(eventForm.getDescription())
+               .endDateTime(eventForm.getEndDateTime())
+               .endEnrollDateTime(eventForm.getEndEnrollDateTime())
+               .startDateTime(eventForm.getStartDateTime())
+               .eventType(eventForm.getEventType())
+               .limitOfEnrollments(eventForm.getLimitOfEnrollments())
                .build();
        return eventRepository.save(event);
 
+    }
+
+    public Event getEvent(Long id) {
+        return eventRepository.findById(id).orElseThrow();
     }
 }

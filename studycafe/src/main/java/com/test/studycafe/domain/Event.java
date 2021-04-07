@@ -1,5 +1,6 @@
 package com.test.studycafe.domain;
 
+import com.test.studycafe.security.UserAccount;
 import lombok.*;
 
 import javax.persistence.*;
@@ -48,4 +49,42 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     private EventType eventType;
+
+
+    public boolean isEnrollableFor(UserAccount userAccount){
+        return this.endEnrollDateTime.isAfter(LocalDateTime.now()) && !isAlreadyEnroll(userAccount);
+    }
+
+    public boolean isDisenrollableFor(UserAccount userAccount){
+        return isAlreadyEnroll(userAccount) && this.endEnrollDateTime.isAfter(LocalDateTime.now());
+    }
+
+    public boolean isAttended(UserAccount userAccount){
+        Account account = userAccount.getAccount();
+        for(Enrollment e: this.enrollments){
+            if(e.getAccount().equals(account)){
+                if(e.isAttended()){
+                    return true;
+                }
+        }
+    }
+        return false;
+    }
+
+    public boolean isAlreadyEnroll(UserAccount userAccount){
+        Account account = userAccount.getAccount();
+        for(Enrollment e: this.enrollments){
+            if(e.getAccount().equals(account)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean canAccept(Enrollment enrollment){
+        return enrollment.isAttended();
+    }
+    public boolean canReject(Enrollment enrollment){
+        return !enrollment.isAttended();
+    }
 }

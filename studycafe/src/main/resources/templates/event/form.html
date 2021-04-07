@@ -70,7 +70,7 @@
                         <small class="form-text text-danger" th:if="${#fields.hasErrors('startDateTime')}" th:errors="*{startDateTime}">Error</small>
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="startDateTime">모임 종료 일시</label>
+                        <label for="endDateTime">모임 종료 일시</label>
                         <input id="endDateTime" type="datetime-local" th:field="*{endDateTime}" class="form-control"
                                aria-describedby="endDateTimeHelp" required>
                         <small id="endDateTimeHelp" class="form-text text-muted">
@@ -92,7 +92,7 @@
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary btn-block" type="submit"
-                            aria-describedby="submitHelp">모임 수정</button>
+                            aria-describedby="submitHelp">모임 만들기</button>
                 </div>
             </form>
         </div>
@@ -100,7 +100,7 @@
     </div>
     <script th:replace="fragments.html :: form-validation"></script>
     <script th:replace="fragments.html :: editor-script"></script>
-    <script type="application/javascript">
+<!--    <script type="application/javascript">
         $(document).ready(function () {
             var today = new Date();
             var date = today.getFullYear()+'-'+adjust(today.getMonth()+1)+'-'+adjust(today.getDate());
@@ -118,6 +118,6 @@
                 return '0' + v.toString();
             }
         }
-    </script>
+    </script>-->
 </body>
 </html>
