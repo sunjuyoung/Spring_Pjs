@@ -12,7 +12,6 @@ public interface BoardService {
     PageResultDTO<BoardDTO, Board> getList(PageRequestDTO requestDTO);
 
     default BoardDTO entityToDTO(Board board){
-
         BoardDTO dto = BoardDTO.builder()
                 .content(board.getContent())
                 .title(board.getTitle())

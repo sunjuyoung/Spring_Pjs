@@ -1,12 +1,17 @@
 package com.test.springboot02.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class PageRequestDTO {
 
 

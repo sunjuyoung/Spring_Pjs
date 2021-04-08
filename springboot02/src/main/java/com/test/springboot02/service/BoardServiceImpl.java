@@ -41,10 +41,9 @@ public class BoardServiceImpl implements BoardService{
 
         Page<Board> result= boardRepository.findAll(pageable);
 
-
         Function<Board,BoardDTO> fn = (en->entityToDTO(en));
 
+       return new PageResultDTO<>(result,fn);
 
-        return new PageResultDTO<>(result,fn);
     }
 }
