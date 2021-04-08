@@ -305,6 +305,30 @@
     </script>
 </div>
 
+<div th:fragment="date-time">
+    <script src="/node_modules/moment/min/moment-with-locales.min.js"></script>
+    <script>
+        // https://momentjs.com/
+        $(document).ready(function () {
+            moment.locale('ko');
+            $(".date").text(function (index,dateTime) {
+                return moment(dateTime,"YYYY-MM-DD hh:mm").format('LL');
+            });
+            $(".weekday").text(function (index,dateTime) {
+                return moment(dateTime,"YYYY-MM-DD hh:mm").format('dddd');
+            });
+            $(".time").text(function (index,dateTime) {
+                return moment(dateTime,"YYYY-MM-DD hh:mm").format('LL');
+            });
+        });
+    </script>
+</div>
+<script type="application/javascript" th:fragment="tooltip">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+
 <head>
     <meta charset="UTF-8">
 </head>

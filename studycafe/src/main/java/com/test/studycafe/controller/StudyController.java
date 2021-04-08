@@ -101,13 +101,13 @@ public class StudyController {
     }
 
 
-    @GetMapping("/study/{path}/events")
+/*    @GetMapping("/study/{path}/events")
     public String events(@CurrentUser Account account,@PathVariable String path ,Model model){
         model.addAttribute(account);
         model.addAttribute(studyService.getStudyByPath(path));
 
         return "study/events";
-    }
+    }*/
 
     /**
      * 스터디 가입, 탈퇴

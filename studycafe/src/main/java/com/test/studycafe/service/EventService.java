@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -41,5 +43,16 @@ public class EventService {
 
     public Event getEvent(Long id) {
         return eventRepository.findById(id).orElseThrow();
+    }
+
+    public List<Event> getEventList(Study study) {
+        List<Event> events =  eventRepository.findAllByStudy(study);
+
+        return events;
+    }
+
+    public void updateEvent(Event event, EventForm eventForm) {
+        modelMapper.map(eventForm,event);
+        //eventRepository.save(event);
     }
 }

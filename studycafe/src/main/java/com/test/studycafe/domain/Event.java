@@ -7,6 +7,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@NamedEntityGraph(name = "Event.withEnrollments",
+attributeNodes = @NamedAttributeNode("enrollments"))
+
 @Entity
 @Getter
 @Setter
@@ -18,10 +21,10 @@ public class Event {
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Study study;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Account createBy;
 
     @Column(nullable = false)
@@ -86,5 +89,13 @@ public class Event {
     }
     public boolean canReject(Enrollment enrollment){
         return !enrollment.isAttended();
+    }
+
+    public int numberOfRemainSpots(){
+        if(this.enrollments.size()>this.limitOfEnrollments){
+            return 0;
+        }else{
+            return this.limitOfEnrollments - this.enrollments.size();
+        }
     }
 }
