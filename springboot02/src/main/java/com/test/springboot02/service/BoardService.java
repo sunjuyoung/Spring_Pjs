@@ -24,4 +24,5 @@ public interface BoardService {
         return dto;
     }
 
+    BoardDTO getBoardByBno(Long bno);
 }

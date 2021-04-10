@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import javax.persistence.Lob;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,10 +19,13 @@ public class BoardDTO {
 
     private Long bno;
 
+    @NotBlank
     private String title;
 
+    @Lob @NotBlank
     private String content;
 
+    @NotBlank
     private String writer;
 
 

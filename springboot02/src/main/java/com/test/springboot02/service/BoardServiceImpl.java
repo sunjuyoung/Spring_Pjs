@@ -46,4 +46,11 @@ public class BoardServiceImpl implements BoardService{
        return new PageResultDTO<>(result,fn);
 
     }
+
+    @Override
+    public BoardDTO getBoardByBno(Long bno) {
+        Board board = boardRepository.findByBno(bno);
+        BoardDTO dto = entityToDTO(board);
+        return dto;
+    }
 }

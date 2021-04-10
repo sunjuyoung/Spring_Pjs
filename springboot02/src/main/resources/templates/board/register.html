@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index.html :: header"></head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper" th:replace="index.html :: sidebar">
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper" >
+        <div th:replace="index.html :: message"></div>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom" th:replace="index.html :: navbar"></nav>
+
+        <div class="container-fluid">
+            <h1>게시글 등록</h1>
+            <form th:action="@{/board/register}" th:method="POST">
+                <div class="form-group">
+                    <label>제목</label>
+                    <input class="form-control" type="text" name="title" id="title">
+                </div>
+                <div class="form-group">
+                    <label>내용</label>
+                    <textarea type="textarea" name="content" id="content"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>글쓴이</label>
+                    <input class="form-control" type="text" name="writer" id="writer">
+                </div>
+
+                <button class="btn-primary mt-4" type="submit">글 등록</button>
+
+            </form>
+
+        </div>
+
+    </div>
+    <!-- /#page-content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Bootstrap core JavaScript --> <!-- Menu Toggle Script -->
+<div th:replace="index.html :: bootstrap-jquery"></div>
+</body>
+
+</html>

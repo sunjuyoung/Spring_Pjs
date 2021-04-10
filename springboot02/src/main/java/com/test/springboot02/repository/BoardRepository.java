@@ -13,4 +13,7 @@ public interface BoardRepository extends JpaRepository<Board,Long>, QuerydslPred
     List<Board> findByBnoBetweenOrderByBnoDesc(Long from , Long to);
     Page<Board> findByBnoBetween(Long from, Long to, Pageable pageable);
     void deleteBoardByBnoLessThan(Long bno);
+
+
+    Board findByBno(Long bno);
 }

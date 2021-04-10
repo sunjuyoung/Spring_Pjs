@@ -38,6 +38,7 @@ class BoardServiceImplTest {
         System.out.println("NEXT"+resultDTO.isNext());
         System.out.println("TOTAL"+resultDTO.getTotalPage());
 
+
        for(BoardDTO dto:resultDTO.getDtoList()){
            System.out.println(dto);
        }
