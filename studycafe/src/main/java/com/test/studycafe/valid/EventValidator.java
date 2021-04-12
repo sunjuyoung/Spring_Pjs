@@ -32,6 +32,9 @@ public class EventValidator implements Validator {
         if(eventForm.getStartDateTime().isBefore(eventForm.getEndEnrollDateTime())){
             errors.rejectValue("startDateTime","wrong.datetime","시작모임 일을 정확히 입력하세요.");
         }
+        if(eventForm.getLimitOfEnrollments()==null ||eventForm.getLimitOfEnrollments().intValue()<=0){
+            errors.rejectValue("limitOfEnrollments","wrong.limit","모집인원은 0명이상 입력하세요.");
+        }
 
     }
 }

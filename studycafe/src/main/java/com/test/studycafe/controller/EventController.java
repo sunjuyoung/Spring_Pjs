@@ -1,6 +1,7 @@
 package com.test.studycafe.controller;
 
 import com.test.studycafe.domain.Account;
+import com.test.studycafe.domain.Enrollment;
 import com.test.studycafe.domain.Event;
 import com.test.studycafe.domain.Study;
 import com.test.studycafe.dto.EventForm;
@@ -131,4 +132,69 @@ public class EventController {
         eventService.updateEvent(event,eventForm);
         return "redirect:/study/"+URLEncoder.encode(study.getPath(),StandardCharsets.UTF_8)+"/events/"+event.getId();
     }
+
+    /**모임 삭제
+     */
+    @PostMapping("/events/{id}/delete")
+    public String deleteEvent(@CurrentUser Account account, @PathVariable String path, @PathVariable Long id){
+        Study study = studyService.getStudyToUpdateStatus(account,path);
+        eventService.deleteEvent(id);
+        return "redirect:/study/"+URLEncoder.encode(study.getPath(),StandardCharsets.UTF_8)+"/events/";
+
+    }
+
+    /**
+     *모임 가입 신청
+     */
+    @PostMapping("/events/{id}/enroll")
+    public String enrollEvent(@CurrentUser Account account, @PathVariable String path, @PathVariable Long id,
+                              Model model){
+        Study study = studyService.getStudyOnlyByPath(path);
+        Event event = eventService.getEvent(id);
+        eventService.newEnrollment(account,event);
+
+        return "redirect:/study/"+URLEncoder.encode(study.getPath(),StandardCharsets.UTF_8)+"/events/"+event.getId();
+
+    }
+
+    /**
+     *모임 가입 신청 취소
+     */
+    @PostMapping("/events/{id}/disenroll")
+    public String disEnrollEvent(@CurrentUser Account account, @PathVariable String path, @PathVariable Long id,
+                              Model model){
+        Study study = studyService.getStudyOnlyByPath(path);
+        Event event = eventService.getEvent(id);
+        eventService.cancelEnrollment(account,event);
+
+        return "redirect:/study/"+URLEncoder.encode(study.getPath(),StandardCharsets.UTF_8)+"/events/"+event.getId();
+
+    }
+
+    /**
+     *모임(CONFIRM) 대기인원 확정
+     */
+    @GetMapping("/events/{id}/enrollments/{enrollId}/accept")
+    public String acceptEnroll(@CurrentUser Account account, @PathVariable String path, @PathVariable Long id,
+                               @PathVariable Long enrollId){
+        Study study = studyService.getStudyOnlyByPath(path);
+        Event event = eventService.getEvent(id);
+        eventService.confirmEnrollment(event,enrollId);
+        return "redirect:/study/"+URLEncoder.encode(study.getPath(),StandardCharsets.UTF_8)+"/events/"+event.getId();
+    }
+
+    /**
+     * 모임(CONFIRM) 확정인원 취소
+     */
+    @GetMapping("/events/{id}/enrollments/{enrollId}/reject")
+    public String rejectEnroll(@CurrentUser Account account, @PathVariable String path, @PathVariable Long id,
+                               @PathVariable Long enrollId){
+        Study study = studyService.getStudyOnlyByPath(path);
+        Event event = eventService.getEvent(id);
+
+        eventService.confirmEnrollmentCancel(enrollId);
+        return "redirect:/study/"+URLEncoder.encode(study.getPath(),StandardCharsets.UTF_8)+"/events/"+event.getId();
+    }
+
+
 }
