@@ -6,10 +6,12 @@ import com.test.studycafe.domain.Study;
 import com.test.studycafe.domain.Tag;
 import com.test.studycafe.domain.Zone;
 import com.test.studycafe.dto.*;
+import com.test.studycafe.event.StudyCreateEvent;
 import com.test.studycafe.repository.StudyRepository;
 import com.test.studycafe.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,7 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final ModelMapper modelMapper;
     private final TagRepository tagRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
 
     public Study createNewStudy(Account account, StudyForm studyForm) {
@@ -87,6 +90,8 @@ public class StudyService {
 
     public void publish(Study study) {
         study.publish();
+        this.eventPublisher.publishEvent(new StudyCreateEvent(study));
+
     }
 
     public void close(Study study) {

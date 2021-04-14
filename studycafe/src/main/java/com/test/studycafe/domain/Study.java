@@ -25,7 +25,9 @@ import java.util.Set;
 
 @NamedEntityGraph(name="Study.withManagers",attributeNodes = {
         @NamedAttributeNode("managers")})
-
+@NamedEntityGraph(name="Study.withTagsAndZones",attributeNodes = {
+        @NamedAttributeNode("tags"),
+        @NamedAttributeNode("zones"),})
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
