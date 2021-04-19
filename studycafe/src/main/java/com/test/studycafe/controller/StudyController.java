@@ -44,6 +44,7 @@ public class StudyController {
     private final ZoneService zoneService;
     private final ObjectMapper objectMapper;
     private final TagService tagService;
+    private final StudyRepository studyRepository;
 
     @InitBinder("studyForm")
     public void StudyFormBinder(WebDataBinder webDataBinder){
@@ -227,19 +228,6 @@ public class StudyController {
         return "study/settings/tags";
     }
 
-    @GetMapping("/study/{path}/settings/zones")
-    public String settingsZones(@CurrentUser Account account,Model model,@PathVariable String path) throws JsonProcessingException {
-        Study study = studyService.getStudyByPath(path);
-        List<String> zoneList =  zoneService.zoneList();
-        studyService.checkManager(account,study);
-
-        model.addAttribute(account);
-        model.addAttribute("study",study);
-        model.addAttribute("zones",study.getZones().stream().map(a->a.toString()).collect(Collectors.toList()));
-        model.addAttribute("whitelist",objectMapper.writeValueAsString(zoneList));
-
-        return "study/settings/zone";
-    }
 
     @PostMapping("/study/{path}/settings/tags/add")
     @ResponseBody
@@ -266,11 +254,27 @@ public class StudyController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    @GetMapping("/study/{path}/settings/zones")
+    public String settingsZones(@CurrentUser Account account,Model model,@PathVariable String path) throws JsonProcessingException {
+        Study study = studyService.getStudyByPath(path);
+        List<String> zoneList =  zoneService.zoneList();
+        studyService.checkManager(account,study);
+
+        model.addAttribute(account);
+        model.addAttribute("study",study);
+        model.addAttribute("zones",study.getZones().stream().map(a->a.toString()).collect(Collectors.toList()));
+        model.addAttribute("whitelist",objectMapper.writeValueAsString(zoneList));
+
+        return "study/settings/zone";
+    }
+
     @PostMapping("/study/{path}/settings/zones/add")
     @ResponseBody
     public ResponseEntity<String> addZone(@CurrentUser Account account, @RequestBody ZoneForm zoneForm,
                                           @PathVariable String path){
-        Study study = studyService.getStudyByPath(path);
+
+        Study study = studyRepository.findStudyWithZonesByPath(path);
         studyService.updateZone(study,zoneForm);
         return new ResponseEntity<>(HttpStatus.OK);
     }

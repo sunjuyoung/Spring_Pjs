@@ -9,6 +9,7 @@ import com.test.studycafe.dto.*;
 import com.test.studycafe.event.StudyCreateEvent;
 import com.test.studycafe.repository.StudyRepository;
 import com.test.studycafe.repository.TagRepository;
+import com.test.studycafe.repository.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,6 +31,7 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final ModelMapper modelMapper;
     private final TagRepository tagRepository;
+    private final ZoneRepository zoneRepository;
     private final ApplicationEventPublisher eventPublisher;
 
 
@@ -79,8 +81,8 @@ public class StudyService {
 
 
     public void updateZone(Study study, ZoneForm zoneForm) {
-        study.getZones().add(Zone.builder().province(zoneForm.getProvince())
-        .localName(zoneForm.getLocalname()).city(zoneForm.getCity()).build());
+        Zone zone=  zoneRepository.findByCityAndProvince(zoneForm.getCity(),zoneForm.getProvince());
+        study.getZones().add(zone);
         //studyRepository.save(study);
     }
 

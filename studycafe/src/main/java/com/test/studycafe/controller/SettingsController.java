@@ -196,6 +196,13 @@ public class SettingsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * 지역
+     * @param account
+     * @param model
+     * @return
+     * @throws JsonProcessingException
+     */
     @GetMapping("/settings/zones")
     public String zoneForm(@CurrentUser Account account,Model model) throws JsonProcessingException {
        Set<Zone> zones =  accountService.getZone(account);
@@ -211,9 +218,7 @@ public class SettingsController {
     @ResponseBody
     public ResponseEntity<String> addZone(@CurrentUser Account account,@RequestBody ZoneForm zones){
 
-
         accountService.addZone(account,zones);
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
