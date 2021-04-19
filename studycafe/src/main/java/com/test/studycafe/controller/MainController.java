@@ -2,6 +2,7 @@ package com.test.studycafe.controller;
 
 import com.test.studycafe.domain.Account;
 import com.test.studycafe.domain.Study;
+import com.test.studycafe.repository.NotificationRepository;
 import com.test.studycafe.repository.StudyRepository;
 import com.test.studycafe.security.CurrentUser;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 public class MainController {
 
     private final StudyRepository studyRepository;
+    private final NotificationRepository notificationRepository;
 
     @GetMapping("/")
     public String home(@CurrentUser Account account, Model model){
@@ -23,6 +25,8 @@ public class MainController {
                 model.addAttribute(account);
                 return "index";
             }
+
+
             return "index";
     }
 

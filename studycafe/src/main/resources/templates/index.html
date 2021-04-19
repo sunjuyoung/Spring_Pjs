@@ -1,11 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
-<!-- head -->
-<th:block th:replace="fragments.html :: head"></th:block>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments.html :: head"></head>
 <body class="bg-light">
-<th:block th:replace="fragments.html :: main-nav"></th:block>
+<div th:replace="fragments.html :: main-nav"></div>
 <div class="alert alert-warning" role="alert" th:if="${account != null && !account.emailVerified}">
     스터디올레 가입을 완료하려면 <a th:href="@{/check-email}" class="alert-link">계정 인증메일을 확인</a>하세요
 </div>
@@ -15,7 +12,9 @@
 
     </div>
     <div class="row justify-content-center">
-
+        <p>
+            <a th:href="@{/sign-up}" class="btn btn-primary my-2">회원 가입</a>
+        </p>
     </div>
     <!--footer -->
     <th:block th:replace="fragments.html :: footer"></th:block>
