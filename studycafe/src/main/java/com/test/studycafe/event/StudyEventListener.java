@@ -36,6 +36,7 @@ public class StudyEventListener {
     public void handleStudyCreateEvent(StudyCreateEvent studyCreateEvent){
         Study study = studyRepository.findStudyWithTagAndZonesById(studyCreateEvent.getStudy().getId());
 
+        //account에서 study와 맞는 tag,zone 조회 (querydsl)
         Iterable<Account> accounts =  accountRepository.findAll(AccountPredicates.findByTagsAndZones(study.getTags(),study.getZones()));
 
        accounts.forEach(account -> {
@@ -48,15 +49,16 @@ public class StudyEventListener {
                context.setVariable("message","새로운 스터디");
                context.setVariable("host",appProperties.getHost());
 
-               String message = templateEngine.process("mail/simple-link",context);
+               String message = templateEngine.process("simple-link",context);
 
                EmailMessage emailMessage = EmailMessage.builder()
-                       .subject("스터디"+study.getTitle())
-                       .to(account.getEmail())
+                       .subject("스터디"+study.getTitle()+" 스터디가 생겼습니다.")
+                       .to("syseoz@naver.com")
                        .message(message)
                        .build();
                emailService.sendEmail(emailMessage);
            }
+           //웹으로 전송
            if(account.isStudyCreatedByWeb()){
                //notification
                Notification notification = new Notification();
@@ -68,11 +70,8 @@ public class StudyEventListener {
                notification.setAccount(account);
                notification.setNotificationType(NotificationType.STUDY_CREATED);
                notificationRepository.save(notification);
-
            }
        });
-
         log.info(study.getTitle() +" is created");
-        throw new RuntimeException();
     }
 }

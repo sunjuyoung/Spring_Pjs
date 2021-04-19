@@ -38,7 +38,6 @@ public class StudyService {
     public Study createNewStudy(Account account, StudyForm studyForm) {
       Study newStudy  =  studyRepository.save(modelMapper.map(studyForm,Study.class));
       newStudy.addManager(account);
-
       return newStudy;
     }
 
@@ -93,7 +92,6 @@ public class StudyService {
     public void publish(Study study) {
         study.publish();
         this.eventPublisher.publishEvent(new StudyCreateEvent(study));
-
     }
 
     public void close(Study study) {
