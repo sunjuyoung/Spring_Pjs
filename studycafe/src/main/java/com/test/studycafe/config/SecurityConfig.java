@@ -29,7 +29,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .mvcMatchers("/","/login","/sign-up","/checked-email","/check-email-token").permitAll()
+                .mvcMatchers("/","/login","/sign-up","/checked-email","/check-email-token","/search/study").permitAll()
                 .mvcMatchers(HttpMethod.GET,"/profile/*").permitAll()
                 .anyRequest().authenticated();
 

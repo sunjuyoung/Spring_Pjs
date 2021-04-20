@@ -1,4 +1,4 @@
-package com.test.studycafe.service;
+package com.test.studycafe.repository;
 
 import com.test.studycafe.domain.Study;
 import org.springframework.transaction.annotation.Transactional;
@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional(readOnly = true)
-public interface StudyServiceExtension {
+public interface StudyRepositoryExtension {
 
     List<Study> findByKeyword(String keyword);
 }

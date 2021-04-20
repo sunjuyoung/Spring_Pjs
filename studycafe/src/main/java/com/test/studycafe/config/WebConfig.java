@@ -20,14 +20,14 @@ public class WebConfig  implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        List<String> staticResourcesPath=  Arrays.stream(StaticResourceLocation.values()).flatMap(staticResourceLocation -> staticResourceLocation.getPatterns()).collect(Collectors.toList());
+        List<String> staticResourcesPath = Arrays.stream(StaticResourceLocation.values()).flatMap(staticResourceLocation -> staticResourceLocation.getPatterns()).collect(Collectors.toList());
 
         //StaticResourceLocation.values();// enum CSS("/css/**"), FAVICON("/**/favicon.ico") JAVA_SCRIPT("/js/**"), IMAGES("/images/**"),WEB_JARS("/webjars/**"),
         //PathRequest.toStaticResources().atCommonLocations();
 
         //핸들러 인터셉터 적용 범위 static리소스 요청에는 적용하지 않기
-        registry.addInterceptor(notificationInterceptor)
-        .excludePathPatterns(staticResourcesPath);
+        registry.addInterceptor(notificationInterceptor);
+        //.excludePathPatterns(staticResourcesPath);
 
     }
 }
