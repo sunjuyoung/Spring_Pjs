@@ -11,6 +11,7 @@ import com.test.studycafe.repository.StudyRepository;
 import com.test.studycafe.repository.TagRepository;
 import com.test.studycafe.repository.ZoneRepository;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.AccessDeniedException;
@@ -168,4 +169,5 @@ public class StudyService {
         study.getMembers().remove(account);
         study.removeMember();
     }
+
 }

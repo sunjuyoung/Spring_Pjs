@@ -28,6 +28,20 @@
             border: 0;
         }
 
+        #study-logo {
+            height: 200px;
+            width: 100%;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+        }
+
+        #study-logo img {
+            height: auto;
+            width: 100%;
+            overflow: hidden;
+        }
+
         .tagify--outside .tagify__input{
             order: -1;
             flex: 100%;
@@ -67,7 +81,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li>
-                <form class="form-inline"  method="get" action="@{/search/study}">
+                <form class="form-inline"  method="get" th:action="@{/search/study}">
                     <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="스터디 검색">
                 </form>
             </li>
@@ -105,7 +119,7 @@
                     <span sec:authentication="name">Username</span>
                 </h6>
                 <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>
-                <a class="dropdown-item">스터디</a>
+                <a class="dropdown-item" th:href="@{'/search/study?keyword='}">스터디</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
                 <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
@@ -134,7 +148,7 @@
 </div>
 
 <div th:fragment="study-banner" th:if="${study.useBanner}" class="row" id="study-logo">
-    <img th:src="${study.image}" />
+    <img th:src="${study.image}"/>
 </div>
 
 
