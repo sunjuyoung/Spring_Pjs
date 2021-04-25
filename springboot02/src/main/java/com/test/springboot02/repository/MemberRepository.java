@@ -10,4 +10,6 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     @EntityGraph(attributePaths={"roleSet"},type= EntityGraph.EntityGraphType.LOAD)
     Optional<Member> findByNicknameAndFromSocial(String nickname, boolean fromSocial);
+
+    Member findByNickname(String nickname);
 }
