@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group">
                     <label>글쓴이</label>
-                    <input class="form-control" type="text" name="writer" id="writer">
+                    <input class="form-control" type="text" name="writer" id="writer" th:value="${member.nickname}">
                 </div>
 
                 <button class="btn-primary mt-4" type="submit">글 등록</button>

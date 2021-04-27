@@ -3,6 +3,7 @@ package com.test.springboot02.controller;
 import com.test.springboot02.dto.BoardDTO;
 import com.test.springboot02.dto.PageRequestDTO;
 import com.test.springboot02.dto.PageResultDTO;
+import com.test.springboot02.entity.Member;
 import com.test.springboot02.security.AuthMember;
 import com.test.springboot02.security.CurrentUser;
 import com.test.springboot02.service.BoardService;
@@ -28,26 +29,24 @@ public class BoardController {
 
 
     @GetMapping("/list")
-    public String list(@CurrentUser AuthMember authMember,Model model, PageRequestDTO pageRequestDTO){
-
-        log.info(authMember);
+    public String list(@CurrentUser Member member, Model model, PageRequestDTO pageRequestDTO){
        PageResultDTO pageResultDTO= boardService.getList(pageRequestDTO);
         model.addAttribute("result",pageResultDTO);
+        model.addAttribute("auth",member);
         return "board/list";
     }
 
 
     @GetMapping("/register")
-    public String registerForm(PageRequestDTO pageRequestDTO){
-
+    public String registerForm(@CurrentUser Member member,Model model,PageRequestDTO pageRequestDTO){
+        model.addAttribute("auth",member);
         return "board/register";
     }
 
     @PostMapping("/register")
-    public String registerBoard(@Valid BoardDTO boardDTO, Errors errors, PageRequestDTO pageRequestDTO,
+    public String registerBoard(@CurrentUser AuthMember authMember,@Valid BoardDTO boardDTO, Errors errors, PageRequestDTO pageRequestDTO,
                                 RedirectAttributes redirectAttributes,Model model){
         if(errors.hasErrors()){
-
             model.addAttribute("message",errors.toString());
             return "board/register";
         }

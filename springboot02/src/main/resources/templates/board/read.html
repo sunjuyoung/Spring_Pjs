@@ -17,15 +17,15 @@
         <div class="container-fluid">
                 <div class="form-group">
                     <label>제목</label>
-                    <input class="form-control" type="text" th:text="${boardDTO.title}">
+                    <input class="form-control" type="text" th:text="${boardDTO.title}" readonly>
                 </div>
                 <div class="form-group">
                     <label>내용</label>
-                    <textarea type="textarea" name="content" id="content" th:text="${boardDTO.content}"></textarea>
+                    <textarea type="textarea" name="content" id="content" th:text="${boardDTO.content}" readonly></textarea>
                 </div>
                 <div class="form-group">
                     <label>글쓴이</label>
-                    <input class="form-control" type="text" name="writer" id="writer" th:text="${boardDTO.writer}">
+                    <input class="form-control" type="text" name="writer" id="writer" th:text="${boardDTO.writer}" readonly>
                 </div>
             <div>
                 <a href="">수정</a>

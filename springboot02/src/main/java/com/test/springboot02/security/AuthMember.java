@@ -17,8 +17,9 @@ public class AuthMember extends User {
 
     private Member member;
 
-    public AuthMember(Member member,Collection<? extends GrantedAuthority> authorities) {
-        super(member.getNickname(), member.getPassword(),authorities);
+    public AuthMember(Member member) {
+        super(member.getNickname(), member.getPassword(),member.getRoleSet().stream().map(role->
+                new SimpleGrantedAuthority("ROLE_"+role.name())).collect(Collectors.toSet()));
         this.member = member;
     }
 }
