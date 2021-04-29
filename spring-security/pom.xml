@@ -140,7 +140,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>5.0.6.RELEASE</version>
+			<version>5.0.17.RELEASE</version>
 		</dependency>
 		<!-- jsp에서 스프링 스큐리티 관련된 태그 라이브러리를 활용할 수 있도록 추가 -->
 		<dependency>
