@@ -9,6 +9,10 @@ public interface BoardService {
 
     Long register(BoardDTO dto);
 
+    Long modify(BoardDTO dto);
+
+    void remove(Long bno);
+
     PageResultDTO<BoardDTO, Board> getList(PageRequestDTO requestDTO);
 
     default BoardDTO entityToDTO(Board board){

@@ -16,22 +16,29 @@
 
         <div class="container-fluid">
             <h1>게시글 등록</h1>
-            <form th:action="@{/board/register}" th:method="POST">
+            <form th:action="@{/board/modify}" th:method="POST">
+                <div class="form-group">
+                    <label>번호</label>
+                    <input class="form-control" type="text" name="bno" id="bno" th:value="${board.bno}" readonly>
+                </div>
                 <div class="form-group">
                     <label>제목</label>
-                    <input class="form-control" type="text" name="title" id="title">
+                    <input class="form-control" type="text" name="title" id="title" th:value="${board.title}">
                 </div>
                 <div class="form-group">
                     <label>내용</label>
-                    <textarea type="textarea" name="content" id="content"></textarea>
+                    <textarea type="textarea" name="content" id="content">[[${board.content}]]</textarea>
                 </div>
                 <div class="form-group">
                     <label>글쓴이</label>
-                    <input class="form-control" type="text" name="writer" id="writer" th:value="${auth.nickname}" readonly>
+                    <input class="form-control" type="text" name="writer" id="writer" th:value="${board.writer}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>regDate</label>
+                    <input class="form-control" type="text"  th:value="${#temporals.format(board.regDate,'yyyy/MM/dd HH:mm')}" readonly>
                 </div>
 
-                <button class="btn-primary mt-4" type="button">글 등록</button>
-
+                <button class="btn-primary mt-4" type="submit">글 수정</button>
 
             </form>
 

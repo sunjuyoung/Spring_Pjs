@@ -49,4 +49,30 @@ class BoardServiceImplTest {
 
     }
 
+    @Test
+    public void testSearch(){
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .size(10)
+                .page(1)
+                .type("tc")
+                .keyword("1")
+                .build();
+
+        PageResultDTO<BoardDTO,Board> resultDTO =  boardService.getList(pageRequestDTO);
+        System.out.println("PREV:"+resultDTO.isPrev());
+        System.out.println("NEXT"+resultDTO.isNext());
+        System.out.println("TOTAL"+resultDTO.getTotalPage());
+
+
+        for(BoardDTO dto:resultDTO.getDtoList()){
+            System.out.println(dto);
+        }
+        System.out.println("========================");
+        resultDTO.getPageList().forEach(i->{
+            System.out.println("page:"+i);
+        });
+
+
+    }
+
 }

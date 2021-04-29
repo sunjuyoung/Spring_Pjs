@@ -1,9 +1,12 @@
 package com.test.springboot02.service;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.test.springboot02.dto.BoardDTO;
 import com.test.springboot02.dto.PageRequestDTO;
 import com.test.springboot02.dto.PageResultDTO;
 import com.test.springboot02.entity.Board;
+import com.test.springboot02.entity.QBoard;
 import com.test.springboot02.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,7 +17,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.function.Function;
+
+import static org.springframework.data.jpa.repository.support.QueryHints.from;
 
 
 @Service
@@ -33,18 +39,67 @@ public class BoardServiceImpl implements BoardService{
         return board.getBno();
     }
 
+    @Transactional
+    @Override
+    public Long modify(BoardDTO dto) {
+        Board result = boardRepository.findByBno(dto.getBno());
+        result.modifyBoard(dto);
+        return result.getBno();
+    }
+
+
+    @Override
+    public void remove(Long bno) {
+        boardRepository.deleteById(bno);
+    }
+
     @Override
     public PageResultDTO<BoardDTO,Board> getList(PageRequestDTO requestDTO) {
 
         Pageable pageable = requestDTO.getPageable(Sort.by("bno").descending());
 
-        Page<Board> result= boardRepository.findAll(pageable);
+        BooleanBuilder booleanBuilder = getSearch(requestDTO);
+
+       // Page<Board> result= boardRepository.findAll(pageable);
+        Page<Board> result = boardRepository.findAll(booleanBuilder,pageable);
 
         Function<Board,BoardDTO> fn = (en->entityToDTO(en));
 
        return new PageResultDTO<>(result,fn);
 
     }
+
+    private BooleanBuilder getSearch(PageRequestDTO pageRequestDTO){
+        String type = pageRequestDTO.getType();
+        String keyword = pageRequestDTO.getKeyword();
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QBoard qBoard = QBoard.board;
+        BooleanExpression expression = qBoard.bno.gt(0);
+
+        booleanBuilder.and(expression);
+
+        //검색 조건이 없는 경우
+        if(type == null || type.trim().length() == 0){
+            return booleanBuilder;
+        }
+
+        BooleanBuilder conditionBuilder = new BooleanBuilder();
+
+        if(type.contains("t")){
+            conditionBuilder.or(qBoard.title.containsIgnoreCase(keyword));
+        }
+        if(type.contains("c")){
+            conditionBuilder.or(qBoard.content.containsIgnoreCase(keyword));
+        }
+        if(type.contains("w")){
+            conditionBuilder.or(qBoard.writer.containsIgnoreCase(keyword));
+        }
+        booleanBuilder.and(conditionBuilder);
+
+        return booleanBuilder;
+    }
+
 
     @Override
     public BoardDTO getBoardByBno(Long bno) {

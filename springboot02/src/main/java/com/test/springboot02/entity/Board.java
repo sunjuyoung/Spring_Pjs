@@ -1,5 +1,6 @@
 package com.test.springboot02.entity;
 
+import com.test.springboot02.dto.BoardDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,4 +25,9 @@ public class Board extends BaseEntity{
 
     @Column(length = 50,nullable = false)
     private String writer;
+
+    public void modifyBoard(BoardDTO dto){
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
+    }
 }

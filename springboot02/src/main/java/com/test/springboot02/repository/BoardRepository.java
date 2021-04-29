@@ -1,5 +1,6 @@
 package com.test.springboot02.repository;
 
+import com.test.springboot02.dto.BoardDTO;
 import com.test.springboot02.entity.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,4 +17,7 @@ public interface BoardRepository extends JpaRepository<Board,Long>, QuerydslPred
 
 
     Board findByBno(Long bno);
+
+
+    void deleteByBno(Long bno);
 }
