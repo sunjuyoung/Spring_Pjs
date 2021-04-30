@@ -53,8 +53,8 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
-    @GetMapping("/read/{bno}")
-    public String readForm(@CurrentUser Member member,PageRequestDTO pageRequestDTO, @PathVariable Long bno,Model model){
+    @GetMapping("/read")
+    public String readForm(@CurrentUser Member member,PageRequestDTO pageRequestDTO,Long bno,Model model){
         BoardDTO dto = boardService.getBoardByBno(bno);
         model.addAttribute("auth",member);
         model.addAttribute(dto);
@@ -62,8 +62,8 @@ public class BoardController {
         return "board/read";
     }
 
-    @GetMapping("/modify/{bno}")
-    public String modifyForm(@CurrentUser Member member,PageRequestDTO pageRequestDTO, @PathVariable Long bno,Model model){
+    @GetMapping("/modify")
+    public String modifyForm(@CurrentUser Member member,PageRequestDTO pageRequestDTO, Long bno,Model model){
         BoardDTO dto = boardService.getBoardByBno(bno);
         model.addAttribute("board",dto);
         model.addAttribute("auth",member);
@@ -72,18 +72,26 @@ public class BoardController {
     }
 
     @PostMapping("/modify")
-    public String modifySubmit(@CurrentUser Member member,BoardDTO boardDTO, PageResultDTO pageResultDTO,Model model,RedirectAttributes redirectAttributes){
+    public String modifySubmit(@CurrentUser Member member,BoardDTO boardDTO, @ModelAttribute PageRequestDTO pageRequestDTO
+            ,RedirectAttributes redirectAttributes){
         Long bno =  boardService.modify(boardDTO);
-        model.addAttribute("auth",member);
 
+        System.out.println("==");
+        System.out.println(bno);
         redirectAttributes.addFlashAttribute("message","수정완료");
-        return "redirect:/board/read/"+bno;
+        redirectAttributes.addAttribute("bno",bno);
+        redirectAttributes.addAttribute("type",pageRequestDTO.getType());
+        redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
+        redirectAttributes.addAttribute("keyword",pageRequestDTO.getKeyword());
+        return "redirect:/board/read";
     }
 
     @PostMapping("/remove")
-    public String removeSubmit(@CurrentUser Member member,long bno,PageResultDTO pageResultDTO,RedirectAttributes redirectAttributes){
+    public String removeSubmit(@CurrentUser Member member,long bno,PageRequestDTO pageRequestDTO,RedirectAttributes redirectAttributes){
         boardService.remove(bno);
-        redirectAttributes.addFlashAttribute("page",pageResultDTO.getPage());
+        redirectAttributes.addAttribute("type",pageRequestDTO.getType());
+        redirectAttributes.addAttribute("page",pageRequestDTO.getPage());
+        redirectAttributes.addAttribute("keyword",pageRequestDTO.getKeyword());
         return "redirect:/board/list";
     }
 }

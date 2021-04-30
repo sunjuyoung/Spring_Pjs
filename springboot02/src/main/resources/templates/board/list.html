@@ -55,7 +55,7 @@
                 <tr th:each="list : ${result.dtoList}">
                     <th scope="row">[[${list.bno}]]</th></a>
                     <td><a th:href="@{/board/read/}">[[${list.writer}]]</a></td>
-                    <td><a th:href="@{'/board/read/'+${list.bno}}">[[${list.title}]]</a></td>
+                    <td><a th:href="@{/board/read/(bno=${list.bno},page=${result.page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">[[${list.title}]]</a></td>
                     <td>[[${#temporals.format(list.regDate,'yyyy/MM/dd')}]]</td>
                 </tr>
                 </tbody>
@@ -65,22 +65,22 @@
             <div class="justify-content-center align-items-center py-2 col-10">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item"><a class="page-link" th:href="@{/board/list/(page=${result.start -1})}" th:if="${result.prev}">
+                        <li class="page-item"><a class="page-link" th:href="@{/board/list/(page=${result.start -1},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}" th:if="${result.prev}">
                             <i class="fas fa-angle-double-left"></i></a>
                         </li>
-                        <li class="page-item"><a class="page-link" th:href="@{/board/list/(page=${result.page -1})}" th:if="${result.page != 1}">
+                        <li class="page-item"><a class="page-link" th:href="@{/board/list/(page=${result.page -1},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}" th:if="${result.page != 1}">
                             <i class="fas fa-angle-left"></i></a>
                         </li>
 
                         <li th:class="'page-item '+${result.page == page? 'active':''}" th:each="page : ${result.pageList}">
-                            <a class="page-link" th:href="@{/board/list/(page=${page})}">[[${page}]]</a>
+                            <a class="page-link" th:href="@{/board/list/(page=${page},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}">[[${page}]]</a>
                         </li>
 
 
-                        <li class="page-item"><a class="page-link" th:href="@{/board/list/(page=${result.page +1})}" th:if="${result.next}">
+                        <li class="page-item"><a class="page-link" th:href="@{/board/list/(page=${result.page +1},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}" th:if="${result.next}">
                             <i class="fas fa-angle-right"></i></a>
                         </li>
-                        <li class="page-item"><a class="page-link" th:href="@{/board/list/(page=${result.end+1})}" th:if="${result.next}">
+                        <li class="page-item"><a class="page-link" th:href="@{/board/list/(page=${result.end+1},type=${pageRequestDTO.type},keyword=${pageRequestDTO.keyword})}" th:if="${result.next}">
                             <i class="fas fa-angle-double-right"></i></a>
                         </li>
                     </ul>

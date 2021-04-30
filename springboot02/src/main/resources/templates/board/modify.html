@@ -38,6 +38,9 @@
                     <input class="form-control" type="text"  th:value="${#temporals.format(board.regDate,'yyyy/MM/dd HH:mm')}" readonly>
                 </div>
 
+                <input type="hidden" name="page" id="page" th:value="${pageRequestDTO.page}">
+                <input type="hidden" name="type" id="type" th:value="${pageRequestDTO.type}">
+                <input type="hidden" name="keyword" id="keyword" th:value="${pageRequestDTO.keyword}">
                 <button class="btn-primary mt-4" type="submit">글 수정</button>
 
             </form>
