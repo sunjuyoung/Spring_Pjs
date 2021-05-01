@@ -6,8 +6,11 @@ import com.test.springboot02.dto.BoardDTO;
 import com.test.springboot02.dto.PageRequestDTO;
 import com.test.springboot02.dto.PageResultDTO;
 import com.test.springboot02.entity.Board;
+
+import com.test.springboot02.entity.Member;
 import com.test.springboot02.entity.QBoard;
 import com.test.springboot02.repository.BoardRepository;
+import com.test.springboot02.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -30,11 +33,14 @@ public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
     private final ModelMapper modelMapper;
+    private final MemberRepository memberRepository;
+
 
 
     @Override
-    public Long register(BoardDTO dto) {
+    public Long register(BoardDTO dto,Member member) {
         Board board = modelMapper.map(dto,Board.class);
+        board.setWriter(member);
         boardRepository.save(board);
         return board.getBno();
     }
@@ -74,7 +80,7 @@ public class BoardServiceImpl implements BoardService{
         String keyword = pageRequestDTO.getKeyword();
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        QBoard qBoard = QBoard.board;
+       QBoard qBoard = QBoard.board;
         BooleanExpression expression = qBoard.bno.gt(0);
 
         booleanBuilder.and(expression);
@@ -93,7 +99,7 @@ public class BoardServiceImpl implements BoardService{
             conditionBuilder.or(qBoard.content.containsIgnoreCase(keyword));
         }
         if(type.contains("w")){
-            conditionBuilder.or(qBoard.writer.containsIgnoreCase(keyword));
+            conditionBuilder.or(qBoard.writer.nickname.containsIgnoreCase(keyword));
         }
         booleanBuilder.and(conditionBuilder);
 

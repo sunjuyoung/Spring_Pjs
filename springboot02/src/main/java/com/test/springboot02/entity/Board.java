@@ -4,6 +4,7 @@ import com.test.springboot02.dto.BoardDTO;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Builder
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "writer")
 public class Board extends BaseEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +24,16 @@ public class Board extends BaseEntity{
     @Column(length = 1500, nullable = false)
     private String content;
 
-    @Column(length = 50,nullable = false)
-    private String writer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member writer;
+
 
     public void modifyBoard(BoardDTO dto){
         this.title = dto.getTitle();
         this.content = dto.getContent();
     }
+
+
+
+
 }

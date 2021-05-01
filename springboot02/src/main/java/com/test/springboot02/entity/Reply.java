@@ -2,9 +2,7 @@ package com.test.springboot02.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Builder
@@ -12,7 +10,7 @@ import javax.persistence.Id;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "board")
 public class Reply extends BaseEntity{
 
     @Id @GeneratedValue
@@ -21,4 +19,7 @@ public class Reply extends BaseEntity{
     private String text;
 
     private String replyer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Board board;
 }

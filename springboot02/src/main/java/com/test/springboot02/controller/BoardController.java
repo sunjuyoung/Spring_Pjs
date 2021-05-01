@@ -48,7 +48,7 @@ public class BoardController {
             model.addAttribute("message",errors.toString());
             return "board/register";
         }
-        boardService.register(boardDTO);
+        boardService.register(boardDTO,member);
         redirectAttributes.addFlashAttribute("message","글 등록 완료");
         return "redirect:/board/list";
     }

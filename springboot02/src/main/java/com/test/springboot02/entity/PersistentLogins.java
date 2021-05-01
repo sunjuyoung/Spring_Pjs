@@ -1,4 +1,4 @@
-package com.test.springboot02.dto;
+package com.test.springboot02.entity;
 
 import lombok.Getter;
 import lombok.Setter;

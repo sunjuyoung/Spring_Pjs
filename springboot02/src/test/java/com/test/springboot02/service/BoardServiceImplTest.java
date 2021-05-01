@@ -19,7 +19,7 @@ class BoardServiceImplTest {
     @Autowired
     private BoardRepository boardRepository;
 
-    @Test
+/*    @Test
     public void test(){
         BoardDTO dto = new BoardDTO();
         dto.setTitle("sample title");
@@ -27,7 +27,7 @@ class BoardServiceImplTest {
         dto.setWriter("user0");
 
         System.out.println(boardService.register(dto));
-    }
+    }*/
 
     @Test
     public void testList(){
