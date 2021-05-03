@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface BoardRepository extends JpaRepository<Board,Long>, QuerydslPredicateExecutor<Board> {
+public interface BoardRepository extends JpaRepository<Board,Long>, QuerydslPredicateExecutor<Board>,BoardSearchRepository {
 
     List<Board> findByBnoBetweenOrderByBnoDesc(Long from , Long to);
     Page<Board> findByBnoBetween(Long from, Long to, Pageable pageable);

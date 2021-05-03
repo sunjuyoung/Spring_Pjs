@@ -32,6 +32,13 @@ class BoardRepositoryTest {
     @Autowired MemberRepository memberRepository;
 
 
+    @Test
+    public void boardSearch1(){
+
+        boardRepository.search1();
+    }
+
+
     @DisplayName("JPQL 조회화면")
     @Test
     public void testRead5(){

@@ -29,5 +29,9 @@ public class BoardDTO {
     private String writer;
 
 
+
+    private int replyCount;
+
+
     private LocalDateTime regDate,modDate;
 }
