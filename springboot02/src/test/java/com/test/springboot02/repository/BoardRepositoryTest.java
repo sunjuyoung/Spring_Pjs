@@ -33,6 +33,13 @@ class BoardRepositoryTest {
 
 
     @Test
+    public void boardSearch2(){
+
+        Pageable pageable = PageRequest.of(0,10,Sort.by("bno").descending());
+
+        boardRepository.searchPage("t","11",pageable);
+    }
+    @Test
     public void boardSearch1(){
 
         boardRepository.search1();
