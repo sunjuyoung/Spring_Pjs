@@ -25,6 +25,7 @@ public class Board extends BaseEntity{
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nickname")
     private Member writer;
 
 

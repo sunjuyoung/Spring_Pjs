@@ -12,5 +12,6 @@ public interface BoardSearchRepository  {
     Board search1();
 
     Page<Object[]> searchPage(String type, String keyword, Pageable pageable);
+    Page<Object[]> searchPage1(String type, String keyword, Pageable pageable);
 
 }

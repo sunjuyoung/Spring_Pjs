@@ -21,6 +21,7 @@ public class Member extends BaseEntity{
     private String email;
 
     @NotBlank
+    @Column(name = "nickname")
     private String nickname;
 
     @NotBlank
