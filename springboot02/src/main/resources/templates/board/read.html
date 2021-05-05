@@ -40,6 +40,44 @@
             </div>
 
         </div>
+        <hr>
+
+        <div class="card mb-1">
+            <div class="card-header bg-light">
+                <i class="fa fa-comment fa"></i> REPLY
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="form-inline mb-1">
+                            <label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
+                            <input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId" th:value="${boardDTO.writer}" readonly>
+                            <!--<label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
+                            <input type="password" class="form-control ml-2" placeholder="Enter password" id="replyPassword">-->
+                        </div>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <button type="button" class="btn btn-dark mt-3" onClick="javascript:addReply();">post reply</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="card mb-2 mx-2 replies">
+           <!-- <div class="card-header bg-light">
+                <i class="fa fa-comment fa"></i> REPLY
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      <span class="list-group">내용</span>
+                        <button type="button" class="btn btn-dark btn-sm mt-3" onClick="javascript:addReply();">답글</button>
+                    </li>
+                </ul>
+            </div>-->
+        </div>
+
+
 
     </div>
     <!-- /#page-content-wrapper -->
@@ -64,9 +102,36 @@
     </script>
 
     <script th:inline="javascript">
+        $(document).ready(function () {
+            var bno = [[${boardDTO.bno}]];
+            $(function () {
+                $.ajax({
+                    url:'/reply/list/'+bno,
+                    type:'get',
+                    success:function (data) {
+                        var str ="";
+                       var listGroup = $(".replies");
 
+                        $.each(data,function (idx,reply) {
+                            console.log(reply);
+                        str+='  <div class="card-header bg-light">'
+                        str+='     <i class="fa fa-comment fa"></i><span class="ml-2">'+reply.replyer+'</span>'
+                        str+='     </div>'
+                        str+='     <div class="card-body">'
+                        str+='     <ul class="list-group list-group-flush">'
+                        str+='     <li class="list-group-item">'
+                        str+='     <span class="list-group">'+reply.text+'</span>'
+                        str+='     <button type="button" class="btn btn-dark btn-sm mt-3" onClick="javascript:addReply();">답글</button>'
+                        str+='     </li>'
+                        str+='     </ul>'
+                        str+='     </div>'
+                        });
+                    listGroup.html(str);
+                    }
+                })
+            });
+        });
         $(".removeBtn").on("click",function () {
-
             if(!confirm("삭제 하시겠습니까?")){
                 return;
             }
@@ -74,10 +139,6 @@
 
             actionForm.submit();
         });
-
-
-
-
     </script>
 </div>
 </body>

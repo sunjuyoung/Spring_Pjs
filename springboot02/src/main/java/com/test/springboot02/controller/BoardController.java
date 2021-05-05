@@ -55,7 +55,7 @@ public class BoardController {
 
     @GetMapping("/read")
     public String readForm(@CurrentUser Member member,PageRequestDTO pageRequestDTO,Long bno,Model model){
-        BoardDTO dto = boardService.getBoardByBno(bno);
+        BoardDTO dto = boardService.getBoardByBno(bno,member);
         model.addAttribute("auth",member);
         model.addAttribute(dto);
 
@@ -64,7 +64,7 @@ public class BoardController {
 
     @GetMapping("/modify")
     public String modifyForm(@CurrentUser Member member,PageRequestDTO pageRequestDTO, Long bno,Model model){
-        BoardDTO dto = boardService.getBoardByBno(bno);
+        BoardDTO dto = boardService.getBoardByBno(bno,member);
         model.addAttribute("board",dto);
         model.addAttribute("auth",member);
 

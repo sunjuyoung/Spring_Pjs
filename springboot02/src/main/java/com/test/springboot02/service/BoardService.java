@@ -14,21 +14,34 @@ public interface BoardService {
 
     void remove(Long bno);
 
-    PageResultDTO<BoardDTO, Board> getList(PageRequestDTO requestDTO);
+    PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO requestDTO);
 
-    default BoardDTO entityToDTO(Board board){
+    default BoardDTO entityToDTO(Board board,Member member,Long count){
         BoardDTO dto = BoardDTO.builder()
                 .content(board.getContent())
                 .title(board.getTitle())
-                .writer(board.getWriter().getNickname())
+                .writer(member.getNickname())
                 .bno(board.getBno())
                 .modDate(board.getModDate())
                 .regDate(board.getRegDate())
+                .replyCount(count.intValue())
                 .build();
+        return dto;
+    }
+    default BoardDTO entityToDTO(Board board,Member member){
+        BoardDTO dto = BoardDTO.builder()
+                .content(board.getContent())
+                .title(board.getTitle())
+                .writer(member.getNickname())
+                .bno(board.getBno())
+                .modDate(board.getModDate())
+                .regDate(board.getRegDate())
 
+                .build();
         return dto;
     }
 
 
-    BoardDTO getBoardByBno(Long bno);
+
+    BoardDTO getBoardByBno(Long bno,Member member);
 }

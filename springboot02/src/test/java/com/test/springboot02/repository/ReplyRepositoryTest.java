@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,6 +17,15 @@ class ReplyRepositoryTest {
 
     @Autowired ReplyRepository replyRepository;
     @Autowired MemberRepository memberRepository;
+
+    @Test
+    public void readReplies(){
+        Board board = Board.builder().bno(299L).build();
+        List<Reply> result =  replyRepository.getRepliesByBoardOrderById(board);
+        for(Reply r: result){
+            System.out.println(r);
+        }
+    }
 
 
     @Test

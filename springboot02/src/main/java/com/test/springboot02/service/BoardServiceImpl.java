@@ -60,19 +60,18 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public PageResultDTO<BoardDTO,Board> getList(PageRequestDTO requestDTO) {
-
+    public PageResultDTO<BoardDTO,Object[]> getList(PageRequestDTO requestDTO) {
         Pageable pageable = requestDTO.getPageable(Sort.by("bno").descending());
 
         BooleanBuilder booleanBuilder = getSearch(requestDTO);
 
        // Page<Board> result= boardRepository.findAll(pageable);
-        Page<Board> result = boardRepository.findAll(booleanBuilder,pageable);
+       // Page<Board> result = boardRepository.findAll(booleanBuilder,pageable);
+        Page<Object[]> result1 = boardRepository.boardListWithSearchPage(requestDTO.getType(),requestDTO.getKeyword(),pageable);
 
-        Function<Board,BoardDTO> fn = (en->entityToDTO(en));
+        Function<Object[],BoardDTO> fn = (en->entityToDTO((Board) en[0],(Member)en[1],(Long)en[2]));
 
-       return new PageResultDTO<>(result,fn);
-
+       return new PageResultDTO<>(result1,fn);
     }
 
     private BooleanBuilder getSearch(PageRequestDTO pageRequestDTO){
@@ -80,7 +79,7 @@ public class BoardServiceImpl implements BoardService{
         String keyword = pageRequestDTO.getKeyword();
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-       QBoard qBoard = QBoard.board;
+        QBoard qBoard = QBoard.board;
         BooleanExpression expression = qBoard.bno.gt(0);
 
         booleanBuilder.and(expression);
@@ -108,9 +107,9 @@ public class BoardServiceImpl implements BoardService{
 
 
     @Override
-    public BoardDTO getBoardByBno(Long bno) {
+    public BoardDTO getBoardByBno(Long bno,Member member) {
         Board board = boardRepository.findByBno(bno);
-        BoardDTO dto = entityToDTO(board);
+        BoardDTO dto = entityToDTO(board,member);
         return dto;
     }
 }

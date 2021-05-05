@@ -32,7 +32,7 @@ class BoardServiceImplTest {
     @Test
     public void testList(){
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(2).size(20).build();
-        PageResultDTO<BoardDTO, Board> resultDTO = boardService.getList(pageRequestDTO);
+        PageResultDTO<BoardDTO, Object[]> resultDTO = boardService.getList(pageRequestDTO);
 
         System.out.println("PREV:"+resultDTO.isPrev());
         System.out.println("NEXT"+resultDTO.isNext());
@@ -58,7 +58,7 @@ class BoardServiceImplTest {
                 .keyword("1")
                 .build();
 
-        PageResultDTO<BoardDTO,Board> resultDTO =  boardService.getList(pageRequestDTO);
+        PageResultDTO<BoardDTO,Object[]> resultDTO =  boardService.getList(pageRequestDTO);
         System.out.println("PREV:"+resultDTO.isPrev());
         System.out.println("NEXT"+resultDTO.isNext());
         System.out.println("TOTAL"+resultDTO.getTotalPage());

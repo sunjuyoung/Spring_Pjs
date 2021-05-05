@@ -35,7 +35,7 @@ class BoardRepositoryTest {
     @Test
     public void boardSearch2(){
         Pageable pageable = PageRequest.of(0,10,Sort.by("bno").descending());
-        Page<Object[]> result = boardRepository.searchPage1("t","11",pageable);
+        Page<Object[]> result = boardRepository.boardListWithSearchPage("t","11",pageable);
     }
 
     @Test

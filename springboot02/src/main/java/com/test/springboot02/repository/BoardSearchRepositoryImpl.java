@@ -51,22 +51,20 @@ public class BoardSearchRepositoryImpl extends QuerydslRepositorySupport impleme
     }
 
     @Override
-    public Page<Object[]> searchPage(String type, String keyword, Pageable pageable) {
-
-
+    public Page<Object[]> boardListWithSearchPage(String type, String keyword, Pageable pageable) {
         QReply reply = QReply.reply;
         QMember member = QMember.member;
         QBoard board = QBoard.board;
 
         JPQLQuery<Board> jpqlQuery = from(board);
+        long count = jpqlQuery.fetchCount();
         jpqlQuery.leftJoin(member).on(board.writer.eq(member));
         jpqlQuery.leftJoin(reply).on(reply.board.eq(board));
 
-        JPQLQuery<Tuple> tuple = jpqlQuery.select(board, member.nickname, reply.count().as("hi"));
+        JPQLQuery<Tuple> tuple = jpqlQuery.select(board, member, reply.count());
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 /*        BooleanExpression expression = board.bno.gt(0L);
-
         booleanBuilder.and(expression);*/
 
         if(type != null){
@@ -105,31 +103,22 @@ public class BoardSearchRepositoryImpl extends QuerydslRepositorySupport impleme
             tuple.orderBy(new OrderSpecifier(direction, orderByExpression.get(prop)));
 
         });
-        tuple.groupBy(board , member).fetchCount();
+        tuple.groupBy(board , member);
 
         //page 처리
         tuple.offset(pageable.getOffset());
         tuple.limit(pageable.getPageSize());
-
-
         List<Tuple> result = tuple.fetch();
-
 
         log.info("==================");
         log.info(result);
-        log.info(result.size());
-        Long count = tuple.fetchCount();
+        log.info(count);
 
-
-
-
-        return null;//new PageImpl<Object[]>(result.stream().map(t->t.toArray()).collect(Collectors.toList()),pageable,result.size());
+        return new PageImpl<Object[]>(result.stream().map(t->t.toArray()).collect(Collectors.toList()),pageable,count);
     }
 
     @Override
     public Page<Object[]> searchPage1(String type, String keyword, Pageable pageable) {
-
-
         QReply reply = QReply.reply;
         QMember member = QMember.member;
         QBoard board = QBoard.board;
@@ -144,11 +133,9 @@ public class BoardSearchRepositoryImpl extends QuerydslRepositorySupport impleme
         JPQLQuery<Board> jpqlQuery1 = from(board);
         log.info(jpqlQuery1.fetchCount());
 
-
        // JPQLQuery<Board> pageableQuery =  getQuerydsl().applyPagination(pageable,jpqlQuery);
        // QueryResults<Board> fetchResult =  pageableQuery.fetchResults();
        // log.info(fetchResult.getTotal());
-
 /*
 
         JPQLQuery<Tuple> tuple = jpqlQuery.select(board, member.nickname, reply.count().as("hi"));
@@ -162,11 +149,6 @@ public class BoardSearchRepositoryImpl extends QuerydslRepositorySupport impleme
         tuple.offset(pageable.getOffset());
         tuple.limit(pageable.getPageSize());
 */
-
-
-
-
-
         return null;//new PageImpl<Object[]>(result.stream().map(t->t.toArray()).collect(Collectors.toList()),pageable,result.size());
     }
 
