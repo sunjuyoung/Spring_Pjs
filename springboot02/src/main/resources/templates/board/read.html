@@ -50,13 +50,13 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="form-inline mb-1">
-                            <label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
-                            <input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId" th:value="${boardDTO.writer}" readonly>
+                            <label for="replyer"><i class="fa fa-user-circle-o fa-2x"></i></label>
+                            <input type="text" class="form-control ml-2" placeholder="Enter yourId" name="replyer" id="replyer" th:value="${boardDTO.writer}" readonly>
                             <!--<label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
                             <input type="password" class="form-control ml-2" placeholder="Enter password" id="replyPassword">-->
                         </div>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        <button type="button" class="btn btn-dark mt-3" onClick="javascript:addReply();">post reply</button>
+                        <textarea class="form-control" id="replyText" name="replyText" rows="3"></textarea>
+                        <button type="button" class="btn btn-dark mt-3 post-reply">post reply</button>
                     </li>
                 </ul>
             </div>
@@ -100,45 +100,143 @@
             });
         });
     </script>
+    <script th:inline="javascript" th:fragment="ajax-csrf-header">
+        $(function () {
+            var csrfToken = [[${_csrf.token}]];
+            var csrfHeader = [[${_csrf.headerName}]];
+            $(document).ajaxSend(function (e,xhr,options) {
+                xhr.setRequestHeader(csrfHeader,csrfToken);
+            })
+        })
+    </script>
 
     <script th:inline="javascript">
         $(document).ready(function () {
+
             var bno = [[${boardDTO.bno}]];
-            $(function () {
+            var boardWirter = [[${boardDTO.writer}]];
+            var replyWriter = $("input[name='replyer']").val();
+            var replyText = $("textarea[name='replyText']").val();
+
+            //날짜 포멧
+            function formatTime(str){
+                var date = new Date(str);
+
+                return date.getFullYear()+'/'+
+                    (date.getMonth()+1)+'/'+
+                        date.getDate()+' '+
+                        date.getHours()+':'+
+                        date.getMinutes();
+            }
+
+            loadReply();
+            //댓글
+            function loadReply(){
                 $.ajax({
                     url:'/reply/list/'+bno,
-                    type:'get',
+                    method:'get',
                     success:function (data) {
                         var str ="";
-                       var listGroup = $(".replies");
+                        var listGroup = $(".replies");
 
                         $.each(data,function (idx,reply) {
-                            console.log(reply);
-                        str+='  <div class="card-header bg-light">'
-                        str+='     <i class="fa fa-comment fa"></i><span class="ml-2">'+reply.replyer+'</span>'
-                        str+='     </div>'
-                        str+='     <div class="card-body">'
-                        str+='     <ul class="list-group list-group-flush">'
-                        str+='     <li class="list-group-item">'
-                        str+='     <span class="list-group">'+reply.text+'</span>'
-                        str+='     <button type="button" class="btn btn-dark btn-sm mt-3" onClick="javascript:addReply();">답글</button>'
-                        str+='     </li>'
-                        str+='     </ul>'
-                        str+='     </div>'
+                            var replyer = reply.replyer;
+                            if(reply.replyer == boardWirter){
+                                replyer = "글쓴이";
+                            }
+                            str+='  <div class="card-header bg-light d-flex">' +
+                                '<input type="hidden" name="rno" value="'+reply.id+'">'
+                            str+='    <div class="mr-auto p-2"> <i class="fa fa-comment fa"></i><span class="ml-2">'+replyer+'</span> </div>' +
+                                '<div class="pt-2"> <span>'+formatTime(reply.regDate)+'</span> </div>'
+                            str+='     </div>'
+                            str+='     <div class="card-body">'
+                            str+='     <ul class="list-group list-group-flush">'
+                            str+='     <li class="list-group-item">'
+                            str+='     <span class="list-group">'+reply.text+'</span>'
+                            str+='     <button type="button" class="btn btn-dark btn-sm mt-3 reply">답글</button>'
+                            str+='     <button type="button" class="btn btn-danger btn-sm mt-3 replyRemove">삭제</button>' +
+                                '<i class="fas fa-wrench modifyReply"></i>'
+                            str+='     </li>'
+                            str+='     </ul>'
+                            str+='     </div>'
                         });
-                    listGroup.html(str);
+                        listGroup.html(str);
                     }
                 })
-            });
-        });
-        $(".removeBtn").on("click",function () {
-            if(!confirm("삭제 하시겠습니까?")){
-                return;
             }
-            var actionForm = document.querySelector("form");
 
-            actionForm.submit();
+            //게시글 삭제
+            $(".removeBtn").on("click",function () {
+                if(!confirm("삭제 하시겠습니까?")){
+                    return;
+                }
+                var actionForm = document.querySelector("form");
+                actionForm.submit();
+            });
+
+            //댓글 저장
+            $(".post-reply").on("click",function () {
+
+                const replyData = {
+                    bno:bno,
+                    text:replyText,
+                    replyer:replyWriter
+                }
+
+                $.ajax({
+                    url:'/reply/register/',
+                    method: 'post',
+                    contentType:'application/json; charset=utf-8',
+                    data:JSON.stringify(replyData),
+                    dataType:'json',
+                    success:function (data) {
+                        $("textarea[name='replyText']").val('');
+                        alert(data+'댓글이 등록되었습니다.')
+                        loadReply();
+                    }
+                })
+
+            });
+
+            //댓글 삭제
+            $(document).on("click",".replyRemove",function () {
+                const rno = $("input[name='rno']").val();
+                if(!confirm("삭제 하시겠습니까?")){
+                    return;
+                }
+                $.ajax({
+                    url:'/reply/'+rno,
+                    method: 'delete',
+                    success:function (data) {
+                        alert('댓글이 삭제되었습니다.')
+                        loadReply();
+                    }
+                })
+            })
+
+            //댓글 삭제
+            $(document).on("click",".modifyReply",function () {
+                const rno = $("input[name='rno']").val();
+
+
+
+                if(!confirm("수정 하시겠습니까?")){
+                    return;
+                }
+                $.ajax({
+                    url:'/reply/'+rno,
+                    method: 'put',
+                    data: JSON.stringify({text:replyText}),
+                    contentType: 'application/json; charset=utf-8',
+                    success:function (data) {
+                        alert('댓글이 수정되었습니다.')
+                        loadReply();
+                    }
+                })
+            })
+
         });
+
     </script>
 </div>
 </body>

@@ -8,9 +8,11 @@ import com.test.springboot02.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +24,14 @@ public class ReplyServiceImpl implements ReplyService{
 
     @Override
     public Long register(ReplyDTO replyDTO) {
-        return null;
+            Board board = Board.builder().bno(replyDTO.getBno()).build();
+            Reply reply = Reply.builder()
+                    .board(board)
+                    .text(replyDTO.getText())
+                    .replyer(replyDTO.getReplyer())
+                    .build();
+        Reply save = replyRepository.save(reply);
+        return save.getId();
     }
 
     @Override
@@ -38,11 +47,15 @@ public class ReplyServiceImpl implements ReplyService{
 
     @Override
     public void remove(Long id) {
-
+        replyRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
-    public void modify(Long id) {
-
+    public void modify(Long id,String replyText) {
+        Optional<Reply> byId = replyRepository.findById(id);
+        Reply reply = byId.get();
+        reply.setText(replyText);
+        replyRepository.save(reply);
     }
 }

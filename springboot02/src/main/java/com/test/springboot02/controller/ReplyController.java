@@ -7,10 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +24,25 @@ public class ReplyController {
 
         List<ReplyDTO> result =  replyService.getList(bno);
         return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/register",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> registerReply(@RequestBody ReplyDTO replyDTO){
+        Long replyId = replyService.register(replyDTO);
+
+        return new ResponseEntity<>(replyId,HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("/{rno}")
+    public ResponseEntity<Long> deleteReply(@PathVariable("rno") Long rno){
+        replyService.remove(rno);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{rno}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> modifyReply(@PathVariable("rno") Long rno, @RequestBody String text){
+        replyService.modify(rno,text);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
