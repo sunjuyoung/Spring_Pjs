@@ -12,5 +12,5 @@ public interface ReplyService {
 
     void remove(Long id);
 
-    void modify(Long id,String replyText);
+    void modify(Long id,ReplyDTO replyDTO);
 }

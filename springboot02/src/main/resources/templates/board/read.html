@@ -52,8 +52,6 @@
                         <div class="form-inline mb-1">
                             <label for="replyer"><i class="fa fa-user-circle-o fa-2x"></i></label>
                             <input type="text" class="form-control ml-2" placeholder="Enter yourId" name="replyer" id="replyer" th:value="${boardDTO.writer}" readonly>
-                            <!--<label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
-                            <input type="password" class="form-control ml-2" placeholder="Enter password" id="replyPassword">-->
                         </div>
                         <textarea class="form-control" id="replyText" name="replyText" rows="3"></textarea>
                         <button type="button" class="btn btn-dark mt-3 post-reply">post reply</button>
@@ -144,18 +142,18 @@
                             if(reply.replyer == boardWirter){
                                 replyer = "글쓴이";
                             }
-                            str+='  <div class="card-header bg-light d-flex">' +
-                                '<input type="hidden" name="rno" value="'+reply.id+'">'
+                            str+='  <div class="card-header bg-light d-flex">'
                             str+='    <div class="mr-auto p-2"> <i class="fa fa-comment fa"></i><span class="ml-2">'+replyer+'</span> </div>' +
                                 '<div class="pt-2"> <span>'+formatTime(reply.regDate)+'</span> </div>'
                             str+='     </div>'
                             str+='     <div class="card-body">'
                             str+='     <ul class="list-group list-group-flush">'
-                            str+='     <li class="list-group-item">'
-                            str+='     <span class="list-group">'+reply.text+'</span>'
+                            str+='     <li class="list-group-item replyInputText">'
+                            str+='     <span class="list-group replySpanText">'+reply.text+'</span>'+
+                            '<input type="hidden" name="rno" value="'+reply.id+'">'
                             str+='     <button type="button" class="btn btn-dark btn-sm mt-3 reply">답글</button>'
                             str+='     <button type="button" class="btn btn-danger btn-sm mt-3 replyRemove">삭제</button>' +
-                                '<i class="fas fa-wrench modifyReply"></i>'
+                                '<button type="button" class="btn btn-danger btn-sm mt-3 modifyReplyBtn">수정</button>'
                             str+='     </li>'
                             str+='     </ul>'
                             str+='     </div>'
@@ -214,26 +212,42 @@
                 })
             })
 
-            //댓글 삭제
-            $(document).on("click",".modifyReply",function () {
-                const rno = $("input[name='rno']").val();
+            //댓글 수정
+            $(document).on("click",".modifyReplyBtn",function () {
+                const rno = $(this).prevAll('input[name="rno"]').val();
+                const text1 = $(this).prevAll('span:first').text();
 
 
+               $(this).parent('li').replaceWith(editReplyForm2(text1));
 
-                if(!confirm("수정 하시겠습니까?")){
-                    return;
-                }
-                $.ajax({
-                    url:'/reply/'+rno,
-                    method: 'put',
-                    data: JSON.stringify({text:replyText}),
-                    contentType: 'application/json; charset=utf-8',
-                    success:function (data) {
-                        alert('댓글이 수정되었습니다.')
-                        loadReply();
-                    }
-                })
+               $(".modifyCancel").on("click",function () {
+                   loadReply();
+               });
+
+               $(document).on("click",".modifyReplySubmit",function () {
+                   const text2 = $("#replyModifyText").val();
+                  $.ajax({
+                      url:'/reply/'+rno,
+                      method: 'put',
+                      data: JSON.stringify({text:text2}),
+                      contentType: 'application/json; charset=utf-8',
+                      success:function (data) {
+                          alert('댓글이 수정되었습니다.')
+                          loadReply();
+                      }
+                  })
+               })
+
+
             })
+
+            function editReplyForm2(replyText) {
+                let editStr = "";
+                editStr+='     <textarea class="form-control" id="replyModifyText" name="replyModifyText" rows="3">'+replyText+'</textarea>'
+                editStr+='     <button type="button" class="btn btn-dark btn-sm mt-3 modifyReplySubmit">수정</button>'
+                editStr+='     <button type="button" class="btn btn-danger btn-sm mt-3 modifyCancel">취소</button>'
+                return editStr;
+            }
 
         });
 

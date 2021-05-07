@@ -41,8 +41,8 @@ public class ReplyController {
     }
 
     @PutMapping(value = "/{rno}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> modifyReply(@PathVariable("rno") Long rno, @RequestBody String text){
-        replyService.modify(rno,text);
+    public ResponseEntity<Long> modifyReply(@PathVariable("rno") Long rno, @RequestBody ReplyDTO replyDTO){
+        replyService.modify(rno,replyDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

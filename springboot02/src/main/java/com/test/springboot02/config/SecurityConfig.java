@@ -65,6 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/vendor/**")
                 .mvcMatchers("/images/**")
                 .antMatchers("/favicon.ico")
+                .mvcMatchers("/favicon.ico")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 }

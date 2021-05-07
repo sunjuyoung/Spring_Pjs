@@ -52,10 +52,10 @@ public class ReplyServiceImpl implements ReplyService{
 
     @Transactional
     @Override
-    public void modify(Long id,String replyText) {
+    public void modify(Long id,ReplyDTO replyDTO) {
         Optional<Reply> byId = replyRepository.findById(id);
         Reply reply = byId.get();
-        reply.setText(replyText);
+        reply.setText(replyDTO.getText());
         replyRepository.save(reply);
     }
 }
