@@ -217,7 +217,6 @@
                 const rno = $(this).prevAll('input[name="rno"]').val();
                 const text1 = $(this).prevAll('span:first').text();
 
-
                $(this).parent('li').replaceWith(editReplyForm2(text1));
 
                $(".modifyCancel").on("click",function () {
@@ -237,8 +236,6 @@
                       }
                   })
                })
-
-
             })
 
             function editReplyForm2(replyText) {
