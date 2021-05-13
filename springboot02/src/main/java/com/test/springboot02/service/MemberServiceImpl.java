@@ -1,8 +1,10 @@
 package com.test.springboot02.service;
 
+import com.test.springboot02.config.AppProperties;
 import com.test.springboot02.dto.SignUpDTO;
 import com.test.springboot02.entity.Member;
 import com.test.springboot02.entity.MemberRole;
+import com.test.springboot02.event.BoardCreateEvent;
 import com.test.springboot02.mail.EmailMessage;
 import com.test.springboot02.mail.EmailService;
 import com.test.springboot02.repository.MemberRepository;
@@ -12,6 +14,7 @@ import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +23,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -38,6 +43,9 @@ public class MemberServiceImpl implements MemberService{
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     //private final JavaMailSender javaMailSender;
+    private final TemplateEngine templateEngine;
+    private final AppProperties appProperties;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
     @Override
@@ -51,19 +59,27 @@ public class MemberServiceImpl implements MemberService{
         member.getRoleSet().add(MemberRole.USER);
         memberRepository.save(member);
         sendMail(member);
+
+
     }
 
     @Override
     public void sendMail(Member member) {
+        Context context = new Context();//Model 역활
+        context.setVariable("link","/");
+        context.setVariable("nickname",member.getNickname());
+        context.setVariable("message","가입환영합니다.");
+        context.setVariable("host",appProperties.getHost());
+
+        String message = templateEngine.process("mail/simple-link", context);
+
         EmailMessage emailMessage= EmailMessage.builder()
                 .to(member.getEmail())
                 .subject("가입 인증 메일")
-                .message("")
+                .message(message)
                 .build();
 
        emailService.sendEmail(emailMessage);
-
-
     }
 
     @Transactional(readOnly = true)

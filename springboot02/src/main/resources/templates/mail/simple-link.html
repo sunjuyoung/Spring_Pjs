@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>가입 인증 메일</title>
+</head>
+<body>
+    <div>
+        <P>안녕하세요 환영합니다. <span th:text="${nickname}"></span> 님</P>
+
+        <h2 th:text="${message}"></h2>
+    </div>
+
+        <a th:href="${host}">사이트 이동</a>
+
+</body>
+</html>

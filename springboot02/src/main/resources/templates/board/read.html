@@ -114,7 +114,7 @@
             var bno = [[${boardDTO.bno}]];
             var boardWirter = [[${boardDTO.writer}]];
             var replyWriter = $("input[name='replyer']").val();
-            var replyText = $("textarea[name='replyText']").val();
+
 
             //날짜 포멧
             function formatTime(str){
@@ -174,7 +174,8 @@
 
             //댓글 저장
             $(".post-reply").on("click",function () {
-
+                var replyText = $("textarea[name='replyText']").val();
+                console.log(replyText);
                 const replyData = {
                     bno:bno,
                     text:replyText,
