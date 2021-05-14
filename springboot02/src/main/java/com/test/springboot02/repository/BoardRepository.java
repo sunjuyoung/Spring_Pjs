@@ -4,6 +4,7 @@ import com.test.springboot02.dto.BoardDTO;
 import com.test.springboot02.entity.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -18,6 +19,9 @@ public interface BoardRepository extends JpaRepository<Board,Long>, QuerydslPred
     void deleteBoardByBnoLessThan(Long bno);
 
     Board findByBno(Long bno);
+
+    @EntityGraph(attributePaths={"writer"},type=EntityGraph.EntityGraphType.FETCH)
+    Board findBoardWithWriterByBno(Long bno);
 
     void deleteByBno(Long bno);
 

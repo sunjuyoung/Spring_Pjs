@@ -32,6 +32,14 @@ class BoardRepositoryTest {
     @Autowired MemberRepository memberRepository;
 
 
+
+    @Test
+    public void boardWithMember(){
+        Board result = boardRepository.findBoardWithWriterByBno(10L);
+        System.out.println(result.getContent());
+        System.out.println(result.getWriter().getNickname());
+    }
+
     @Test
     public void boardSearch2(){
         Pageable pageable = PageRequest.of(0,10,Sort.by("bno").descending());

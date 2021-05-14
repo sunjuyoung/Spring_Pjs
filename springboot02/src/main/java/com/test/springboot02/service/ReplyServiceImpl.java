@@ -34,6 +34,7 @@ public class ReplyServiceImpl implements ReplyService{
                     .replyer(replyDTO.getReplyer())
                     .build();
         Reply save = replyRepository.save(reply);
+
         eventPublisher.publishEvent(new BoardCreateEvent(board));
 
         return save.getId();
