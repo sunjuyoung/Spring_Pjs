@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 
 @Async
 @Log4j2
-@Transactional
 @Component
+@Transactional
 @RequiredArgsConstructor
 public class StudyEventListener {
 
@@ -40,11 +40,11 @@ public class StudyEventListener {
         Iterable<Account> accounts =  accountRepository.findAll(AccountPredicates.findByTagsAndZones(study.getTags(),study.getZones()));
 
        accounts.forEach(account -> {
+           //이메일 전송
            if(account.isStudyCreatedByEmail()){
-               //이메일 전송
                Context context = new Context();
                context.setVariable("nickname",account.getNickname());
-               context.setVariable("link","/study/");
+               context.setVariable("link","/study/"+study.getPath());
                context.setVariable("linkName",study.getTitle());
                context.setVariable("message","새로운 스터디");
                context.setVariable("host",appProperties.getHost());
@@ -60,10 +60,9 @@ public class StudyEventListener {
            }
            //웹으로 전송
            if(account.isStudyCreatedByWeb()){
-               //notification
                Notification notification = new Notification();
                notification.setTitle(study.getTitle());
-               notification.setLink("/study/");
+               notification.setLink("/study/"+study.getPath());
                notification.setChecked(false);
                notification.setCreatedLocalDateTime(LocalDateTime.now());
                notification.setMessage(study.getShortDescription());

@@ -29,8 +29,6 @@ public class MainController {
                 model.addAttribute(account);
                 return "index";
             }
-
-
             return "index";
     }
 
@@ -45,6 +43,8 @@ public class MainController {
         Page<Study> studyPage= studyRepository.findByKeyword(keyword,pageable);
         model.addAttribute("studyPage",studyPage);
         model.addAttribute("keyword",keyword);
+        model.addAttribute("sortProperty",pageable.getSort().toString().contains("publishedDateTime")? "publishedDateTime":"memberCount");
+
 
         return "search";
     }
