@@ -15,4 +15,9 @@ public class MainController {
     public String login(){
         return "login";
     }
+
+    @GetMapping("/uploadEx")
+    public String uploadEx(){
+        return "uploadEx";
+    }
 }

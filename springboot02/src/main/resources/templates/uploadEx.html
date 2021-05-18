@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="container">
+        <p>upload File</p>
+        <input name="uploadFiles" type="file" multiple>
+        <button class="uploadBtn">UPLOAD</button>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:inline="javascript" th:fragment="ajax-csrf-header">
+        $(function () {
+            var csrfToken = [[${_csrf.token}]];
+            var csrfHeader = [[${_csrf.headerName}]];
+            $(document).ajaxSend(function (e,xhr,options) {
+                xhr.setRequestHeader(csrfHeader,csrfToken);
+            })
+        })
+    </script>
+
+<script>
+    $(".uploadBtn").on("click",function () {
+        var formData = new FormData();//폼데이터 객체로 저장
+        var inputFile = $("input[name='uploadFiles']");
+        var files = inputFile[0].files;
+        for(var i=0; i<files.length; i++){//
+             console.log(files[i]);
+            formData.append("uploadFiles",files[i]);
+        }
+
+        $.ajax({
+            url:'/uploadAjax',
+            processData:false,
+            contentType:false,
+            data:formData,
+            type:'POST',
+            dataType:'json',
+            success:function (result) {
+                console.log(result);
+
+            },
+            error:function (xhr,textStatus,errorThrown) {
+                console.log(textStatus);
+            }
+        })//ajax
+
+    })
+</script>
+</body>
+</html>

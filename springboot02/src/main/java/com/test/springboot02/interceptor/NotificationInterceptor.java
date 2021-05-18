@@ -28,6 +28,9 @@ public class NotificationInterceptor implements HandlerInterceptor {
             Member member = (((AuthMember) authentication.getPrincipal()).getMember());
             long count = notificationRepository.countByMemberAndChecked(member, false);
             modelAndView.addObject("hasNotification",count>0);
+            modelAndView.addObject("notificationCount",count);
+
+
         }
     }
 
