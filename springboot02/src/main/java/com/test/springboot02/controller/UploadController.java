@@ -5,6 +5,7 @@ import com.test.springboot02.dto.UploadResultDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,7 +41,7 @@ public class UploadController {
 
     @PostMapping(value="/uploadAjax")
     public ResponseEntity<List<UploadResultDTO>> uploadFile(MultipartFile[] uploadFiles){
-        String uploadPath = getUploadPath();
+        String uploadPath = getUploadPath();//C://upload
         List<UploadResultDTO> resultDTOS = new ArrayList<>();
 
         for(MultipartFile uploadFile : uploadFiles){
@@ -57,6 +59,7 @@ public class UploadController {
             //UUID
             String uuid = UUID.randomUUID().toString();
             String saveName = uploadPath+ File.separator+folderPath+File.separator+uuid+"_"+fileName;
+            //                C:/upload/2021/5/21/UUID_fileName
 
             Path savePath = Paths.get(saveName);
             try{
@@ -64,9 +67,9 @@ public class UploadController {
                 uploadFile.transferTo(savePath);
 
                 //섬네일 생성  s_
-/*                String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator + "s_"+ uuid +"_"+fileName;
+                String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator + "s_"+ uuid +"_"+fileName;
                 File thumbnailFile = new File(thumbnailSaveName);
-                Thumbnailator.createThumbnail(savePath.toFile(),thumbnailFile,100,100);*/
+                Thumbnailator.createThumbnail(savePath.toFile(),thumbnailFile,100,100);
 
                 resultDTOS.add(new UploadResultDTO(fileName,uuid,folderPath));
             }catch (IOException e){
@@ -103,6 +106,28 @@ public class UploadController {
         return result;
     }
 
+
+    @PostMapping("/removeFile")
+    public ResponseEntity<Boolean> removeFile(String fileName){
+        String srcFileName=null;
+        try{
+            srcFileName = URLDecoder.decode(fileName,"UTF-8");
+            File file = new File(getUploadPath()+File.separator+srcFileName);
+            boolean result = file.delete();
+
+            log.info(file.getParent());
+            log.info("===================="+file.getParent());
+
+            File thumbnail = new File(file.getParent(),"s_"+file.getName());
+            result = thumbnail.delete();
+
+            return new ResponseEntity<>(result,HttpStatus.OK);
+
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 
