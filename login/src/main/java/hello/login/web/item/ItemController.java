@@ -2,6 +2,8 @@ package hello.login.web.item;
 
 import hello.login.domain.item.Item;
 import hello.login.domain.item.ItemRepository;
+import hello.login.domain.member.Member;
+import hello.login.web.argumentresolver.Login;
 import hello.login.web.item.form.ItemSaveForm;
 import hello.login.web.item.form.ItemUpdateForm;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +26,10 @@ public class ItemController {
     private final ItemRepository itemRepository;
 
     @GetMapping
-    public String items(Model model) {
+    public String items(@Login Member member, Model model) {
         List<Item> items = itemRepository.findAll();
         model.addAttribute("items", items);
+        model.addAttribute("member", member);
         return "items/items";
     }
 
